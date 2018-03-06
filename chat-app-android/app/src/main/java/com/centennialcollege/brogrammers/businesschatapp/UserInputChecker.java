@@ -6,7 +6,7 @@ package com.centennialcollege.brogrammers.businesschatapp;
 
 public class UserInputChecker {
     public static final int MINIMUM_PASSWORD_LENGTH = 6;
-    public static final int MINIMUM_USERNAME_LENGTH = 6;
+    public static final int MINIMUM_USERNAME_LENGTH = 3;
     // Errors
     public static final String ERROR_THIS_FIELD_IS_REQUIED = "This field is required";
     // Email errors
