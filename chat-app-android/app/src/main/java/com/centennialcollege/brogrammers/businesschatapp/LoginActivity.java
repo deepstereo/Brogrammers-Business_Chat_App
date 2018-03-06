@@ -94,19 +94,16 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
      * @return : True if all inputs are valid, false otherwise.
      */
     private boolean performValidations(String email, String password) {
-        etEmail.setError(null);
-        etPassword.setError(null);
-
         String errorMessage = UserInputChecker.checkEmail(email);
+        etEmail.setError(errorMessage);
         if (errorMessage != null) {
-            etEmail.setError(errorMessage);
             etEmail.requestFocus();
             return false;
         }
 
         errorMessage = UserInputChecker.checkPassword(password);
+        etPassword.setError(errorMessage);
         if (errorMessage != null) {
-            etPassword.setError(errorMessage);
             etPassword.requestFocus();
             return false;
         }

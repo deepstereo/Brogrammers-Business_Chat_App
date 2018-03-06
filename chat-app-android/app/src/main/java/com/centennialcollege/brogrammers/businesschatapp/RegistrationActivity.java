@@ -58,47 +58,47 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void attemptRegistration() {
-        etEmail.setError(null);
-        etPassword.setError(null);
-
-        final String username = etUsername.getText().toString();
+        String username = etUsername.getText().toString();
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         String password2 = etPassword2.getText().toString();
 
-        View focusView = null;
+        if (performValidations(username, email, password, password2)) {
+            showProgress(true);
+            createUserWithEmailAndPassword(username, email, password);
+        }
+    }
 
+    private boolean performValidations(String username,String email, String password, String password2) {
         String errorMessage = UserInputChecker.checkUsername(username);
+        etUsername.setError(errorMessage);
         if (errorMessage != null) {
-            etUsername.setError(errorMessage);
-            focusView = etUsername;
+            etUsername.requestFocus();
+            return false;
         }
 
         errorMessage = UserInputChecker.checkEmail(email);
+        etEmail.setError(errorMessage);
         if (errorMessage != null) {
-            etEmail.setError(errorMessage);
-            focusView = etEmail;
+            etEmail.requestFocus();
+            return false;
         }
 
         errorMessage = UserInputChecker.checkPassword(password);
+        etPassword.setError(errorMessage);
         if (errorMessage != null) {
-            etPassword.setError(errorMessage);
-            focusView = etPassword;
+            etPassword.requestFocus();
+            return false;
         } else {
             errorMessage = UserInputChecker.checkPasswords(password, password2);
+            etPassword2.setError(errorMessage);
             if (errorMessage != null) {
-                etPassword2.setError(errorMessage);
-                focusView = etPassword2;
+                etPassword2.requestFocus();
+                return false;
             }
         }
 
-        if (focusView != null) {
-            focusView.requestFocus();
-        } else {
-            showProgress(true);
-
-            createUserWithEmailAndPassword(username, email, password);
-        }
+        return true;
     }
 
     private void createUserWithEmailAndPassword(final String username, String email, String password) {

@@ -14,7 +14,7 @@ public class UserInputChecker {
     // Password errors
     public static final String ERROR_PASSWORD_TOO_SHORT = "This password is too short," +
             " minimum length is " + MINIMUM_PASSWORD_LENGTH + " characters";
-    public static final String ERROR_PASSWORD_NOT_SAME = "This passwords isn't same";
+    public static final String ERROR_PASSWORD_NOT_SAME = "This passwords aren't same";
     // Username errors
     public static final String ERROR_USERNAME_TOO_SHORT = "This username is too short," +
             " minimum length is " + MINIMUM_USERNAME_LENGTH + " characters";
