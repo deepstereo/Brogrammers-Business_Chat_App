@@ -2,56 +2,62 @@ package com.centennialcollege.brogrammers.businesschatapp;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-public class LoginActivity extends AppCompatActivity implements OnClickListener {
+public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private EditText etUsername;
     private EditText etEmail;
     private EditText etPassword;
+    private EditText etPassword2;
     private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_registration);
 
+        etUsername = findViewById(R.id.et_username);
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
+        etPassword2 = findViewById(R.id.et_password_2);
 
         progressBar = findViewById(R.id.progress_bar);
 
-        findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_registration).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.button_login:
-                attemptLogin();
-                break;
+        switch (view.getId()) {
             case R.id.button_registration:
-                startActivity(new Intent(this, RegistrationActivity.class));
+                attemptRegistration();
                 break;
         }
     }
 
-    private void attemptLogin() {
+    private void attemptRegistration() {
         etEmail.setError(null);
         etPassword.setError(null);
 
+        String username = etUsername.getText().toString();
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
+        String password2 = etPassword2.getText().toString();
 
         View focusView = null;
 
-        String errorMessage = UserInputChecker.checkEmail(email);
+        String errorMessage = UserInputChecker.checkUsername(username);
+        if (errorMessage != null) {
+            etUsername.setError(errorMessage);
+            focusView = etUsername;
+        }
+
+        errorMessage = UserInputChecker.checkEmail(email);
         if (errorMessage != null) {
             etEmail.setError(errorMessage);
             focusView = etEmail;
@@ -61,13 +67,19 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         if (errorMessage != null) {
             etPassword.setError(errorMessage);
             focusView = etPassword;
+        } else {
+            errorMessage = UserInputChecker.checkPasswords(password, password2);
+            if (errorMessage != null) {
+                etPassword2.setError(errorMessage);
+                focusView = etPassword2;
+            }
         }
 
         if (focusView != null) {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            //ToDo Login with firebase
+            //ToDo Registration with firebase
         }
     }
 
