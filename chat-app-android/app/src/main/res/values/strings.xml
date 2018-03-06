@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Business Chat App</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Login</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="action_login">Login</string>
+    <string name="action_sing_up">Sing Up</string>
+
+
 </resources>
