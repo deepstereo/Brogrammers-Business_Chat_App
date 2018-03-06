@@ -133,7 +133,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                                 Toast.makeText(RegistrationActivity.this, ERROR_REGISTRATION,
                                         Toast.LENGTH_SHORT).show();
                             } else {
-                                startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                                startActivity(new Intent(RegistrationActivity.this, ChatActivity.class));
                                 finish();
                             }
                         }

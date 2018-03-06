@@ -35,6 +35,18 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        // If the user is still logged in, navigate straight to the Chat Screen.
+        if (isUserLoggedIn()) {
+            launchChatActivity();
+        }
+
+        init();
+    }
+
+    /**
+     * Initialize the views.
+     */
+    private void init() {
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
 
@@ -42,6 +54,14 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_registration).setOnClickListener(this);
+    }
+
+    /**
+     * Checks if the user is still logged in or not.
+     * @return : True if logged in, false otherwise.
+     */
+    private boolean isUserLoggedIn() {
+        return firebaseAuth.getCurrentUser() != null;
     }
 
     @Override
@@ -56,36 +76,47 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         }
     }
 
+    /**
+     *  Perform data validations and attempt to login.
+     */
     private void attemptLogin() {
-        etEmail.setError(null);
-        etPassword.setError(null);
-
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
 
-        View focusView = null;
+        if (performValidations(email, password)) {
+            showProgress(true);
+            signInWithEmailAndPassword(email, password);
+        }
+    }
+
+    /**
+     * Performs validations on the user inputs.
+     * @return : True if all inputs are valid, false otherwise.
+     */
+    private boolean performValidations(String email, String password) {
+        etEmail.setError(null);
+        etPassword.setError(null);
 
         String errorMessage = UserInputChecker.checkEmail(email);
         if (errorMessage != null) {
             etEmail.setError(errorMessage);
-            focusView = etEmail;
+            etEmail.requestFocus();
+            return false;
         }
 
         errorMessage = UserInputChecker.checkPassword(password);
         if (errorMessage != null) {
             etPassword.setError(errorMessage);
-            focusView = etPassword;
+            etPassword.requestFocus();
+            return false;
         }
 
-        if (focusView != null) {
-            focusView.requestFocus();
-        } else {
-            showProgress(true);
-
-            signInWithEmailAndPassword(email, password);
-        }
+        return true;
     }
 
+    /**
+     * Attempt to sign in the user through email address and password credentials.
+     */
     private void signInWithEmailAndPassword(String email, String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
@@ -98,13 +129,20 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                             Toast.makeText(LoginActivity.this, ERROR_AUTHENTICATION,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
+                            launchChatActivity();
                         }
                     }
                 });
     }
 
+    private void launchChatActivity() {
+        startActivity(new Intent(this, ChatActivity.class));
+        finish();
+    }
+
+    /**
+     * Show/hide the progress bar based on the boolean input passed in.
+     */
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
