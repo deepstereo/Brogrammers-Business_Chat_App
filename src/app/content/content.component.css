@@ -1,0 +1,27 @@
+.main-nav{
+    min-height: 95px;
+}
+
+.main-content{
+    height: 100%;
+    background: url("assets/background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: fixed;
+    background-attachment: scroll;
+    background-position: 50% 50%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    content: "";
+    z-index: 0;
+    overflow: scroll; 
+    margin-top: 84px;
+}
+ 
+@media screen and (max-width: 992px) {
+.main-content{
+    margin-top: 153px;
+}
+}

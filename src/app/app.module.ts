@@ -11,12 +11,18 @@ import { environment } from './../environments/environment';
 import { AppNavbarComponent } from './app-navbar/app-navbar.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppFooterComponent } from './app-footer/app-footer.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { ContentComponent } from './content/content.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AppNavbarComponent
+    AppNavbarComponent,
+    AppFooterComponent,
+    RegistrationComponent,
+    ContentComponent
   ],
   imports: [
     BrowserModule,
