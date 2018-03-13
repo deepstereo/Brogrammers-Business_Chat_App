@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -15,6 +16,12 @@ import { AppFooterComponent } from './app-footer/app-footer.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { ContentComponent } from './content/content.component';
 
+import { AuthService } from './services/auth.service';
+import { ChatComponent } from './chat/chat.component';
+
+import { RouterModule } from '@angular/router';
+import { appRoutes } from '../routes';
+
 
 @NgModule({
   declarations: [
@@ -22,16 +29,19 @@ import { ContentComponent } from './content/content.component';
     AppNavbarComponent,
     AppFooterComponent,
     RegistrationComponent,
-    ContentComponent
+    ContentComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    FormsModule,
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,23 +3,23 @@
   <button *ngIf="!isRegistrationProcess; else registrationForm" type="button" (click)="showRegistrationForm()" class="btn btn-primary registerButton">Get Started</button>
   <ng-template #registrationForm>
 
-    <form class="panel panel-primary regForm">
+    <form class="panel panel-primary regForm ">
       <div class="panel-body">
         <div>
           <div class="form-group">
-            <input type="text" id="username" class="form-control" name="username" placeholder="Username">
+            <input [(ngModel)]="username" type="text" id="username" class="form-control" name="username" placeholder="Username">
           </div>
           <div class="form-group">
-            <input type="text" id="emailaddr" class="form-control" name="email" placeholder="Email">
+            <input [(ngModel)]="email" type="text" id="emailaddr" class="form-control" name="email" placeholder="Email">
           </div>
           <div class="form-group">
-            <input type="password" id="password" class="form-control" name="password" placeholder="Password">
+            <input [(ngModel)]="password" type="password" id="password" class="form-control" name="password" placeholder="Password">
           </div>
           <div class="form-group">
             <input type="password" id="confirmpass" class="form-control" name="verifypass" placeholder="Password Repeat">
           </div>
           <div class="form-group text-center">
-            <button type="submit" class="btn btnSignUp btn-lg" id="submitbtn" name="submit">Sign up!</button>
+            <button (click)="signUP()" type="submit" class="btn btnSignUp btn-lg" id="submitbtn" name="submit">Sign up!</button>
             <button (click)="hideRegistrationForm()" type="Cancel" class="btn btnCancel btn-lg" id="cancel" name="cancel">Cancel</button>
           </div>
         </div>
