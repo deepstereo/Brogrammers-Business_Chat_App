@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
  * The main chat screen where all messages sent by all users are visible.
  */
 public class ChatActivity extends AppCompatActivity {
+    private static final String MESSAGES_CHILD = "messages-android-test";
 
     private FirebaseListAdapter<ChatMessage> adapter;
     EditText etMessageField;
@@ -59,7 +60,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Retrieve and send the text message in the message field to firebase database.
-                FirebaseDatabase.getInstance().getReference().push().setValue(new ChatMessage(etMessageField.getText().toString(),
+                FirebaseDatabase.getInstance().getReference().child(MESSAGES_CHILD)
+                        .push().setValue(new ChatMessage(etMessageField.getText().toString(),
                         firebaseAuth.getCurrentUser().getEmail()));
                 etMessageField.setText("");
                 etMessageField.requestFocus();
@@ -88,10 +90,18 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_sign_out) {
-            // Sign out the current user and navigate to Login Screen.
-            firebaseAuth.signOut();
-            launchLoginActivity();
+        switch (item.getItemId()){
+            case R.id.menu_sign_out:
+                // Sign out the current user and navigate to Login Screen.
+                firebaseAuth.signOut();
+                launchLoginActivity();
+                return true;
+            case R.id.menu_contacts:
+                startActivity(new Intent(this, ContactsActivity.class));
+                return true;
+            case R.id.menu_my_contacts:
+                startActivity(new Intent(this, MyContactsActivity.class));
+                return true;
         }
         return true;
     }
@@ -102,7 +112,8 @@ public class ChatActivity extends AppCompatActivity {
     private void displayChatMessages() {
 
         ListView listOfMessage = findViewById(R.id.lv_messages);
-        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class, R.layout.message_list_item, FirebaseDatabase.getInstance().getReference()) {
+        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
+                R.layout.message_list_item, FirebaseDatabase.getInstance().getReference().child(MESSAGES_CHILD)) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 //Initialize the views in message list item and set values for them.
