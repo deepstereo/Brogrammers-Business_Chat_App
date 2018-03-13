@@ -99,6 +99,9 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.menu_contacts:
                 startActivity(new Intent(this, ContactsActivity.class));
                 return true;
+            case R.id.menu_my_contacts:
+                startActivity(new Intent(this, MyContactsActivity.class));
+                return true;
         }
         return true;
     }

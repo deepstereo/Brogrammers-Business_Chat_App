@@ -126,10 +126,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if (currentUser != null) {
             String userId = currentUser.getUid();
             String email = currentUser.getEmail();
-            User user = new User(username, email);
-
+            User user = new User(userId, username, email);
             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD);
-
             if (usersRef != null) {
                 usersRef.child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

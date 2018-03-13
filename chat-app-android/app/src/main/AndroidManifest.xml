@@ -11,13 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".ChatActivity"
-            android:label="@string/title_activity_chats"/>
-
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chats" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,10 +26,13 @@
         <activity
             android:name=".RegistrationActivity"
             android:label="@string/title_activity_registration"
-            android:parentActivityName=".LoginActivity"/>
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".ContactsActivity"
             android:label="Contacts"
+            android:parentActivityName=".ChatActivity" />
+        <activity android:name=".MyContactsActivity"
+            android:label="My Contacts"
             android:parentActivityName=".ChatActivity"/>
     </application>
 

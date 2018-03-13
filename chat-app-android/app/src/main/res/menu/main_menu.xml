@@ -3,8 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_contacts"
-        android:title="Contacts"
+        android:title="Add Contacts"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_my_contacts"
+        android:title="My Contacts"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/menu_sign_out"
         android:title="Sign Out"
