@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "91913602875",
-    "firebase_url": "https://bizchatapptest.firebaseio.com",
-    "project_id": "bizchatapptest",
-    "storage_bucket": "bizchatapptest.appspot.com"
+    "project_number": "578742288376",
+    "firebase_url": "https://business-chat-app.firebaseio.com",
+    "project_id": "business-chat-app",
+    "storage_bucket": "business-chat-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:91913602875:android:6ad15fb44fbe8969",
+        "mobilesdk_app_id": "1:578742288376:android:6ad15fb44fbe8969",
         "android_client_info": {
           "package_name": "com.centennialcollege.brogrammers.businesschatapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "91913602875-h6vhbneulrq77p9q990j3li8lr2deo62.apps.googleusercontent.com",
+          "client_id": "578742288376-9ear75mh1ke7q6mandlevu39bacupf9e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.centennialcollege.brogrammers.businesschatapp",
-            "certificate_hash": "a194c0b61d379eed83b7d46a8a526f98fec0c471"
+            "certificate_hash": "4b39fb730087aea10264c35efbb41bee6f2cb4a0"
           }
         },
         {
-          "client_id": "91913602875-dmdfkrlic37o8nugoajc84gful7tt2fh.apps.googleusercontent.com",
+          "client_id": "578742288376-3ec49j73sl1q9qflgf09aq3bh88dvd59.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCgspv5JHbki6J1rPKzxGxLg8v3R8RTNAw"
+          "current_key": "AIzaSyAvtUGjb5QhY2EHK0O9ND2wlvbW4a3fMDA"
         }
       ],
       "services": {
@@ -40,8 +40,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "91913602875-dmdfkrlic37o8nugoajc84gful7tt2fh.apps.googleusercontent.com",
+              "client_id": "578742288376-3ec49j73sl1q9qflgf09aq3bh88dvd59.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "578742288376-ue2n90gild7b8vp0j602jv2g7rseiokr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ca.centennialcollege.business-chat-app"
+              }
             }
           ]
         },

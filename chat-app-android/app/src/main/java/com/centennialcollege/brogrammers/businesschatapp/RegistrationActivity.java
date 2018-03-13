@@ -12,17 +12,20 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String ERROR_REGISTRATION = "Registration failed";
     private static final String TAG = "RegistrationActivity";
+    private static final String USERS_CHILD = "users-android-test";
     private EditText etUsername;
     private EditText etEmail;
     private EditText etPassword;
@@ -65,11 +68,11 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
         if (performValidations(username, email, password, password2)) {
             showProgress(true);
-            createUserWithEmailAndPassword(username, email, password);
+            createUser(username, email, password);
         }
     }
 
-    private boolean performValidations(String username,String email, String password, String password2) {
+    private boolean performValidations(String username, String email, String password, String password2) {
         String errorMessage = UserInputChecker.checkUsername(username);
         etUsername.setError(errorMessage);
         if (errorMessage != null) {
@@ -101,43 +104,49 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         return true;
     }
 
-    private void createUserWithEmailAndPassword(final String username, String email, String password) {
+    private void createUser(final String username, String email, String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Log.w(TAG, "createUserWithEmailAndPassword:onComplete:"
+                            Log.w(TAG, "createUser:onComplete:"
                                     + task.getException());
                             Toast.makeText(RegistrationActivity.this, ERROR_REGISTRATION,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            setDisplayName(username);
+                            addAdditionalFieldsToDb(username);
                         }
                     }
                 });
     }
 
-    private void setDisplayName(String username) {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if (firebaseUser != null) {
-            firebaseUser.updateProfile(
-                    new UserProfileChangeRequest.Builder().setDisplayName(username).build())
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            showProgress(false);
-                            if (!task.isSuccessful()) {
-                                Log.w(TAG, "updateProfile:setDisplayName:"
-                                        + task.getException());
-                                Toast.makeText(RegistrationActivity.this, ERROR_REGISTRATION,
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                startActivity(new Intent(RegistrationActivity.this, ChatActivity.class));
-                                finish();
-                            }
+    private void addAdditionalFieldsToDb(String username) {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String email = currentUser.getEmail();
+            User user = new User(username, email);
+
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD);
+
+            if (usersRef != null) {
+                usersRef.child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        showProgress(false);
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "addAdditionalFieldsToDb: "
+                                    + task.getException());
+                            Toast.makeText(RegistrationActivity.this, ERROR_REGISTRATION,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            startActivity(new Intent(RegistrationActivity.this, ChatActivity.class));
+                            finish();
                         }
-                    });
+                    }
+                });
+            }
         }
     }
 
