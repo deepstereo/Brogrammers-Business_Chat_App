@@ -28,6 +28,10 @@
             android:name=".RegistrationActivity"
             android:label="@string/title_activity_registration"
             android:parentActivityName=".LoginActivity"/>
+        <activity
+            android:name=".ContactsActivity"
+            android:label="Contacts"
+            android:parentActivityName=".ChatActivity"/>
     </application>
 
 </manifest>
