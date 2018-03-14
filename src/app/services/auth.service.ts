@@ -50,4 +50,9 @@ export class AuthService {
     this.db.object(path).update(data);
   }
 
+  logout() {
+    this.afAuth.auth.signOut();
+    this.router.navigate(['home']);
+  }
+
 }

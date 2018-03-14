@@ -2,9 +2,10 @@
   <img class="navbar-brand" src= "assets/logo.png" class="rounded float-left" alt="...">
   <div class="float-sm-right" id="authorization">
     <form #authorizationForm class="form-inline my-2 my-lg-0">
-        <input [(ngModel)]="email" name="email" class="form-control mr-sm-2" type="text" placeholder="Email" aria-label="Email">
-        <input [(ngModel)]="password" name="password" class="form-control mr-sm-2" type="text" placeholder="Password" aria-label="Password" type="password">
-        <button (click)="login()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+        <input [(ngModel)]="email" *ngIf="!(user|async)?.uid" name="email" class="form-control mr-sm-2" type="text" placeholder="Email" aria-label="Email">
+        <input [(ngModel)]="password" *ngIf="!(user|async)?.uid" name="password" class="form-control mr-sm-2" type="text" placeholder="Password" aria-label="Password" type="password">
+        <button (click)='login()' *ngIf="!(user|async)?.uid" class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+        <button (click)='logout()' *ngIf="(user|async)?.uid" class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
     </form>
   </div>
 </nav>
