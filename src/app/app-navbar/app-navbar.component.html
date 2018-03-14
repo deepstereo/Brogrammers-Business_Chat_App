@@ -1,10 +1,10 @@
 <nav class="fixed-top main-nav navbar">
   <img class="navbar-brand" src= "assets/logo.png" class="rounded float-left" alt="...">
   <div class="float-sm-right" id="authorization">
-    <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username">
-        <input class="form-control mr-sm-2" type="text" placeholder="Password" aria-label="Password">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
+    <form #authorizationForm class="form-inline my-2 my-lg-0">
+        <input [(ngModel)]="email" name="email" class="form-control mr-sm-2" type="text" placeholder="Email" aria-label="Email">
+        <input [(ngModel)]="password" name="password" class="form-control mr-sm-2" type="text" placeholder="Password" aria-label="Password" type="password">
+        <button (click)="login()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Go</button>
     </form>
   </div>
 </nav>
