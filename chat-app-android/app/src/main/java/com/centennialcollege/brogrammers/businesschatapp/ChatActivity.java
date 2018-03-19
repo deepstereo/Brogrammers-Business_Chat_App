@@ -22,11 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class ChatActivity extends AppCompatActivity {
     private static final String MESSAGES_CHILD = "messages-android-test";
-
-    private FirebaseListAdapter<ChatMessage> adapter;
     EditText etMessageField;
     ImageView sendButton;
-
+    private FirebaseListAdapter<ChatMessage> adapter;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -101,6 +99,9 @@ public class ChatActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_my_contacts:
                 startActivity(new Intent(this, MyContactsActivity.class));
+                return true;
+            case R.id.menu_my_profile:
+                startActivity(new Intent(this, ProfileActivity.class));
                 return true;
         }
         return true;
