@@ -1,7 +1,7 @@
 package com.centennialcollege.brogrammers.businesschatapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -57,7 +57,9 @@ public class MyContactsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                myContactsId = user.getContactList();
+                if (user != null) {
+                    myContactsId = user.getContactList();
+                }
 
                 displayMyContacts();
             }

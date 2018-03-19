@@ -31,9 +31,14 @@
             android:name=".ContactsActivity"
             android:label="Contacts"
             android:parentActivityName=".ChatActivity" />
-        <activity android:name=".MyContactsActivity"
+        <activity
+            android:name=".MyContactsActivity"
             android:label="My Contacts"
-            android:parentActivityName=".ChatActivity"/>
+            android:parentActivityName=".ChatActivity" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="Profile"
+            android:parentActivityName=".ChatActivity" />
     </application>
 
 </manifest>
