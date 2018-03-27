@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     }
 
     private void launchChatActivity() {
-        startActivity(new Intent(this, ChatActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

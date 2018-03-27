@@ -7,6 +7,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_new_group_chat"
+        android:title="New Group Chat"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_contacts"
         android:title="Add Contacts"
         app:showAsAction="never" />

@@ -14,4 +14,12 @@
         <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
 
+    <style name="TabLayoutStyle">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabIndicatorColor">@color/colorAccent</item>
+        <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
+    </style>
+
 </resources>

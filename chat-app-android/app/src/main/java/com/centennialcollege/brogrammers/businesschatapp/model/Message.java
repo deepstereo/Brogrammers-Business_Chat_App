@@ -6,19 +6,19 @@ import java.util.Date;
  * Model class for a chat message.
  */
 
-public class ChatMessage {
+public class Message {
 
     private String messageText;
     private String messageUser;
     private long messageTime;
 
-    public ChatMessage(String messageText, String messageUser) {
+    public Message(String messageText, String messageUser) {
         this.messageText = messageText;
         this.messageUser = messageUser;
         messageTime = new Date().getTime();
     }
 
-    public ChatMessage() {
+    public Message() {
     }
 
     public String getMessageText() {
