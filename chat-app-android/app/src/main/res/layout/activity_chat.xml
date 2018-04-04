@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".RegistrationActivity">
+    tools:context=".chat.ChatActivity">
 
     <ImageView
         android:id="@+id/button_send"
@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <ListView
-        android:id="@+id/lv_messages"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_chats"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/et_message_field"

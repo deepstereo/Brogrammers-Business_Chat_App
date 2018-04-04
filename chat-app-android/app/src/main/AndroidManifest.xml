@@ -12,11 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ChatActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_chats" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,17 +26,21 @@
             android:label="@string/title_activity_registration"
             android:parentActivityName=".LoginActivity" />
         <activity
-            android:name=".ContactsActivity"
+            android:name=".contacts.ContactsActivity"
             android:label="Contacts"
-            android:parentActivityName=".ChatActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".MyContactsActivity"
+            android:name=".contacts.MyContactsActivity"
             android:label="My Contacts"
-            android:parentActivityName=".ChatActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ProfileActivity"
             android:label="Profile"
-            android:parentActivityName=".ChatActivity" />
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".chat.ChatActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".chat.GroupChatActivity"></activity>
     </application>
 
 </manifest>

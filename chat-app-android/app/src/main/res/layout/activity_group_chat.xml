@@ -2,6 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Group Name"
+        android:layout_margin="10dp"
+        android:inputType="text"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_contacts"
         android:dividerHeight="16dp"
@@ -16,6 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="Add Contacts"
-        android:onClick="onAddContactsButtonClicked"/>
+        android:text="Start Group Chat"
+        android:onClick="onStartGroupChatButtonClicked"/>
 </LinearLayout>

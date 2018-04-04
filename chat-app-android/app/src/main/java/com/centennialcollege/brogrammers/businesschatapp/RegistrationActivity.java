@@ -25,7 +25,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     public static final String ERROR_REGISTRATION = "Registration failed";
     private static final String TAG = "RegistrationActivity";
-    private static final String USERS_CHILD = "users-android-test";
     private EditText etUsername;
     private EditText etEmail;
     private EditText etPassword;
@@ -127,7 +126,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             String userId = currentUser.getUid();
             String email = currentUser.getEmail();
             User user = new User(userId, username, email);
-            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD);
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_CHILD);
             if (usersRef != null) {
                 usersRef.child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -139,7 +138,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                             Toast.makeText(RegistrationActivity.this, ERROR_REGISTRATION,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            startActivity(new Intent(RegistrationActivity.this, ChatActivity.class));
+                            startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
                             finish();
                         }
                     }

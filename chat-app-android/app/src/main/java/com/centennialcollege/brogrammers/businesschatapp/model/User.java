@@ -1,47 +1,65 @@
 package com.centennialcollege.brogrammers.businesschatapp.model;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * Model class to store information about a user.
+ */
 
 public class User {
     private String id;
     private String username;
     private String email;
-    private ArrayList<String> contactList = new ArrayList<>();
+    private Map<String, Boolean> contactList = new LinkedHashMap<>();
+    private Map<String, Boolean> activePersonalChats = new LinkedHashMap<>();
+
     public User() {
     }
+
     public User(String id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;
     }
-    public User(String id, String username, String email, ArrayList<String> contactList) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.contactList = contactList;
-    }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
-    public ArrayList<String> getContactList() {
+
+    public Map<String, Boolean> getContactList() {
         return contactList;
     }
-    public void setContactList(ArrayList<String> contactList) {
+
+    public void setContactList(Map<String, Boolean> contactList) {
         this.contactList = contactList;
+    }
+
+    public Map<String, Boolean> getActivePersonalChats() {
+        return activePersonalChats;
+    }
+
+    public void setActivePersonalChats(Map<String, Boolean> activePersonalChats) {
+        this.activePersonalChats = activePersonalChats;
     }
 }
