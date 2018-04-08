@@ -2,11 +2,20 @@ package com.centennialcollege.brogrammers.businesschatapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.centennialcollege.brogrammers.businesschatapp.chat.ChatsPagerAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.chat.GroupChatActivity;
@@ -17,15 +26,17 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * The main chat screen where all messages sent by all users are visible.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth firebaseAuth;
     private TabLayout tabLayout;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         init();
     }
 
@@ -42,6 +53,26 @@ public class MainActivity extends AppCompatActivity {
      * Initialize stuff.
      */
     private void init() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         firebaseAuth = FirebaseAuth.getInstance();
         ChatsPagerAdapter adapter = new ChatsPagerAdapter(getSupportFragmentManager());
 
@@ -67,32 +98,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_sign_out:
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_sign_out:
                 // Sign out the current user and navigate to Login Screen.
                 firebaseAuth.signOut();
                 launchLoginActivity();
-                return true;
-            case R.id.menu_contacts:
+                break;
+            case R.id.nav_contacts:
                 startActivity(new Intent(this, ContactsActivity.class));
-                return true;
-            case R.id.menu_my_contacts:
+                break;
+            case R.id.nav_my_contacts:
                 startActivity(new Intent(this, MyContactsActivity.class));
-                return true;
-            case R.id.menu_my_profile:
+                break;
+            case R.id.nav_my_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
-                return true;
-            case R.id.menu_new_group_chat:
+                break;
+            case R.id.nav_new_group_chat:
                 startActivity(new Intent(this, GroupChatActivity.class));
-                return true;
+                break;
         }
+
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

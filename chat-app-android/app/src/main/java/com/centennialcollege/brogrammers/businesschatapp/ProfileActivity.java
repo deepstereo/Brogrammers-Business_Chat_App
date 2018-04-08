@@ -80,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_activity_menu, menu);
+        getMenuInflater().inflate(R.menu.activity_profile, menu);
         return true;
     }
 
