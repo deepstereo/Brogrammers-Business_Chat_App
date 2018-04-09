@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.chat;
+package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +35,7 @@ public class MessagesRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message
     @Override
     public MessagesRecyclerViewAdapter.MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_list_item, parent, false);
+                .inflate(R.layout.item_message, parent, false);
         return new MessageViewHolder(view);
     }
 

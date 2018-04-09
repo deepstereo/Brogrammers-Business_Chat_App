@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,14 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.centennialcollege.brogrammers.businesschatapp.chat.ChatsPagerAdapter;
-import com.centennialcollege.brogrammers.businesschatapp.chat.GroupChatActivity;
-import com.centennialcollege.brogrammers.businesschatapp.contacts.ContactsActivity;
-import com.centennialcollege.brogrammers.businesschatapp.contacts.MyContactsActivity;
+import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -86,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Checks if the user is still logged in or not.
+     *
      * @return : True if logged in, false otherwise.
      */
     private boolean isUserLoggedIn() {
@@ -118,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, ContactsActivity.class));
                 break;
             case R.id.nav_my_contacts:
-                startActivity(new Intent(this, MyContactsActivity.class));
+                startActivity(new Intent(this, UserContactsActivity.class));
                 break;
             case R.id.nav_my_profile:
                 startActivity(new Intent(this, ProfileActivity.class));

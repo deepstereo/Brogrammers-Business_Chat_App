@@ -13,6 +13,7 @@ public class User {
     private String email;
     private Map<String, Boolean> contactList = new LinkedHashMap<>();
     private Map<String, Boolean> activePersonalChats = new LinkedHashMap<>();
+    private Map<String, Boolean> activeGroupChats = new LinkedHashMap<>();
 
     public User() {
     }
@@ -61,5 +62,13 @@ public class User {
 
     public void setActivePersonalChats(Map<String, Boolean> activePersonalChats) {
         this.activePersonalChats = activePersonalChats;
+    }
+
+    public Map<String, Boolean> getActiveGroupChats() {
+        return activeGroupChats;
+    }
+
+    public void setActiveGroupChats(Map<String, Boolean> activeGroupChats) {
+        this.activeGroupChats = activeGroupChats;
     }
 }

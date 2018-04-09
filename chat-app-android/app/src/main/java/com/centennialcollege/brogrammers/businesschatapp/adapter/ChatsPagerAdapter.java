@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.chat;
+package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,9 +26,9 @@ public class ChatsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return PersonalChatsFragment.newInstance();
+            return com.centennialcollege.brogrammers.businesschatapp.fragment.PersonalChatsFragment.newInstance();
         } else {
-            return GroupChatsFragment.newInstance();
+            return com.centennialcollege.brogrammers.businesschatapp.fragment.GroupChatsFragment.newInstance();
         }
     }
 
@@ -37,9 +37,9 @@ public class ChatsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         // Generate title based on TAB position
         if (position == 0) {
-            return PersonalChatsFragment.TITLE;
+            return com.centennialcollege.brogrammers.businesschatapp.fragment.PersonalChatsFragment.TITLE;
         } else {
-            return GroupChatsFragment.TITLE;
+            return com.centennialcollege.brogrammers.businesschatapp.fragment.GroupChatsFragment.TITLE;
         }
     }
 }

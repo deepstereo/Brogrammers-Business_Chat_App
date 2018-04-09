@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.contacts;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.ContactsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +31,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private RecyclerView mContactsRecyclerView;
     private ContactsRecyclerViewAdapter contactsRecyclerViewAdapter;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +72,13 @@ public class ContactsActivity extends AppCompatActivity {
         mContactsRecyclerView.setAdapter(contactsRecyclerViewAdapter);
     }
 
-    void addContacts(){
+    void addContacts() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             String currentUserId = user.getUid();
             FirebaseDatabase.getInstance().getReference().child(USERS_CHILD).child(currentUserId)
                     .child("contactList").setValue(selectedContacts);
-            Toast.makeText(getApplicationContext(), "Added",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
         }
     }
 

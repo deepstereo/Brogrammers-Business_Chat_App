@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.centennialcollege.brogrammers.businesschatapp.Constants;
+import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.UserInputChecker;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.chat;
+package com.centennialcollege.brogrammers.businesschatapp.fragment;
 
 
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.ChatListItem;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +43,7 @@ public class PersonalChatsFragment extends Fragment {
     private Map<String, Boolean> activePersonalChatIds;
 
     private RecyclerView mChatsRecyclerView;
-    private ChatsRecyclerViewAdapter chatsRecyclerViewAdapter;
+    private com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsRecyclerViewAdapter chatsRecyclerViewAdapter;
 
     private ArrayList<ChatListItem> chatListItems;
 
@@ -128,22 +129,21 @@ public class PersonalChatsFragment extends Fragment {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(MESSAGES_CHILD)
                 .child(chatListItem.getChatId());
 
-        Query query = ref.orderByKey().limitToLast(1);
+        Query query = ref.orderByChild("messageTime").limitToLast(1);
 
         // Attach a listener to read the data at our posts reference
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // FixMe : Json data being received is not being parsed properly into a Message object.
-                Message message = dataSnapshot.getValue(Message.class);
-//                if (message != null) {
-//                    chatListItem.setLastMessage(message.getMessageText());
+                Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
+                if (message != null) {
+                    chatListItem.setLastMessage(message);
                     chatListItems.add(chatListItem);
 
                     if (chatListItems.size() == activePersonalChatIds.size()) {
                         chatsRecyclerViewAdapter.notifyDataSetChanged();
                     }
-//                }
+                }
             }
 
             @Override

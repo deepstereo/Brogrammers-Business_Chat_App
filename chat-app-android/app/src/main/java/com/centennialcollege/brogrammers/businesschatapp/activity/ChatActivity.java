@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.chat;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.MessagesRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,10 +20,9 @@ import com.google.firebase.database.Query;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String chatId;
-
     EditText etMessageField;
     ImageView sendButton;
+    private String chatId;
     private FirebaseAuth firebaseAuth;
 
     private RecyclerView mMessageRecyclerView;

@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.contacts;
+package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,7 +36,7 @@ public class ContactsRecyclerViewAdapter extends FirebaseRecyclerAdapter<User, C
     @Override
     public ContactsRecyclerViewAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.contact_list_item, parent, false);
+                .inflate(R.layout.item_contact, parent, false);
         return new ContactsRecyclerViewAdapter.ContactViewHolder(view);
     }
 

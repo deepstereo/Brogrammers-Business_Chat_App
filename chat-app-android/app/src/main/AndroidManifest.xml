@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/title_activity_chats"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,25 +23,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".activity.RegistrationActivity"
             android:label="@string/title_activity_registration"
-            android:parentActivityName=".LoginActivity" />
+            android:parentActivityName=".activity.LoginActivity" />
         <activity
-            android:name=".contacts.ContactsActivity"
+            android:name=".activity.ContactsActivity"
             android:label="Contacts"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".contacts.MyContactsActivity"
+            android:name=".activity.UserContactsActivity"
             android:label="My Contacts"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".activity.ProfileActivity"
             android:label="Profile"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".chat.ChatActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".chat.GroupChatActivity" />
+            android:name=".activity.ChatActivity"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity android:name=".activity.GroupChatActivity" />
     </application>
 
 </manifest>
