@@ -9,16 +9,28 @@
 import UIKit
 
 class MainTabViewController: UITabBarController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
- 
+  
+  let colours = Colours()
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    Services.instance.presenceSystem()
+    
+//    let network = Services.instance.myStatus()
+//    if network {
+//      self.tabBar.tintColor = colours.colourMainBlue
+//      self.tabBar.unselectedItemTintColor = colours.colourLightBlue
+//    } else {
+//      self.tabBar.tintColor = colours.colourMainPurple
+//      self.tabBar.unselectedItemTintColor = colours.colourMainPurple
+//    }
+    
+    self.tabBar.tintColor = colours.colourMainBlue
+    self.tabBar.unselectedItemTintColor = colours.colourLightBlue
+    
+  }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+  }
 }

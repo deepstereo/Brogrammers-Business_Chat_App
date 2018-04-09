@@ -26,12 +26,20 @@ class CustomMessageOut: UITableViewCell {
         // Initialization code
     }
 
-    func configeureCell(senderName: String, messageTime: String, messageBody: String, messageBackground: UIColor ) {
+	func configeureCell(senderName: String, messageTime: String, messageBody: String, messageBackground: UIColor) {
         self.senderName.text = senderName
         self.messageTime.text = messageTime
         self.messageBody.text = messageBody
         self.messageBackground.backgroundColor = messageBackground
-        
+        self.userPic.isHidden = true
+        self.senderName.isHidden = true 
     }
-    
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    self.senderName.text = nil
+    self.messageTime.text = nil
+    self.messageBody.text = nil
+    self.messageBackground.backgroundColor = nil
+  }
+  
 }
