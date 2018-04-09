@@ -1,10 +1,12 @@
 package com.centennialcollege.brogrammers.businesschatapp.model;
 
+import android.support.annotation.NonNull;
+
 /**
  * Model class to store information about one single chat item to be displayed on chat list screen.
  */
 
-public class ChatListItem {
+public class ChatListItem implements Comparable<ChatListItem> {
 
     private String chatId;
     private String chatName;
@@ -37,4 +39,12 @@ public class ChatListItem {
         this.chatId = chatId;
     }
 
+    @Override
+    public int compareTo(@NonNull ChatListItem chatListItem) {
+        if (chatListItem.getLastMessage() != null && lastMessage != null) {
+            return Long.compare(chatListItem.getLastMessage().getMessageTime(), lastMessage.getMessageTime());
+        } else {
+            return 0;
+        }
+    }
 }

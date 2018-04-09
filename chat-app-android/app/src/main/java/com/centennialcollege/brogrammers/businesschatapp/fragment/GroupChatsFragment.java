@@ -24,7 +24,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.centennialcollege.brogrammers.businesschatapp.Constants.CHATS_CHILD;
@@ -135,14 +137,16 @@ public class GroupChatsFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
-                if (message != null) {
-                    chatListItem.setLastMessage(message);
-                    chatListItems.add(chatListItem);
+                Iterator<DataSnapshot> iterable = dataSnapshot.getChildren().iterator();
 
-                    if (chatListItems.size() == activeGroupChatIds.size()) {
-                        chatsRecyclerViewAdapter.notifyDataSetChanged();
-                    }
+                if (iterable.hasNext()) {
+                    Message message = iterable.next().getValue(Message.class);
+                    chatListItem.setLastMessage(message);
+                }
+                chatListItems.add(chatListItem);
+                if (chatListItems.size() == activeGroupChatIds.size()) {
+                    Collections.sort(chatListItems);
+                    chatsRecyclerViewAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -159,7 +163,7 @@ public class GroupChatsFragment extends Fragment {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
-        chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatListItems, getContext());
+        chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatListItems);
 
         mChatsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mChatsRecyclerView.setAdapter(chatsRecyclerViewAdapter);

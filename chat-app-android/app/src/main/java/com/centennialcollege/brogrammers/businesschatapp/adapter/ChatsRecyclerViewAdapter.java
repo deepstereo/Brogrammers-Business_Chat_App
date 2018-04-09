@@ -1,6 +1,5 @@
 package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
 import com.centennialcollege.brogrammers.businesschatapp.model.ChatListItem;
+import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -23,12 +23,10 @@ import java.util.Date;
 
 public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecyclerViewAdapter.ChatViewHolder> {
 
-    private Context context;
     private ArrayList<ChatListItem> chatListItems;
 
-    public ChatsRecyclerViewAdapter(ArrayList<ChatListItem> personalChats, Context context) {
+    public ChatsRecyclerViewAdapter(ArrayList<ChatListItem> personalChats) {
         this.chatListItems = personalChats;
-        this.context = context;
     }
 
     @Override
@@ -66,18 +64,21 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
 
             tvChatname.setText(chat.getChatName());
 
-            Date date = new Date(chat.getLastMessage().getMessageTime());
-            DateFormat dateFormat = DateFormat.getDateInstance();
-            tvDate.setText(dateFormat.format(date));
-            
-            tvLastMessage.setText(chat.getLastMessage().getMessageText());
+            Message message = chat.getLastMessage();
+            if (message != null) {
+                Date date = new Date(message.getMessageTime());
+                DateFormat dateFormat = DateFormat.getDateInstance();
+                tvDate.setText(dateFormat.format(date));
+
+                tvLastMessage.setText(message.getMessageText());
+            }
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ChatActivity.class);
+                    Intent intent = new Intent(view.getContext(), ChatActivity.class);
                     intent.putExtra(Constants.KEY_CHAT_ID, chat.getChatId());
-                    context.startActivity(intent);
+                    view.getContext().startActivity(intent);
                 }
             });
         }
