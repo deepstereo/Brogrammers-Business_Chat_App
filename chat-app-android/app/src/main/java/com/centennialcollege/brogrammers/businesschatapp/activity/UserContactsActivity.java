@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.contacts;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.UserContactsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,13 +22,13 @@ import java.util.Map;
 
 import static com.centennialcollege.brogrammers.businesschatapp.Constants.USERS_CHILD;
 
-public class MyContactsActivity extends AppCompatActivity {
+public class UserContactsActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private Map<String, Boolean> myContactsId;
 
     private RecyclerView mContactsRecyclerView;
-    private MyContactsRecyclerViewAdapter myContactsRecyclerViewAdapter;
+    private UserContactsRecyclerViewAdapter userContactsRecyclerViewAdapter;
 
     private ArrayList<User> myContacts;
 
@@ -85,7 +86,7 @@ public class MyContactsActivity extends AppCompatActivity {
                 myContacts.add(user);
 
                 if (myContacts.size() == myContactsId.size()) {
-                    myContactsRecyclerViewAdapter.notifyDataSetChanged();
+                    userContactsRecyclerViewAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -102,10 +103,10 @@ public class MyContactsActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        myContactsRecyclerViewAdapter = new MyContactsRecyclerViewAdapter(myContacts, this);
+        userContactsRecyclerViewAdapter = new UserContactsRecyclerViewAdapter(myContacts, this);
 
         mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mContactsRecyclerView.setAdapter(myContactsRecyclerViewAdapter);
+        mContactsRecyclerView.setAdapter(userContactsRecyclerViewAdapter);
     }
 
 }

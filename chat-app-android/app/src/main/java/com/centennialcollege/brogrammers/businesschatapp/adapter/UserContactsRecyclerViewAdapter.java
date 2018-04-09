@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp.contacts;
+package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
-import com.centennialcollege.brogrammers.businesschatapp.chat.ChatActivity;
+import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
 import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,21 +29,21 @@ import java.util.Map;
  * RecyclerView adapter to display the list of my contacts.
  */
 
-public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContactsRecyclerViewAdapter.ContactViewHolder> {
+public class UserContactsRecyclerViewAdapter extends RecyclerView.Adapter<UserContactsRecyclerViewAdapter.ContactViewHolder> {
 
     private Context context;
     private ArrayList<User> myContacts;
 
-    public MyContactsRecyclerViewAdapter(ArrayList<User> myContacts, Context context) {
+    public UserContactsRecyclerViewAdapter(ArrayList<User> myContacts, Context context) {
         this.myContacts = myContacts;
         this.context = context;
     }
 
     @Override
-    public MyContactsRecyclerViewAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserContactsRecyclerViewAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.contact_list_item, parent, false);
-        return new MyContactsRecyclerViewAdapter.ContactViewHolder(view);
+                .inflate(R.layout.item_contact, parent, false);
+        return new UserContactsRecyclerViewAdapter.ContactViewHolder(view);
     }
 
     @Override

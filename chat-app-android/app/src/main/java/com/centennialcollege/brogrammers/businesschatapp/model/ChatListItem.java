@@ -8,7 +8,7 @@ public class ChatListItem {
 
     private String chatId;
     private String chatName;
-    private String lastMessage;
+    private Message lastMessage;
 
     public ChatListItem() {
     }
@@ -21,11 +21,11 @@ public class ChatListItem {
         this.chatName = chatName;
     }
 
-    public String getLastMessage() {
+    public Message getLastMessage() {
         return lastMessage;
     }
 
-    public void setLastMessage(String lastMessage) {
+    public void setLastMessage(Message lastMessage) {
         this.lastMessage = lastMessage;
     }
 
@@ -36,4 +36,5 @@ public class ChatListItem {
     public void setChatId(String chatId) {
         this.chatId = chatId;
     }
+
 }

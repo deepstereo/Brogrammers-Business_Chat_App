@@ -1,8 +1,8 @@
-package com.centennialcollege.brogrammers.businesschatapp.chat;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
-import com.centennialcollege.brogrammers.businesschatapp.contacts.ContactsRecyclerViewAdapter;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.ContactsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.firebase.ui.database.FirebaseRecyclerOptions;

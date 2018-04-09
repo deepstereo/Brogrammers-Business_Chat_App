@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.UserInputChecker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -31,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(com.centennialcollege.brogrammers.businesschatapp.R.layout.activity_login);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
     /**
      * Checks if the user is still logged in or not.
+     *
      * @return : True if logged in, false otherwise.
      */
     private boolean isUserLoggedIn() {
@@ -66,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_login:
                 attemptLogin();
                 break;
@@ -77,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     }
 
     /**
-     *  Perform data validations and attempt to login.
+     * Perform data validations and attempt to login.
      */
     private void attemptLogin() {
         String email = etEmail.getText().toString();
@@ -91,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
     /**
      * Performs validations on the user inputs.
+     *
      * @return : True if all inputs are valid, false otherwise.
      */
     private boolean performValidations(String email, String password) {

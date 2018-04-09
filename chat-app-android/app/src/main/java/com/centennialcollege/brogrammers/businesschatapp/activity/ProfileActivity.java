@@ -1,4 +1,4 @@
-package com.centennialcollege.brogrammers.businesschatapp;
+package com.centennialcollege.brogrammers.businesschatapp.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.centennialcollege.brogrammers.businesschatapp.R;
+import com.centennialcollege.brogrammers.businesschatapp.UserInputChecker;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,9 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ProfileActivity extends AppCompatActivity {
+import static com.centennialcollege.brogrammers.businesschatapp.Constants.USERS_CHILD;
 
-    private static final String USERS_CHILD = "users-android-test";
+public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseUser currentUser;
     private DatabaseReference userRef;
@@ -80,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_activity_menu, menu);
+        getMenuInflater().inflate(R.menu.activity_profile, menu);
         return true;
     }
 

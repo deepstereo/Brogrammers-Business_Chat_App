@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <ProgressBar
         android:id="@+id/progress_bar"
