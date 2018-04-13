@@ -1,17 +1,50 @@
 <resources>
     <string name="app_name">Business Chat App</string>
 
-    <!-- Strings related to login and registration -->
-    <string name="title_activity_login">Login</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_confirm_password">Confirm Password</string>
-    <string name="action_login">Login</string>
-    <string name="action_register">Register</string>
-    <string name="title_activity_registration">Registration</string>
-    <string name="hint_username">Username</string>
+    <!-- Don't use one string for different screen -->
+    <!-- screen_type_name -->
 
-    <!--Chat Screen String resources-->
+    <!-- Login screen start -->
+    <string name="login_title">Login</string>
+    <string name="login_error_field_required">This field is required</string>
+    <string name="login_error_email_invalid">This email address is invalid</string>
+    <string name="login_error_email_not_exist">User with this email address isn\'t exist</string>
+    <string name="login_error_authorization">Authentication failed</string>
+    <string name="login_error_wrong_password">This password is wrong</string>
+    <string name="login_hint_email">Email</string>
+    <string name="login_hint_password">Password</string>
+    <string name="login_action_login">Login</string>
+    <string name="login_action_register">Register</string>
+    <!-- Login screen end -->
+
+    <!-- Registration screen start -->
+    <string name="registration_title">Registration</string>
+    <string name="registration_error_field_required">This field is required</string>
+    <string name="registration_error_email_invalid">This email address is invalid</string>
+    <string name="registration_error_password_too_short">This password is too short, minimum length is %1$d characters</string>
+    <string name="registration_error_passwords_not_same">This passwords aren\'t same</string>
+    <string name="registration_error_username_too_short">This username is too short, minimum length is %1$d characters</string>
+    <string name="registration_error">Registration error</string>
+    <string name="registration_error_email_exist">The email address is already in use by another account</string>
+    <string name="registration_hint_email">Email</string>
+    <string name="registration_hint_password">Password</string>
+    <string name="registration_hint_confirm_password">Confirm Password</string>
+    <string name="registration_hint_username">Username</string>
+    <string name="registration_action_login">Login</string>
+    <string name="registration_action_register">Register</string>
+    <!-- Registration screen end -->
+
+    <!-- Profile screen start -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_hint_username">Username</string>
+    <string name="profile_hint_email">Email</string>
+    <!-- Profile screen end -->
+
+    <!-- Strings need to relocate to specific screen -->
+    <!-- Don't touch string with name: _strings_needs_to_relocate_to_specific_screen -->
+    <string name="_strings_needs_to_relocate_to_specific_screen" />
+
+
     <string name="title_activity_chats">Chats</string>
     <string name="message_date_format">dd-MM-yyyy (HH:mm)</string>
 

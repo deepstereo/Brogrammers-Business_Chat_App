@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsPagerAdapter;
+import com.centennialcollege.brogrammers.businesschatapp.ui.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**

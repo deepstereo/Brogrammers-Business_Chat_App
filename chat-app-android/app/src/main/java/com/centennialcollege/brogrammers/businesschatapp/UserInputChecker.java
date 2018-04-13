@@ -3,7 +3,7 @@ package com.centennialcollege.brogrammers.businesschatapp;
 /**
  * Created by Sergey-PC on 05.03.2018.
  */
-
+@Deprecated
 public class UserInputChecker {
     public static final int MINIMUM_PASSWORD_LENGTH = 6;
     public static final int MINIMUM_USERNAME_LENGTH = 3;

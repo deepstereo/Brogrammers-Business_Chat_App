@@ -1,14 +1,17 @@
 package com.centennialcollege.brogrammers.businesschatapp;
 
-public class Constants {
+public interface Constants {
 
-    public static final String USERS_CHILD = "users-android-test-2";
-    public static final String MESSAGES_CHILD = "messages-android-test-2";
-    public static final String CHATS_CHILD = "chats-android-test-2";
+    int MINIMUM_PASSWORD_LENGTH = 6;
+    int MINIMUM_USERNAME_LENGTH = 3;
 
-    public static final String ACTIVE_PERSONAL_CHATS = "activePersonalChats";
-    public static final String ACTIVE_GROUP_CHATS = "activeGroupChats";
-    public static final String CHAT_NAME = "chatName";
+    String USERS_CHILD = "users-android-test-2";
+    String MESSAGES_CHILD = "messages-android-test-2";
+    String CHATS_CHILD = "chats-android-test-2";
 
-    public static final String KEY_CHAT_ID = "KEY_CHAT_ID";
+    String ACTIVE_PERSONAL_CHATS = "activePersonalChats";
+    String ACTIVE_GROUP_CHATS = "activeGroupChats";
+    String CHAT_NAME = "chatName";
+
+    String KEY_CHAT_ID = "KEY_CHAT_ID";
 }
