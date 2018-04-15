@@ -37,16 +37,13 @@ public class RegistrationFragment extends Fragment implements RegistrationContra
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_registration, container, false);
 
-        binding.btnRegistration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = binding.etUsername.getText().toString();
-                String email = binding.etEmail.getText().toString();
-                String password = binding.etPassword.getText().toString();
-                String passwordConfirm = binding.etPasswordConfirm.getText().toString();
+        binding.btnRegistration.setOnClickListener(v -> {
+            String username = binding.etUsername.getText().toString();
+            String email = binding.etEmail.getText().toString();
+            String password = binding.etPassword.getText().toString();
+            String passwordConfirm = binding.etPasswordConfirm.getText().toString();
 
-                presenter.attemptRegistration(username, email, password, passwordConfirm);
-            }
+            presenter.attemptRegistration(username, email, password, passwordConfirm);
         });
 
         return binding.getRoot();
@@ -65,61 +62,48 @@ public class RegistrationFragment extends Fragment implements RegistrationContra
     }
 
     @Override
-    public void showErrorEmailRequired() {
-        binding.etEmail.setError(getString(R.string.registration_error_field_required));
-        binding.etEmail.requestFocus();
-    }
+    public void showError(RegistrationContract.Error errorCode) {
 
-    @Override
-    public void showErrorEmailInvalid() {
-        binding.etEmail.setError(getString(R.string.registration_error_email_invalid));
-        binding.etEmail.requestFocus();
-    }
-
-    @Override
-    public void showErrorEmailExist() {
-        binding.etEmail.setError(getString(R.string.registration_error_email_exist));
-        binding.etEmail.requestFocus();
-    }
-
-    @Override
-    public void showErrorUsernameRequired() {
-        binding.etUsername.setError(getString(R.string.registration_error_field_required));
-        binding.etUsername.requestFocus();
-    }
-
-    @Override
-    public void showErrorPasswordConfirmRequired() {
-        binding.etPasswordConfirm.setError(getString(R.string.registration_error_field_required));
-        binding.etPasswordConfirm.requestFocus();
-    }
-
-    @Override
-    public void showErrorPasswordsNotSame() {
-        Toast.makeText(getContext(), R.string.registration_error_passwords_not_same, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showErrorUsernameTooShort() {
-        binding.etUsername.setError(getString(R.string.registration_error_username_too_short, Constants.MINIMUM_USERNAME_LENGTH));
-        binding.etUsername.requestFocus();
-    }
-
-    @Override
-    public void showErrorPasswordTooShort() {
-        binding.etPassword.setError(getString(R.string.registration_error_password_too_short, Constants.MINIMUM_PASSWORD_LENGTH));
-        binding.etPassword.requestFocus();
-    }
-
-    @Override
-    public void showErrorPasswordRequired() {
-        binding.etPassword.setError(getString(R.string.registration_error_field_required));
-        binding.etPassword.requestFocus();
-    }
-
-    @Override
-    public void showErrorRegistration() {
-        Toast.makeText(getContext(), R.string.registration_error, Toast.LENGTH_SHORT).show();
+        switch (errorCode) {
+            case ERROR_USERNAME_REQUIRED:
+                binding.etUsername.setError(getString(R.string.registration_error_field_required));
+                binding.etUsername.requestFocus();
+                break;
+            case ERROR_EMAIL_REQUIRED:
+                binding.etEmail.setError(getString(R.string.registration_error_field_required));
+                binding.etEmail.requestFocus();
+                break;
+            case ERROR_PASSWORD_REQUIRED:
+                binding.etPassword.setError(getString(R.string.registration_error_field_required));
+                binding.etPassword.requestFocus();
+                break;
+            case ERROR_PASSWORD_CONFIRMATION_REQUIRED:
+                binding.etPasswordConfirm.setError(getString(R.string.registration_error_field_required));
+                binding.etPasswordConfirm.requestFocus();
+                break;
+            case ERROR_EMAIL_INVALID:
+                binding.etUsername.setError(getString(R.string.registration_error_email_invalid));
+                binding.etUsername.requestFocus();
+                break;
+            case ERROR_USERNAME_TOO_SHORT:
+                binding.etUsername.setError(getString(R.string.registration_error_username_too_short, Constants.MINIMUM_USERNAME_LENGTH));
+                binding.etUsername.requestFocus();
+                break;
+            case ERROR_PASSWORD_TOO_SHORT:
+                binding.etPassword.setError(getString(R.string.registration_error_password_too_short, Constants.MINIMUM_PASSWORD_LENGTH));
+                binding.etPassword.requestFocus();
+                break;
+            case ERROR_PASSWORDS_NOT_MATCHING:
+                Toast.makeText(getContext(), R.string.registration_error_passwords_not_same, Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR_EMAIL_EXISTS:
+                binding.etUsername.setError(getString(R.string.registration_error_email_exist));
+                binding.etUsername.requestFocus();
+                break;
+            case ERROR_REGISTRATION:
+                Toast.makeText(getContext(), R.string.registration_error, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

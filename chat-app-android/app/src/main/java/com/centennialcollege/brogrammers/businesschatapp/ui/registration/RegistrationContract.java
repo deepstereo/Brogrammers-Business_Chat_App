@@ -4,15 +4,22 @@ import com.centennialcollege.brogrammers.businesschatapp.ui.BasePresenter;
 
 interface RegistrationContract {
 
+    enum Error {
+        ERROR_USERNAME_REQUIRED,
+        ERROR_EMAIL_REQUIRED,
+        ERROR_PASSWORD_REQUIRED,
+        ERROR_PASSWORD_CONFIRMATION_REQUIRED,
+        ERROR_EMAIL_INVALID,
+        ERROR_USERNAME_TOO_SHORT,
+        ERROR_PASSWORD_TOO_SHORT,
+        ERROR_PASSWORDS_NOT_MATCHING,
+        ERROR_EMAIL_EXISTS,
+        ERROR_REGISTRATION
+    }
+
     interface View {
 
-        void showErrorEmailRequired();
-
-        void showErrorPasswordRequired();
-
-        void showErrorEmailInvalid();
-
-        void showErrorRegistration();
+        void showError(Error errorCode);
 
         void hideErrors();
 
@@ -22,17 +29,6 @@ interface RegistrationContract {
 
         void launchMainActivity();
 
-        void showErrorEmailExist();
-
-        void showErrorUsernameRequired();
-
-        void showErrorPasswordConfirmRequired();
-
-        void showErrorPasswordsNotSame();
-
-        void showErrorUsernameTooShort();
-
-        void showErrorPasswordTooShort();
     }
 
     interface Presenter extends BasePresenter<View> {

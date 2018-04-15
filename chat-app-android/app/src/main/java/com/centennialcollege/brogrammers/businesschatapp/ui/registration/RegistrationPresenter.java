@@ -2,8 +2,8 @@ package com.centennialcollege.brogrammers.businesschatapp.ui.registration;
 
 import android.text.TextUtils;
 
-import com.centennialcollege.brogrammers.businesschatapp.data.autharization.AuthorizationContract;
-import com.centennialcollege.brogrammers.businesschatapp.data.autharization.AuthorizationModel;
+import com.centennialcollege.brogrammers.businesschatapp.data.authorization.AuthorizationContract;
+import com.centennialcollege.brogrammers.businesschatapp.data.authorization.AuthorizationModel;
 import com.centennialcollege.brogrammers.businesschatapp.data.db.DbContract;
 import com.centennialcollege.brogrammers.businesschatapp.data.db.DbModel;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
@@ -48,42 +48,42 @@ class RegistrationPresenter implements RegistrationContract.Presenter,
         passwordConfirm = passwordConfirm.trim();
 
         if (TextUtils.isEmpty(username)) {
-            view.showErrorUsernameRequired();
+            view.showError(RegistrationContract.Error.ERROR_USERNAME_REQUIRED);
             return;
         }
 
         if (TextUtils.isEmpty(email)) {
-            view.showErrorEmailRequired();
+            view.showError(RegistrationContract.Error.ERROR_EMAIL_REQUIRED);
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            view.showErrorPasswordRequired();
+            view.showError(RegistrationContract.Error.ERROR_PASSWORD_REQUIRED);
             return;
         }
 
         if (TextUtils.isEmpty(passwordConfirm)) {
-            view.showErrorPasswordConfirmRequired();
+            view.showError(RegistrationContract.Error.ERROR_PASSWORD_CONFIRMATION_REQUIRED);
             return;
         }
 
         if (!isEmailValid(email)) {
-            view.showErrorEmailInvalid();
+            view.showError(RegistrationContract.Error.ERROR_EMAIL_INVALID);
             return;
         }
 
         if (!isUsernameLongEnough(username)) {
-            view.showErrorUsernameTooShort();
+            view.showError(RegistrationContract.Error.ERROR_USERNAME_TOO_SHORT);
             return;
         }
 
         if (!isPasswordLongEnough(password)) {
-            view.showErrorPasswordTooShort();
+            view.showError(RegistrationContract.Error.ERROR_PASSWORD_TOO_SHORT);
             return;
         }
 
         if (!password.equals(passwordConfirm)) {
-            view.showErrorPasswordsNotSame();
+            view.showError(RegistrationContract.Error.ERROR_PASSWORDS_NOT_MATCHING);
             return;
         }
 
@@ -127,15 +127,15 @@ class RegistrationPresenter implements RegistrationContract.Presenter,
         if (errorCode != null) {
             switch (errorCode) {
                 case "ERROR_INVALID_EMAIL":
-                    view.showErrorEmailInvalid();
+                    view.showError(RegistrationContract.Error.ERROR_EMAIL_INVALID);
                     break;
                 case "ERROR_EMAIL_ALREADY_IN_USE":
                 case "ERROR_CREDENTIAL_ALREADY_IN_USE":
                 case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                    view.showErrorEmailExist();
+                    view.showError(RegistrationContract.Error.ERROR_EMAIL_EXISTS);
                     break;
                 default:
-                    view.showErrorRegistration();
+                    view.showError(RegistrationContract.Error.ERROR_REGISTRATION);
             }
         }
     }
@@ -153,6 +153,6 @@ class RegistrationPresenter implements RegistrationContract.Presenter,
 
         view.hideProgress();
 
-        view.showErrorRegistration();
+        view.showError(RegistrationContract.Error.ERROR_REGISTRATION);
     }
 }

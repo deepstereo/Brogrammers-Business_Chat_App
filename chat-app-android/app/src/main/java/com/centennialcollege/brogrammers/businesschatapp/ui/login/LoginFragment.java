@@ -36,21 +36,13 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
 
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = binding.etEmail.getText().toString();
-                String password = binding.etPassword.getText().toString();
+        binding.btnLogin.setOnClickListener(v -> {
+            String email = binding.etEmail.getText().toString();
+            String password = binding.etPassword.getText().toString();
 
-                presenter.attemptLogin(email, password);
-            }
+            presenter.attemptLogin(email, password);
         });
-        binding.btnRegistration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchRegistrationActivity();
-            }
-        });
+        binding.btnRegistration.setOnClickListener(v -> launchRegistrationActivity());
 
         return binding.getRoot();
     }
@@ -68,38 +60,33 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     @Override
-    public void showErrorEmailRequired() {
-        binding.etEmail.setError(getString(R.string.login_error_field_required));
-        binding.etEmail.requestFocus();
-    }
+    public void showError(LoginContract.Error errorCode) {
 
-    @Override
-    public void showErrorEmailInvalid() {
-        binding.etEmail.setError(getString(R.string.login_error_email_invalid));
-        binding.etEmail.requestFocus();
-    }
-
-    @Override
-    public void showErrorEmailNotExist() {
-        binding.etEmail.setError(getString(R.string.login_error_email_not_exist));
-        binding.etEmail.requestFocus();
-    }
-
-    @Override
-    public void showErrorPasswordRequired() {
-        binding.etPassword.setError(getString(R.string.login_error_field_required));
-        binding.etPassword.requestFocus();
-    }
-
-    @Override
-    public void showErrorWrongPassword() {
-        binding.etPassword.setError(getString(R.string.login_error_wrong_password));
-        binding.etPassword.requestFocus();
-    }
-
-    @Override
-    public void showErrorAuthorization() {
-        Toast.makeText(getContext(), R.string.login_error_authorization, Toast.LENGTH_SHORT).show();
+        switch (errorCode) {
+            case ERROR_EMAIL_REQUIRED:
+                binding.etEmail.setError(getString(R.string.login_error_field_required));
+                binding.etEmail.requestFocus();
+                break;
+            case ERROR_PASSWORD_REQUIRED:
+                binding.etPassword.setError(getString(R.string.login_error_field_required));
+                binding.etPassword.requestFocus();
+                break;
+            case ERROR_EMAIL_INVALID:
+                binding.etEmail.setError(getString(R.string.login_error_email_invalid));
+                binding.etEmail.requestFocus();
+                break;
+            case ERROR_WRONG_PASSWORD:
+                binding.etPassword.setError(getString(R.string.login_error_wrong_password));
+                binding.etPassword.requestFocus();
+                break;
+            case ERROR_AUTHORIZATION:
+                Toast.makeText(getContext(), R.string.login_error_authorization, Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR_EMAIL_DOES_NOT_EXIST:
+                binding.etEmail.setError(getString(R.string.login_error_email_not_exist));
+                binding.etEmail.requestFocus();
+                break;
+        }
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.centennialcollege.brogrammers.businesschatapp.ui.login;
 
 import android.text.TextUtils;
 
-import com.centennialcollege.brogrammers.businesschatapp.data.autharization.AuthorizationContract;
-import com.centennialcollege.brogrammers.businesschatapp.data.autharization.AuthorizationModel;
+import com.centennialcollege.brogrammers.businesschatapp.data.authorization.AuthorizationContract;
+import com.centennialcollege.brogrammers.businesschatapp.data.authorization.AuthorizationModel;
 import com.google.firebase.auth.FirebaseUser;
 
 
@@ -38,17 +38,17 @@ class LoginPresenter implements LoginContract.Presenter, AuthorizationContract.P
         password = password.trim();
 
         if (TextUtils.isEmpty(email)) {
-            view.showErrorEmailRequired();
+            view.showError(LoginContract.Error.ERROR_EMAIL_REQUIRED);
             return;
         }
 
         if (!isEmailValid(email)) {
-            view.showErrorEmailInvalid();
+            view.showError(LoginContract.Error.ERROR_EMAIL_INVALID);
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            view.showErrorPasswordRequired();
+            view.showError(LoginContract.Error.ERROR_PASSWORD_REQUIRED);
             return;
         }
 
@@ -71,17 +71,17 @@ class LoginPresenter implements LoginContract.Presenter, AuthorizationContract.P
         if (errorCode != null) {
             switch (errorCode) {
                 case "ERROR_INVALID_EMAIL":
-                    view.showErrorEmailInvalid();
+                    view.showError(LoginContract.Error.ERROR_EMAIL_INVALID);
                     break;
                 case "ERROR_WRONG_PASSWORD":
                 case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                    view.showErrorWrongPassword();
+                    view.showError(LoginContract.Error.ERROR_WRONG_PASSWORD);
                     break;
                 case "ERROR_USER_NOT_FOUND":
-                    view.showErrorEmailNotExist();
+                    view.showError(LoginContract.Error.ERROR_EMAIL_DOES_NOT_EXIST);
                     break;
                 default:
-                    view.showErrorAuthorization();
+                    view.showError(LoginContract.Error.ERROR_AUTHORIZATION);
             }
         }
     }
