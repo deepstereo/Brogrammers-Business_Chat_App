@@ -40,6 +40,14 @@ public class ChatListItem implements Comparable<ChatListItem> {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ChatListItem) {
+            return chatId.equals(((ChatListItem) obj).chatId);
+        }
+        return false;
+    }
+
+    @Override
     public int compareTo(@NonNull ChatListItem chatListItem) {
         if (chatListItem.getLastMessage() != null && lastMessage != null) {
             return Long.compare(chatListItem.getLastMessage().getMessageTime(), lastMessage.getMessageTime());

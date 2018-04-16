@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -17,6 +16,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -48,20 +50,30 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.button_send);
         etMessageField = findViewById(R.id.et_message_field);
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.MESSAGES_CHILD).child(chatId);
+        sendButton.setOnClickListener(view -> {
+            DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
 
-                // Retrieve and send the text message in the message field to firebase database.
-                Message message = new Message(etMessageField.getText().toString(),
-                        firebaseAuth.getCurrentUser().getEmail());
+            DatabaseReference messageReference = dbReference.child(Constants.MESSAGES_CHILD).child(chatId);
+            DatabaseReference lastMessageTimeReference = dbReference.child(Constants.CHATS_CHILD)
+                    .child(chatId).child(Constants.CHAT_LAST_MESSAGE_TIMESTAMP);
 
-                reference.push().setValue(message);
-                etMessageField.setText("");
-                etMessageField.requestFocus();
-            }
+            // Retrieve and send the text message in the message field to firebase database.
+            Message message = new Message(etMessageField.getText().toString(),
+                    firebaseAuth.getCurrentUser().getEmail());
+
+            // Evaluate the relative paths for writing message object and updating lastMessageTimestamp in one go.
+            String messageReferenceRelativeChildKey = messageReference.toString().replace(dbReference.toString(), "");
+            String lastMessageTimeReferenceRelativeChildKey = lastMessageTimeReference.toString().replace(dbReference.toString(), "");
+
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put(messageReferenceRelativeChildKey + "/" + messageReference.push().getKey(), message);
+            childUpdates.put(lastMessageTimeReferenceRelativeChildKey, message.getMessageTime());
+
+            dbReference.updateChildren(childUpdates);
+
+            etMessageField.setText("");
+            etMessageField.requestFocus();
+            mMessageRecyclerView.scrollToPosition(mMessagesRecyclerViewAdapter.getItemCount() - 1);
         });
 
         mMessageRecyclerView = findViewById(R.id.rv_chats);

@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsPagerAdapter;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Give the TabLayout the ViewPager
         tabLayout = findViewById(R.id.layout_tabs);
         tabLayout.setupWithViewPager(chatsViewPager);
+
+        TextView userEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_user_email);
+        userEmail.setText(firebaseAuth.getCurrentUser().getEmail());
     }
 
     /**
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, ContactsActivity.class));
                 break;
             case R.id.nav_my_contacts:
-                startActivity(new Intent(this, UserContactsActivity.class));
+                startActivity(new Intent(this, MyContactsActivity.class));
                 break;
             case R.id.nav_my_profile:
                 startActivity(new Intent(this, ProfileActivity.class));

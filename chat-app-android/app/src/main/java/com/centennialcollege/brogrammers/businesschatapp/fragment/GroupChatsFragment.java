@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.centennialcollege.brogrammers.businesschatapp.model.ChatListItem;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import static com.centennialcollege.brogrammers.businesschatapp.Constants.CHATS_CHILD;
@@ -79,24 +80,45 @@ public class GroupChatsFragment extends Fragment {
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD)
                 .child(firebaseUser.getUid()).child(Constants.ACTIVE_GROUP_CHATS);
 
-        // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
+        // Attach a listener to read and observe the list of personal chat Ids.
+        ref.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                HashMap<String, Boolean> chatIds = (HashMap<String, Boolean>) dataSnapshot.getValue();
-                if (chatIds != null) {
-                    activeGroupChatIds.putAll(chatIds);
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String chatId = dataSnapshot.getKey();
+                if (!TextUtils.isEmpty(chatId)) {
+                    activeGroupChatIds.put(chatId, true);
                 }
 
                 if (activeGroupChatIds != null && activeGroupChatIds.size() > 0) {
-                    for (String activePersonalChatId : activeGroupChatIds.keySet()) {
-                        ChatListItem chatListItem = new ChatListItem();
-                        chatListItem.setChatId(activePersonalChatId);
-                        populateChatName(chatListItem);
+                    ChatListItem chatListItem = new ChatListItem();
+                    chatListItem.setChatId(chatId);
+                    populateChatName(chatListItem);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                // Do Nothing
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String chatId = dataSnapshot.getKey();
+                activeGroupChatIds.remove(chatId);
+                ChatListItem chatToRemove = null;
+                for (ChatListItem item : chatListItems) {
+                    if (TextUtils.equals(item.getChatId(), chatId)) {
+                        chatToRemove = item;
+                        break;
                     }
                 }
-                ref.removeEventListener(this);
+                chatListItems.remove(chatToRemove);
+                chatsRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                // Todo: Think of what could trigger this.
             }
 
             @Override
@@ -137,16 +159,20 @@ public class GroupChatsFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterator<DataSnapshot> iterable = dataSnapshot.getChildren().iterator();
+                if (dataSnapshot.getChildren().iterator().hasNext()) {
+                    Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
+                    if (message != null) {
+                        chatListItem.setLastMessage(message);
 
-                if (iterable.hasNext()) {
-                    Message message = iterable.next().getValue(Message.class);
-                    chatListItem.setLastMessage(message);
-                }
-                chatListItems.add(chatListItem);
-                if (chatListItems.size() == activeGroupChatIds.size()) {
-                    Collections.sort(chatListItems);
-                    chatsRecyclerViewAdapter.notifyDataSetChanged();
+                        if (!chatListItems.contains(chatListItem)) {
+                            chatListItems.add(chatListItem);
+                        }
+
+                        if (chatListItems.size() == activeGroupChatIds.size()) {
+                            Collections.sort(chatListItems);
+                            chatsRecyclerViewAdapter.notifyDataSetChanged();
+                        }
+                    }
                 }
             }
 

@@ -73,13 +73,10 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
                 tvLastMessage.setText(message.getMessageText());
             }
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(view.getContext(), ChatActivity.class);
-                    intent.putExtra(Constants.KEY_CHAT_ID, chat.getChatId());
-                    view.getContext().startActivity(intent);
-                }
+            view.setOnClickListener(v -> {
+                Intent intent = new Intent(view.getContext(), ChatActivity.class);
+                intent.putExtra(Constants.KEY_CHAT_ID, chat.getChatId());
+                view.getContext().startActivity(intent);
             });
         }
     }

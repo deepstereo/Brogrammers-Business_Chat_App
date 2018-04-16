@@ -13,6 +13,7 @@ import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
 import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
+import com.centennialcollege.brogrammers.businesschatapp.util.ChatAttributesHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,21 +30,23 @@ import java.util.Map;
  * RecyclerView adapter to display the list of my contacts.
  */
 
-public class UserContactsRecyclerViewAdapter extends RecyclerView.Adapter<UserContactsRecyclerViewAdapter.ContactViewHolder> {
+public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContactsRecyclerViewAdapter.ContactViewHolder> {
 
     private Context context;
+    private User currentUser;
     private ArrayList<User> myContacts;
 
-    public UserContactsRecyclerViewAdapter(ArrayList<User> myContacts, Context context) {
+    public MyContactsRecyclerViewAdapter(User currentUser, ArrayList<User> myContacts, Context context) {
+        this.currentUser = currentUser;
         this.myContacts = myContacts;
         this.context = context;
     }
 
     @Override
-    public UserContactsRecyclerViewAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyContactsRecyclerViewAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_contact, parent, false);
-        return new UserContactsRecyclerViewAdapter.ContactViewHolder(view);
+        return new MyContactsRecyclerViewAdapter.ContactViewHolder(view);
     }
 
     @Override
@@ -72,32 +75,29 @@ public class UserContactsRecyclerViewAdapter extends RecyclerView.Adapter<UserCo
                 tvUsername.setText("Username: " + model.getUsername());
                 tvEmail.setText("Email: " + model.getEmail());
 
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                view.setOnClickListener(v -> {
 
-                        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                        String currentUserId = firebaseAuth.getCurrentUser().getUid();
+                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                    String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
-                        // Create a new chat
-                        Map<String, Boolean> members = new LinkedHashMap<>();
-                        members.put(currentUserId, true);
-                        members.put(model.getId(), true);
+                    // Create a new chat
+                    Map<String, Boolean> members = new LinkedHashMap<>();
+                    members.put(currentUserId, true);
+                    members.put(model.getId(), true);
 
-                        // Todo: Change the Chat name later on as per discussion.
-                        Chat newChat = new Chat(model.getUsername() + " & " + firebaseAuth.getCurrentUser().getEmail(), false, members);
+                    // Chat name is the concatenation of the usernames of sender and recipient.
+                    Chat newChat = new Chat(model.getUsername() + currentUser.getUsername(), false, members);
 
-                        DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
-                                .child(Constants.CHATS_CHILD);
-                        String newChatId = chatReference.push().getKey();
-                        chatReference.child(newChatId).setValue(newChat);
+                    DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.CHATS_CHILD);
+                    String newChatId = ChatAttributesHelper.getPersonalChatID(currentUserId, model.getId());
+                    chatReference.child(newChatId).setValue(newChat);
 
-                        addChatIdInActivePersonalChats(newChatId, currentUserId, model.getId());
+                    addChatIdInActivePersonalChats(newChatId, currentUserId, model.getId());
 
-                        Intent intent = new Intent(context, ChatActivity.class);
-                        intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
-                        context.startActivity(intent);
-                    }
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
+                    context.startActivity(intent);
                 });
         }
     }

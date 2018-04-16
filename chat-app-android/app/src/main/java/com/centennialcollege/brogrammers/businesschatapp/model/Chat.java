@@ -10,6 +10,7 @@ public class Chat {
 
     private String chatName;
     private boolean isGroupChat;
+    private long lastMessageTimeStamp;
     private Map<String, Boolean> members;
 
     public Chat() {
@@ -35,6 +36,14 @@ public class Chat {
 
     public void setIsGroupChat(boolean groupChat) {
         isGroupChat = groupChat;
+    }
+
+    public long getLastMessageTimeStamp() {
+        return lastMessageTimeStamp;
+    }
+
+    public void setLastMessageTimeStamp(long lastMessageTimeStamp) {
+        this.lastMessageTimeStamp = lastMessageTimeStamp;
     }
 
     public Map<String, Boolean> getMembers() {

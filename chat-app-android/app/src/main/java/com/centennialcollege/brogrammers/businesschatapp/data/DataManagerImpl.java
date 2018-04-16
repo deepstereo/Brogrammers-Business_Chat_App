@@ -36,6 +36,16 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
+    public FirebaseAuthHelper getFirebaseAuthHelper() {
+        return firebaseAuthHelper;
+    }
+
+    @Override
+    public FirebaseDbHelper getFirebaseDbHelper() {
+        return firebaseDbHelper;
+    }
+
+    @Override
     public Task<AuthResult> signIn(String email, String password) {
         return firebaseAuthHelper.signInWithEmailAndPassword(email, password);
     }

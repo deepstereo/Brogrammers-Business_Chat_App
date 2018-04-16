@@ -12,6 +12,7 @@ public interface Constants {
     String ACTIVE_PERSONAL_CHATS = "activePersonalChats";
     String ACTIVE_GROUP_CHATS = "activeGroupChats";
     String CHAT_NAME = "chatName";
+    String CHAT_LAST_MESSAGE_TIMESTAMP = "lastMessageTimeStamp";
 
     String KEY_CHAT_ID = "KEY_CHAT_ID";
 }

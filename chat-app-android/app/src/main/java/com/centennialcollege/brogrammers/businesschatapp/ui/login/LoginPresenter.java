@@ -30,6 +30,14 @@ class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
+    public void checkUserAuthState() {
+        // If user is already logged in, open MainActivity.
+        if (dataManager.getFirebaseAuthHelper().getCurrentUser() != null) {
+            view.launchMainActivity();
+        }
+    }
+
+    @Override
     public void attemptLogin(String email, String password) {
         view.hideErrors();
 

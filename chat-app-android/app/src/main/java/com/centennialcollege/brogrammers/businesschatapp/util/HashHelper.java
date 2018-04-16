@@ -1,10 +1,14 @@
 package com.centennialcollege.brogrammers.businesschatapp.util;
 
+import android.util.Log;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashHelper {
+
+    private static final String TAG = HashHelper.class.getSimpleName();
 
     public static String getMd5(String text) {
         try {
@@ -15,8 +19,9 @@ public class HashHelper {
                 sb.append(Integer.toHexString((anArray & 0xFF) | 0x100).substring(1, 3));
             }
             return sb.toString();
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ignored) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException exception) {
+            Log.e(TAG, "Could not generate Md5 hash for text : " + text, exception);
+            return null;
         }
-        return null;
     }
 }

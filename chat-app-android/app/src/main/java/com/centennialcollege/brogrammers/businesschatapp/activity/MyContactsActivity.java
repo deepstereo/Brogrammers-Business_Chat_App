@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.centennialcollege.brogrammers.businesschatapp.R;
-import com.centennialcollege.brogrammers.businesschatapp.adapter.UserContactsRecyclerViewAdapter;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.MyContactsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,15 +22,16 @@ import java.util.Map;
 
 import static com.centennialcollege.brogrammers.businesschatapp.Constants.USERS_CHILD;
 
-public class UserContactsActivity extends AppCompatActivity {
+public class MyContactsActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private Map<String, Boolean> myContactsId;
 
     private RecyclerView mContactsRecyclerView;
-    private UserContactsRecyclerViewAdapter userContactsRecyclerViewAdapter;
+    private MyContactsRecyclerViewAdapter myContactsRecyclerViewAdapter;
 
     private ArrayList<User> myContacts;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class UserContactsActivity extends AppCompatActivity {
 
         init();
         fetchMyContactsIds();
-        setupRecyclerView();
+        fetchCurrentUser();
     }
 
     private void init() {
@@ -63,7 +64,7 @@ public class UserContactsActivity extends AppCompatActivity {
                     myContactsId.putAll(user.getContactList());
 
                     for (String myContactId : user.getContactList().keySet()) {
-                        fetchUser(myContactId);
+                        fetchMyContact(myContactId);
                     }
                 }
             }
@@ -75,19 +76,38 @@ public class UserContactsActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchUser(String contactId) {
+    private void fetchMyContact(String contactId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD).child(contactId);
 
         // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 myContacts.add(user);
 
                 if (myContacts.size() == myContactsId.size()) {
-                    userContactsRecyclerViewAdapter.notifyDataSetChanged();
+                    myContactsRecyclerViewAdapter.notifyDataSetChanged();
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    private void fetchCurrentUser() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD)
+                .child(firebaseAuth.getCurrentUser().getUid());
+
+        // Attach a listener to read the data at our posts reference
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUser = dataSnapshot.getValue(User.class);
+                setupRecyclerView();
             }
 
             @Override
@@ -103,10 +123,10 @@ public class UserContactsActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        userContactsRecyclerViewAdapter = new UserContactsRecyclerViewAdapter(myContacts, this);
+        myContactsRecyclerViewAdapter = new MyContactsRecyclerViewAdapter(currentUser, myContacts, this);
 
         mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mContactsRecyclerView.setAdapter(userContactsRecyclerViewAdapter);
+        mContactsRecyclerView.setAdapter(myContactsRecyclerViewAdapter);
     }
 
 }

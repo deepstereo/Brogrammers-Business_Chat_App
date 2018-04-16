@@ -15,7 +15,7 @@ public class Message {
     public Message(String messageText, String messageUser) {
         this.messageText = messageText;
         this.messageUser = messageUser;
-        messageTime = new Date().getTime();
+        messageTime = System.currentTimeMillis();
     }
 
     public Message() {
