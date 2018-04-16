@@ -37,7 +37,7 @@
             android:label="My Contacts"
             android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".activity.ProfileActivity"
+            android:name=".ui.profile.ProfileActivity"
             android:label="Profile"
             android:parentActivityName=".activity.MainActivity" />
         <activity

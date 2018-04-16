@@ -82,8 +82,8 @@ public class RegistrationFragment extends Fragment implements RegistrationContra
                 binding.etPasswordConfirm.requestFocus();
                 break;
             case ERROR_EMAIL_INVALID:
-                binding.etUsername.setError(getString(R.string.registration_error_email_invalid));
-                binding.etUsername.requestFocus();
+                binding.etEmail.setError(getString(R.string.registration_error_email_invalid));
+                binding.etEmail.requestFocus();
                 break;
             case ERROR_USERNAME_TOO_SHORT:
                 binding.etUsername.setError(getString(R.string.registration_error_username_too_short, Constants.MINIMUM_USERNAME_LENGTH));
@@ -97,8 +97,8 @@ public class RegistrationFragment extends Fragment implements RegistrationContra
                 Toast.makeText(getContext(), R.string.registration_error_passwords_not_same, Toast.LENGTH_SHORT).show();
                 break;
             case ERROR_EMAIL_EXISTS:
-                binding.etUsername.setError(getString(R.string.registration_error_email_exist));
-                binding.etUsername.requestFocus();
+                binding.etEmail.setError(getString(R.string.registration_error_email_exist));
+                binding.etEmail.requestFocus();
                 break;
             case ERROR_REGISTRATION:
                 Toast.makeText(getContext(), R.string.registration_error, Toast.LENGTH_SHORT).show();

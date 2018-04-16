@@ -2,18 +2,17 @@ package com.centennialcollege.brogrammers.businesschatapp.ui.login;
 
 import android.text.TextUtils;
 
-import com.centennialcollege.brogrammers.businesschatapp.data.authorization.AuthorizationContract;
-import com.centennialcollege.brogrammers.businesschatapp.data.authorization.AuthorizationModel;
-import com.google.firebase.auth.FirebaseUser;
+import com.centennialcollege.brogrammers.businesschatapp.data.DataManager;
+import com.centennialcollege.brogrammers.businesschatapp.data.DataManagerImpl;
 
 
-class LoginPresenter implements LoginContract.Presenter, AuthorizationContract.Presenter {
+class LoginPresenter implements LoginContract.Presenter {
 
     private LoginContract.View view;
-    private AuthorizationContract.Model model;
+    private DataManager dataManager;
 
     LoginPresenter() {
-        model = new AuthorizationModel(this);
+        dataManager = new DataManagerImpl();
     }
 
     @Override
@@ -54,35 +53,30 @@ class LoginPresenter implements LoginContract.Presenter, AuthorizationContract.P
 
         view.showProgress();
 
-        model.signInWithEmailAndPassword(email, password);
+        dataManager.signIn(email, password)
+                .addOnSuccessListener(authResult -> {
+                    view.hideProgress();
+
+                    view.launchMainActivity();
+                })
+                .addOnFailureListener(e -> {
+                    view.hideProgress();
+
+                    switch (dataManager.getFirebaseException(e)) {
+                        case ERROR_INVALID_EMAIL:
+                            view.showError(LoginContract.Error.ERROR_EMAIL_INVALID);
+                            break;
+                        case ERROR_WRONG_PASSWORD:
+                        case ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL:
+                            view.showError(LoginContract.Error.ERROR_WRONG_PASSWORD);
+                            break;
+                        case ERROR_USER_NOT_FOUND:
+                            view.showError(LoginContract.Error.ERROR_EMAIL_DOES_NOT_EXIST);
+                            break;
+                        default:
+                            view.showError(LoginContract.Error.ERROR_AUTHORIZATION);
+                    }
+                });
     }
 
-    @Override
-    public void onSuccessAuthorization(FirebaseUser user) {
-        view.hideProgress();
-
-        view.launchMainActivity();
-    }
-
-    @Override
-    public void onFailureAuthorization(String errorCode) {
-        view.hideProgress();
-
-        if (errorCode != null) {
-            switch (errorCode) {
-                case "ERROR_INVALID_EMAIL":
-                    view.showError(LoginContract.Error.ERROR_EMAIL_INVALID);
-                    break;
-                case "ERROR_WRONG_PASSWORD":
-                case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                    view.showError(LoginContract.Error.ERROR_WRONG_PASSWORD);
-                    break;
-                case "ERROR_USER_NOT_FOUND":
-                    view.showError(LoginContract.Error.ERROR_EMAIL_DOES_NOT_EXIST);
-                    break;
-                default:
-                    view.showError(LoginContract.Error.ERROR_AUTHORIZATION);
-            }
-        }
-    }
 }

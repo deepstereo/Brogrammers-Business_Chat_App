@@ -8,6 +8,7 @@ import java.util.Map;
  */
 
 public class User {
+    @Deprecated
     private String id;
     private String username;
     private String email;
@@ -18,6 +19,12 @@ public class User {
     public User() {
     }
 
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
+
+    @Deprecated
     public User(String id, String username, String email) {
         this.id = id;
         this.username = username;
