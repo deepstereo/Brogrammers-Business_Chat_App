@@ -42,6 +42,9 @@
         <activity
             android:name=".activity.ChatActivity"
             android:parentActivityName=".activity.MainActivity" />
+        <activity
+            android:name=".activity.ChatInfoActivity"
+            android:label="@string/chat_info_title" />
         <activity android:name=".activity.GroupChatActivity" />
     </application>
 

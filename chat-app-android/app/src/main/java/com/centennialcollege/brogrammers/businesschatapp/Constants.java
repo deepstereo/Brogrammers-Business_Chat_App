@@ -16,9 +16,11 @@ public interface Constants {
     String USER_ACTIVE_GROUP_CHATS = "activeGroupChats";
 
     String CHAT_NAME = "chatName";
+    String CHATS_MEMBERS = "members";
     String CHAT_LAST_MESSAGE_TIMESTAMP = "lastMessageTimeStamp";
 
     String PHOTO_MESSAGES_CHILD = "photoMessages";
 
     String KEY_CHAT_ID = "KEY_CHAT_ID";
+
 }
