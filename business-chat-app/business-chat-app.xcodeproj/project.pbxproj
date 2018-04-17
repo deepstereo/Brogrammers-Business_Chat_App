@@ -182,6 +182,7 @@
 				74B3B093204BB2F40056A026 /* MainTabViewController.swift */,
 				748407FD205492D000CF244F /* AddContactVC.swift */,
 				74CB91562049DBBA0098E047 /* PersonalChatTableVC.swift */,
+				74B8C3A6205AC15900951EEB /* AddGroupVC.swift */,
 				748BEF16205DFBB00032EE3C /* GroupChatVC.swift */,
 				137B603E20642155008FEC57 /* GroupInfoVC.swift */,
 				7404B0D52052DA24001DF785 /* ListOfContactsVC.swift */,
@@ -190,7 +191,6 @@
 				1363906320631CD500746F5A /* EditProfileTableVC.swift */,
 				743D497E204DDB92004A57E8 /* SettingsVC.swift */,
 				137B603C20633BFD008FEC57 /* UserProfileVC.swift */,
-				74B8C3A6205AC15900951EEB /* AddGroupVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -295,7 +295,6 @@
 				77AE6FE520491C4F00918A93 /* Frameworks */,
 				77AE6FE620491C4F00918A93 /* Resources */,
 				294FE05098B1ACC3E714E382 /* [CP] Embed Pods Frameworks */,
-				22161E8667651CBA021E7CCC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -321,10 +320,10 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -370,21 +369,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		22161E8667651CBA021E7CCC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-business-chat-app/Pods-business-chat-app-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		294FE05098B1ACC3E714E382 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -401,6 +385,7 @@
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/SimpleImageViewer/SimpleImageViewer.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -415,6 +400,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SimpleImageViewer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -620,7 +606,6 @@
 			baseConfigurationReference = C1F2C9B5BD2F35B4665BA1E8 /* Pods-business-chat-app.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "business-chat-app/business-chat-app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6QEFHSRMQX;
 				INFOPLIST_FILE = "business-chat-app/Info.plist";
@@ -637,7 +622,6 @@
 			baseConfigurationReference = F48D78BC5E0D745189ED9639 /* Pods-business-chat-app.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "business-chat-app/business-chat-app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6QEFHSRMQX;
 				INFOPLIST_FILE = "business-chat-app/Info.plist";

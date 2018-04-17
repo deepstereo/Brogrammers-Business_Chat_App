@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import SVProgressHUD
+import SimpleImageViewer
 
 
 class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -74,7 +75,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.lastSeenTime.isHidden = false
         self.lastSeenTime.text = date
       }
-
+      
       self.contactNameLabel.text = tabName
       
       if tabImage == "NoImage" {
@@ -84,13 +85,13 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
       }
       
       self.tabPhoto.layer.masksToBounds = true
-      self.tabPhoto.layer.cornerRadius = 20
+      self.tabPhoto.layer.cornerRadius = 15
       
     }
     configureTableView()
     getMessages()
-     self.heightConstraint.constant = 60
-
+    self.heightConstraint.constant = 60
+    
   }
   
   func getMessages() {
@@ -99,7 +100,9 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.chatMessages = returnedChatMessages
         self.configureTableView()
+         DispatchQueue.main.async {
         self.chatTableView.reloadData()
+        }
         self.scrollToBottom()
         
       })
@@ -136,7 +139,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //    chatTableView.register(UINib(nibName: "WebCellOut", bundle: nil), forCellReuseIdentifier: "webOut")
     
-//    self.hideKeyboardWhenTappedAround()
+    //    self.hideKeyboardWhenTappedAround()
     chatTableView.separatorStyle = .none
     chatTableView.setContentOffset(chatTableView.contentOffset, animated: false)
   }
@@ -210,7 +213,6 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.configeureCell(messageImage: mediaUrl, messageTime: date!, senderName: sender)
         
         return cell
-        
       }
       
       let cell = tableView.dequeueReusableCell(withIdentifier: "messageIn", for: indexPath) as! CustomMessageIn
@@ -222,7 +224,6 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
   }
   
-  
   func textFieldDidEndEditing(_ textField: UITextField) {
     
     UIView.animate(withDuration: 0.2) {
@@ -233,16 +234,42 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
   }
   
-  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return chatMessages.count
+  }
+  
+  
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+    let currentCell = tableView.cellForRow(at: indexPath)
+    
+    if (currentCell?.isKind(of: MultimediaMessageIn.self))! {
+      print("MULIT IN")
+      let cell = tableView.cellForRow(at: indexPath) as! MultimediaMessageIn
+      
+      let configuration = ImageViewerConfiguration { config in
+        config.imageView = cell.messageBodyImage
+      }
+      present(ImageViewerController(configuration: configuration), animated: true)
+      
+    }else if (currentCell?.isKind(of: MultimediaMessageOut.self))! {
+      print("MULIT Out")
+      let cell = tableView.cellForRow(at: indexPath) as! MultimediaMessageOut
+      
+      let configuration = ImageViewerConfiguration { config in
+        config.imageView = cell.messageBodyImage
+      }
+      present(ImageViewerController(configuration: configuration), animated: true)
+    }
+    
   }
   
   
   @IBAction func sendButton(_ sender: UIButton) {
     
     let date = Date()
-    let currentDate = date.timeIntervalSinceReferenceDate
+    let currentDate = date.millisecondsSince1970
     let messageUID = ("\(currentDate)" + currentUserId!).replacingOccurrences(of: ".", with: "")
     if textField.text != "" {
       sendBtn.isEnabled = false
@@ -278,7 +305,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     self.present(actionSheet, animated: true, completion: nil)
     
     print("Photo Message Uploaded")
-
+    
   }
   
   @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String:Any]) {
@@ -287,7 +314,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     let image = info[UIImagePickerControllerOriginalImage] as! UIImage
     let date = Date()
-    let currentDate = date.timeIntervalSinceReferenceDate
+    let currentDate = date.millisecondsSince1970
     let messageUID = ("\(currentDate)" + currentUserId!).replacingOccurrences(of: ".", with: "")
     
     Services.instance.uploadPhotoMessage(withImage: image, withChatKey: (self.chat?.key)!, withMessageId: messageUID, completion: { (imageUrl) in
@@ -321,10 +348,10 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
   @objc func keyboardWillShow(notification : NSNotification) {
     
     let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue.size
-
+    
     self.heightConstraint.constant = keyboardSize.height + 60
     UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions.curveLinear, animations: { () -> Void in
-
+      
     })
   }
   
@@ -341,8 +368,11 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
       if let chatName = chat?.chatName {
         userProfileVC.chatName = chatName
       }
+      userProfileVC.title = self.contactNameLabel.text!
     }
   }
+  
+  
   @IBAction func infoButtonPressed(_ sender: UIButton) {
     performSegue(withIdentifier: "showUserProfile", sender: self)
     print("Info Button Pressed")

@@ -14,33 +14,56 @@ class ListOfGroupsVC: UIViewController {
   @IBOutlet weak var groupsTableView: UITableView!
   
   var groupsArray = [Chat]()
+
+  var allUsersArray = [User]()
+
+  var refreshControl: UIRefreshControl!
   
   override func viewDidLoad() {
     super.viewDidLoad()
     groupsTableView.delegate = self
     groupsTableView.dataSource = self
+    refreshControl = UIRefreshControl()
+    groupsTableView.refreshControl = refreshControl
+    refreshControl.addTarget(self, action: #selector(refreshPull), for: UIControlEvents.valueChanged)
     navigationItem.leftBarButtonItem = editButtonItem
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     offlineMode()
+    downloadMessages()
+
+  }
+  
+  @objc func refreshPull() {
+    DispatchQueue.main.async {
+      
+      self.refreshControl.endRefreshing()
+      self.downloadMessages()
+    }
+  }
+  
+  func downloadMessages(){
     
-    ChatServices.instance.getMyChatsIds(isGroup: true) { (ids) in
-      ChatServices.instance.getMyChats(forIds: ids, handler: { (returnedChats) in
-        self.groupsArray = returnedChats
-        DispatchQueue.main.async {
-          self.groupsTableView.reloadData()
-        }
-      })
+    UserServices.instance.REF_USERS.child(currentUserId!).child("activeGroupChats").observe( .childAdded) { (df) in
+      ChatServices.instance.getMyChatsIds(isGroup: true) { (ids) in
+        ChatServices.instance.getMyChats(forIds: ids, handler: { (returnedChats) in
+          self.groupsArray = returnedChats.sorted { $0.lastMessage > $1.lastMessage }
+//          DispatchQueue.main.async {
+            self.groupsTableView.reloadData()
+//          }
+        })
+      }
     }
     
-    UserServices.instance.REF_USERS.child(currentUserId!).child("activeGroupChats").observe(.childRemoved) { (snapshot) in
+    UserServices.instance.REF_USERS.child(currentUserId!).child("activerPersonalChats").observe(.childRemoved) { (snapshot) in
       DispatchQueue.main.async {
         self.groupsTableView.reloadData()
       }
     }
   }
+  
   
   deinit{
     
@@ -73,6 +96,7 @@ extension ListOfGroupsVC: UITableViewDelegate, UITableViewDataSource {
       let indexPath = groupsTableView.indexPathForSelectedRow
       guard let groupChatVC = segue.destination as? GroupChatVC else {return}
       groupChatVC.initData(forChat: groupsArray[(indexPath?.row)!])
+		groupChatVC.title = groupsArray[(indexPath?.row)!].chatName
     }
   }
   

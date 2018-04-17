@@ -47,6 +47,7 @@ extension UIView {
   
 }
 
+
 extension UIViewController {
   func hideKeyboardWhenTappedAround() {
     let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
@@ -59,9 +60,7 @@ extension UIViewController {
   }
   
   func presentStoryboard() {
-    
-    
-    
+
     let storyboard = UIStoryboard(name: "MainStoryboard", bundle: nil)
     let vc = storyboard.instantiateViewController(withIdentifier: "MainTabVC") as UIViewController
     self.present(vc, animated: true, completion: nil)
@@ -76,9 +75,8 @@ extension UIViewController {
     
   }
   func getDateFromInterval(timestamp: Double?) -> String? {
-    
     if let timestamp = timestamp {
-      let date = Date(timeIntervalSinceReferenceDate: timestamp)
+      let date = Date(milliseconds: Int(timestamp))
       let dateFormatter = DateFormatter()
       let timeSinceDateInSeconds = Date().timeIntervalSince(date)
       let secondInDays: TimeInterval = 24*60*60
@@ -96,6 +94,16 @@ extension UIViewController {
     
   }
   
+}
+
+extension Date {
+  var millisecondsSince1970:Int {
+    return Int((self.timeIntervalSince1970 * 1000.0).rounded())
+  }
+  
+  init(milliseconds:Int) {
+    self = Date(timeIntervalSince1970: TimeInterval(milliseconds / 1000))
+  }
 }
 
 extension UIColor {
