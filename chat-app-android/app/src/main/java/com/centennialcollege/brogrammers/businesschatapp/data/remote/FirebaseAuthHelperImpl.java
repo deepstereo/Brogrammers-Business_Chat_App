@@ -2,6 +2,7 @@ package com.centennialcollege.brogrammers.businesschatapp.data.remote;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -55,4 +56,14 @@ public class FirebaseAuthHelperImpl implements FirebaseAuthHelper {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    @Override
+    public Task<Void> reAuthentication(String password) {
+        FirebaseUser user = getCurrentUser();
+        String email = user.getEmail();
+        if (email != null) {
+            return user.reauthenticate(EmailAuthProvider.getCredential(email, password));
+        } else {
+            return null;
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
@@ -14,7 +15,27 @@ import java.util.UUID;
 public class FirebaseDbHelperImpl implements FirebaseDbHelper {
 
     @Override
-    public Task<Void> addUserInfo(String userId, User user) {
+    public Task<Void> replaceUserEmail(String userId, String email) {
+        return FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.USERS_CHILD)
+                .child(userId)
+                .child(Constants.USER_EMAIL)
+                .setValue(email);
+    }
+
+    @Override
+    public Task<Void> replaceUserUsername(String userId, String email) {
+        return FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.USERS_CHILD)
+                .child(userId)
+                .child(Constants.USER_USERNAME)
+                .setValue(email);
+    }
+
+    @Override
+    public Task<Void> replaceUserInfo(String userId, User user) {
         return FirebaseDatabase.getInstance()
                 .getReference()
                 .child(Constants.USERS_CHILD)
@@ -35,7 +56,7 @@ public class FirebaseDbHelperImpl implements FirebaseDbHelper {
                 .getReference()
                 .child(Constants.USERS_CHILD)
                 .child(userId)
-                .child("contactList") // fixMe add to constant
+                .child(Constants.USER_CONTACT_LIST)
                 .updateChildren(newContactsId);
     }
 
@@ -45,7 +66,7 @@ public class FirebaseDbHelperImpl implements FirebaseDbHelper {
                 .getReference()
                 .child(Constants.USERS_CHILD)
                 .child(userId)
-                .child("activePersonalChats") // fixMe add to constant
+                .child(Constants.USER_ACTIVE_PERSONAL_CHATS)
                 .updateChildren(newChatsId);
     }
 
@@ -68,4 +89,11 @@ public class FirebaseDbHelperImpl implements FirebaseDbHelper {
                 .setValue(message);
     }
 
+    @Override
+    public DatabaseReference getUserRef(String userId) {
+        return FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.USERS_CHILD)
+                .child(userId);
+    }
 }

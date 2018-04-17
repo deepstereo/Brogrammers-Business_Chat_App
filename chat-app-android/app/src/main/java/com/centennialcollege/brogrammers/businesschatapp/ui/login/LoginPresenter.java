@@ -18,6 +18,7 @@ class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void takeView(LoginContract.View view) {
         this.view = view;
+        checkUserAuthState();
     }
 
     @Override
@@ -29,8 +30,7 @@ class LoginPresenter implements LoginContract.Presenter {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    @Override
-    public void checkUserAuthState() {
+    private void checkUserAuthState() {
         // If user is already logged in, open MainActivity.
         if (dataManager.getFirebaseAuthHelper().getCurrentUser() != null) {
             view.launchMainActivity();

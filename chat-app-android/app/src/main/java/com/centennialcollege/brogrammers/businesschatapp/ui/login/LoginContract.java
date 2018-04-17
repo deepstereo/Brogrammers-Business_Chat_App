@@ -31,8 +31,6 @@ interface LoginContract {
 
     interface Presenter extends BasePresenter<View> {
 
-        void checkUserAuthState();
-
         void attemptLogin(String email, String password);
 
     }

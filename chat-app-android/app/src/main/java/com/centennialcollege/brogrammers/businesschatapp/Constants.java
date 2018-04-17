@@ -9,8 +9,12 @@ public interface Constants {
     String MESSAGES_CHILD = "messages-android-test-2";
     String CHATS_CHILD = "chats-android-test-2";
 
-    String ACTIVE_PERSONAL_CHATS = "activePersonalChats";
-    String ACTIVE_GROUP_CHATS = "activeGroupChats";
+    String USER_EMAIL = "email";
+    String USER_USERNAME = "username";
+    String USER_CONTACT_LIST = "contactList";
+    String USER_ACTIVE_PERSONAL_CHATS = "activePersonalChats";
+    String USER_ACTIVE_GROUP_CHATS = "activeGroupChats";
+
     String CHAT_NAME = "chatName";
     String CHAT_LAST_MESSAGE_TIMESTAMP = "lastMessageTimeStamp";
 

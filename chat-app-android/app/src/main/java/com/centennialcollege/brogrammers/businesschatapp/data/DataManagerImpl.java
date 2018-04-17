@@ -11,6 +11,10 @@ import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class DataManagerImpl implements DataManager {
     private FirebaseAuthHelper firebaseAuthHelper;
@@ -53,7 +57,57 @@ public class DataManagerImpl implements DataManager {
     @Override
     public Task<Void> createUser(final User user, String password) {
         return firebaseAuthHelper.registerUser(user.getEmail(), password)
-                .continueWithTask(task -> firebaseDbHelper.addUserInfo(task.getResult().getUser().getUid(), user));
+                .continueWithTask(task -> firebaseDbHelper.replaceUserInfo(task.getResult().getUser().getUid(), user));
     }
+
+    @Override
+    public void getCurrentUserInfo(GetUserInfoCallback getUserInfoCallback) {
+        FirebaseUser firebaseUser = firebaseAuthHelper.getCurrentUser();
+        String userId = firebaseUser.getUid();
+
+        firebaseDbHelper.getUserRef(userId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null)
+                            getUserInfoCallback.onSuccess(user);
+                        else
+                            getUserInfoCallback.onFailure();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        getUserInfoCallback.onFailure();
+                    }
+                });
+    }
+
+    @Override
+    public Task<Void> replaceCurrentUserEmailAndUsername(String email, String username,
+                                                         ReplaceUserEmailAndUsernameCallback replaceCallback) {
+        FirebaseUser firebaseUser = firebaseAuthHelper.getCurrentUser();
+        String userId = firebaseUser.getUid();
+
+        return firebaseAuthHelper.updateEmail(email)
+                .continueWithTask(task -> {
+                    if (task.isSuccessful()) {
+                        return firebaseDbHelper.replaceUserEmail(userId, email);
+                    } else {
+                        replaceCallback.onFailure(task.getException());
+                        return null;
+                    }
+                })
+                .continueWithTask(task -> {
+                    if (task.isSuccessful()) {
+                        return firebaseDbHelper.replaceUserUsername(userId, username);
+                    } else {
+                        return null;
+                    }
+                })
+                .addOnSuccessListener(aVoid -> replaceCallback.onSuccess())
+                .addOnFailureListener(replaceCallback::onFailure);
+    }
+
 
 }

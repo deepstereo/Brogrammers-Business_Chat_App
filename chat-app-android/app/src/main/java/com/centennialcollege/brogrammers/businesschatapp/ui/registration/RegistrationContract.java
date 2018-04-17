@@ -36,9 +36,4 @@ interface RegistrationContract {
         void attemptRegistration(String username, String email, String password, String passwordConfirm);
     }
 
-    interface Model {
-
-
-    }
-
 }

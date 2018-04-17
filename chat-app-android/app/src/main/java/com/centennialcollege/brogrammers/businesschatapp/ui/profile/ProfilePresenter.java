@@ -1,0 +1,154 @@
+package com.centennialcollege.brogrammers.businesschatapp.ui.profile;
+
+import android.text.TextUtils;
+
+import com.centennialcollege.brogrammers.businesschatapp.data.DataManager;
+import com.centennialcollege.brogrammers.businesschatapp.data.DataManagerImpl;
+import com.centennialcollege.brogrammers.businesschatapp.model.User;
+
+import static com.centennialcollege.brogrammers.businesschatapp.Constants.MINIMUM_USERNAME_LENGTH;
+
+
+class ProfilePresenter implements ProfileContract.Presenter {
+
+    private ProfileContract.View view;
+    private DataManager dataManager;
+    private String username;
+    private String email;
+
+    ProfilePresenter() {
+        dataManager = new DataManagerImpl();
+    }
+
+    @Override
+    public void takeView(ProfileContract.View view) {
+        this.view = view;
+        updateUserInfo();
+    }
+
+
+    @Override
+    public void dropView() {
+        this.view = null;
+    }
+
+    boolean isViewNotNull() {
+        return view != null;
+    }
+
+    private void updateUserInfo() {
+        if (isViewNotNull()) {
+            view.showProgress();
+            dataManager.getCurrentUserInfo(new DataManager.GetUserInfoCallback() {
+                @Override
+                public void onSuccess(User user) {
+                    if (isViewNotNull()) {
+                        view.hideProgress();
+
+                        view.setUsername(user.getUsername());
+                        view.setUserEmail(user.getEmail());
+                    }
+                }
+
+                @Override
+                public void onFailure() {
+                    if (isViewNotNull()) {
+                        view.hideProgress();
+
+                        view.showError(ProfileContract.Error.ERROR_GET_USER_INFO);
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean isEmailValid(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private boolean isUsernameLongEnough(String username) {
+        return username.length() >= MINIMUM_USERNAME_LENGTH;
+    }
+
+    @Override
+    public void attemptChangeUserInfo(String username, String email) {
+        view.hideErrors();
+
+        username = username.trim();
+        email = email.trim();
+
+        if (TextUtils.isEmpty(email)) {
+            view.showError(ProfileContract.Error.ERROR_EMAIL_REQUIRED);
+            return;
+        }
+
+        if (!isEmailValid(email)) {
+            view.showError(ProfileContract.Error.ERROR_EMAIL_INVALID);
+            return;
+        }
+
+        if (TextUtils.isEmpty(username)) {
+            view.showError(ProfileContract.Error.ERROR_USERNAME_REQUIRED);
+            return;
+        }
+
+        if (!isUsernameLongEnough(username)) {
+            view.showError(ProfileContract.Error.ERROR_USERNAME_TOO_SHORT);
+            return;
+        }
+
+        view.showProgress();
+
+        DataManager.ReplaceUserEmailAndUsernameCallback replaceCallback =
+                new DataManager.ReplaceUserEmailAndUsernameCallback() {
+                    @Override
+                    public void onSuccess() {
+                        view.hideProgress();
+
+                        view.showUpdateSuccessMsg();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        view.hideProgress();
+
+                        switch (dataManager.getFirebaseException(e)) {
+                            case ERROR_INVALID_EMAIL:
+                                view.showError(ProfileContract.Error.ERROR_EMAIL_INVALID);
+                                break;
+                            case ERROR_EMAIL_ALREADY_IN_USE:
+                                view.showError(ProfileContract.Error.ERROR_EMAIL_ALREADY_IN_USE);
+                                break;
+                            case ERROR_REQUIRES_RECENT_LOGIN:
+                                view.showReAuthenticationDialog();
+                                break;
+                            default:
+                                view.showError(ProfileContract.Error.ERROR_UPDATE_USER_INFO);
+                        }
+                    }
+                };
+
+        this.username = username;
+        this.email = email;
+
+        dataManager.replaceCurrentUserEmailAndUsername(email, username, replaceCallback);
+    }
+
+    @Override
+    public void attemptReAuthentication(String password) {
+        if (TextUtils.isEmpty(password)) {
+            view.showError(ProfileContract.Error.ERROR_PASSWORD_REQUIRED);
+            return;
+        }
+
+        dataManager.getFirebaseAuthHelper()
+                .reAuthentication(password)
+                .addOnSuccessListener(aVoid -> {
+                    view.closeReAuthenticationDialog();
+                    attemptChangeUserInfo(username, email);
+                })
+                .addOnFailureListener(e ->
+                        view.showError(ProfileContract.Error.ERROR_WRONG_PASSWORD));
+    }
+
+}

@@ -11,6 +11,18 @@ import com.google.firebase.auth.AuthResult;
 
 public interface DataManager {
 
+    Task<Void> replaceCurrentUserEmailAndUsername(String email, String username,
+                                                  ReplaceUserEmailAndUsernameCallback replaceCallback);
+
+    void getCurrentUserInfo(GetUserInfoCallback getUserInfoCallback);
+
+    interface GetUserInfoCallback {
+
+        void onSuccess(User user);
+
+        void onFailure();
+    }
+
     @NonNull
     FirebaseAuthExceptions getFirebaseException(Exception e);
 
@@ -22,4 +34,10 @@ public interface DataManager {
 
     Task<AuthResult> signIn(String email, String password);
 
+    interface ReplaceUserEmailAndUsernameCallback {
+
+        void onSuccess();
+
+        void onFailure(Exception e);
+    }
 }

@@ -176,7 +176,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
     private void updateActiveGroupChatsForUser(final String newChatId, String userId) {
         final DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_CHILD)
-                .child(userId).child(Constants.ACTIVE_GROUP_CHATS);
+                .child(userId).child(Constants.USER_ACTIVE_GROUP_CHATS);
 
 
         // Attach a listener to read the data at our posts reference

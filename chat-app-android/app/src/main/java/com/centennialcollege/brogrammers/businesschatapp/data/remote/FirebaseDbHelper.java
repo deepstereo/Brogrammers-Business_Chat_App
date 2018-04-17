@@ -4,12 +4,17 @@ import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.Map;
 
 public interface FirebaseDbHelper {
 
-    Task<Void> addUserInfo(String userId, User user);
+    Task<Void> replaceUserEmail(String userId, String email);
+
+    Task<Void> replaceUserUsername(String userId, String email);
+
+    Task<Void> replaceUserInfo(String userId, User user);
 
     Task<Void> addContactToUserContacts(String userId, String newContactId);
 
@@ -21,4 +26,5 @@ public interface FirebaseDbHelper {
 
     Task<Void> createMessage(String chatId, Message message);
 
+    DatabaseReference getUserRef(String userId);
 }

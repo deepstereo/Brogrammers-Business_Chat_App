@@ -78,7 +78,7 @@ public class GroupChatsFragment extends Fragment {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD)
-                .child(firebaseUser.getUid()).child(Constants.ACTIVE_GROUP_CHATS);
+                .child(firebaseUser.getUid()).child(Constants.USER_ACTIVE_GROUP_CHATS);
 
         // Attach a listener to read and observe the list of personal chat Ids.
         ref.addChildEventListener(new ChildEventListener() {

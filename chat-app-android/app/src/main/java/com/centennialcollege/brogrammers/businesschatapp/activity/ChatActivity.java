@@ -33,9 +33,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 1;
 
-    EditText etMessageField;
-    ImageView sendButton;
-    ImageView galleryButton;
+    private EditText etMessageField;
+    private ImageView sendButton;
+    private ImageView galleryButton;
     private String chatId;
     private FirebaseAuth firebaseAuth;
     private StorageReference storageRef;
@@ -58,9 +58,9 @@ public class ChatActivity extends AppCompatActivity {
     private void init() {
         firebaseAuth = FirebaseAuth.getInstance();
 
-        storageRef = FirebaseStorage.getInstance().getReference().child(Constants.PHOTO_MESSAGES_CHILD).child(chatId);
-
         chatId = getIntent().getStringExtra(Constants.KEY_CHAT_ID);
+
+        storageRef = FirebaseStorage.getInstance().getReference().child(Constants.PHOTO_MESSAGES_CHILD).child(chatId);
 
         sendButton = findViewById(R.id.button_send);
         galleryButton = findViewById(R.id.button_gallery);
@@ -98,7 +98,6 @@ public class ChatActivity extends AppCompatActivity {
 
             etMessageField.setText("");
             etMessageField.requestFocus();
-            mMessageRecyclerView.scrollToPosition(mMessagesRecyclerViewAdapter.getItemCount() - 1);
         });
 
         mMessageRecyclerView = findViewById(R.id.rv_chats);
@@ -143,7 +142,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
 
         Query query = FirebaseDatabase.getInstance().getReference().child(Constants.MESSAGES_CHILD).child(chatId);
 
@@ -154,7 +154,7 @@ public class ChatActivity extends AppCompatActivity {
 
         mMessagesRecyclerViewAdapter = new MessagesRecyclerViewAdapter(options, this);
 
-        mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mMessageRecyclerView.setLayoutManager(layoutManager);
         mMessageRecyclerView.setAdapter(mMessagesRecyclerViewAdapter);
     }
 

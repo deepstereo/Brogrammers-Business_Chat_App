@@ -38,6 +38,12 @@
     <string name="profile_title">Profile</string>
     <string name="profile_hint_username">Username</string>
     <string name="profile_hint_email">Email</string>
+    <string name="profile_error_field_required">This field is required</string>
+    <string name="profile_error_email_invalid">This email address is invalid</string>
+    <string name="profile_error_email_exist">The email address is already in use by another account</string>
+    <string name="profile_error_get_user_info">Error getting user</string>
+    <string name="profile_error_update">Error updating user</string>
+    <string name="profile_success_update">User updated</string>
     <!-- Profile screen end -->
 
     <!-- Strings need to relocate to specific screen -->
@@ -53,5 +59,11 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="profile_error_wrong_password">Password is wrong</string>
+    <string name="profile_error_password_required">Please enter your password</string>
+    <string name="profile_hint_password">Password</string>
+    <string name="profile_title_enter_password">Enter your password:</string>
+    <string name="profile_ok">Ok</string>
+    <string name="profile_cancel">Cancel</string>
 
 </resources>

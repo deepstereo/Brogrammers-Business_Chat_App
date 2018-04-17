@@ -110,7 +110,7 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
 
     private void updateActivePersonalChatsForUser(final String newChatId, String userId) {
         final DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_CHILD)
-                .child(userId).child(Constants.ACTIVE_PERSONAL_CHATS);
+                .child(userId).child(Constants.USER_ACTIVE_PERSONAL_CHATS);
 
 
         // Attach a listener to read the data at our posts reference

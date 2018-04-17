@@ -19,4 +19,6 @@ public interface FirebaseAuthHelper {
     Task<AuthResult> signInWithEmailAndPassword(String email, String password);
 
     FirebaseUser getCurrentUser();
+
+    Task<Void> reAuthentication(String password);
 }
