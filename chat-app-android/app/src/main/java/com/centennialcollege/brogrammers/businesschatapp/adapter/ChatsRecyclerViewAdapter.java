@@ -66,11 +66,11 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
 
             Message message = chat.getLastMessage();
             if (message != null) {
-                Date date = new Date(message.getMessageTime());
+                Date date = new Date(message.getTimeSent());
                 DateFormat dateFormat = DateFormat.getDateInstance();
                 tvDate.setText(dateFormat.format(date));
 
-                tvLastMessage.setText(message.getMessageText());
+                tvLastMessage.setText(message.getContent());
             }
 
             view.setOnClickListener(v -> {

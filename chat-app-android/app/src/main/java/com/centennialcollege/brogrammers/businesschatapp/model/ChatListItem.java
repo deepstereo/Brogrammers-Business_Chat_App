@@ -50,7 +50,7 @@ public class ChatListItem implements Comparable<ChatListItem> {
     @Override
     public int compareTo(@NonNull ChatListItem chatListItem) {
         if (chatListItem.getLastMessage() != null && lastMessage != null) {
-            return Long.compare(chatListItem.getLastMessage().getMessageTime(), lastMessage.getMessageTime());
+            return Long.compare(chatListItem.getLastMessage().getTimeSent(), lastMessage.getTimeSent());
         } else {
             return 0;
         }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="5dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:gravity="start"
+        android:layout_marginStart="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="3dp"
+            android:textSize="12sp"
+            tools:text="11:50 pm" />
+
+        <TextView
+            android:id="@+id/tv_message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chat_bubble_bg_their"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:padding="5dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            tools:text="Message Text" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+</LinearLayout>

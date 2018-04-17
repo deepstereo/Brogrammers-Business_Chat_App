@@ -5,6 +5,9 @@
     <color name="colorPrimaryLight">#7a5eb1</color>
     <color name="colorAccent">#40c4ff</color>
 
+    <color name="colorChatBubbleMine">#0c3470</color>
+    <color name="colorChatBubbleTheir">#771f44</color>
+
     <color name="gray">#9e9e9e</color>
     <color name="lighter_gray">#e0e0e0</color>
 </resources>
