@@ -1,6 +1,10 @@
 package com.centennialcollege.brogrammers.businesschatapp.ui.profile;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,16 +19,35 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.databinding.FragmentProfileBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class ProfileFragment extends Fragment implements ProfileContract.View {
+
+    private static final int PICK_IMAGE = 1;
 
     private ProfileContract.Presenter presenter;
 
     private FragmentProfileBinding binding;
 
     private AlertDialog authDialog;
+
+    private String userId;
 
     public ProfileFragment() {
     } // Required empty public constructor
@@ -47,6 +70,52 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.takeView(this);
+
+        binding.ivUserImage.setOnClickListener(view1 -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE);
+        });
+
+        initUserAvatar();
+    }
+
+    private void initUserAvatar() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) return;
+        userId = firebaseUser.getUid();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.USERS_CHILD)
+                .child(userId)
+                .child(Constants.USER_AVATAR_URL);
+
+        // Attach a listener to read the data at our posts reference
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    String url = dataSnapshot.getValue(String.class);
+
+                    if (url != null && url.length() > 0) {
+                        Context context = getContext();
+                        if (context == null) return;
+
+                        Glide.with(context)
+                                .load(url)
+                                .into(binding.ivUserImage);
+                    }
+                } catch (Exception e) {
+                    System.out.println("The read failed: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     @Override
@@ -169,6 +238,54 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     @Override
     public void closeReAuthenticationDialog() {
         if (authDialog != null) authDialog.dismiss();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        StorageReference storageRef;
+        if (userId == null) return;
+        storageRef = FirebaseStorage.getInstance().getReference()
+                .child(Constants.USER_IMAGES_CHILD).child(userId);
+
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data.getData() == null) {
+                Toast.makeText(getContext(), "Error occurred while choosing photo.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                Context context = getContext();
+                if (context == null) return;
+                InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
+                if (inputStream == null) return;
+                UploadTask uploadTask = storageRef.putStream(inputStream);
+                uploadTask
+                        .addOnSuccessListener(taskSnapshot -> {
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            if (downloadUrl == null) return;
+
+                            Glide.with(context)
+                                    .load(downloadUrl)
+                                    .into(binding.ivUserImage);
+
+                            addUserAvatarToDb(downloadUrl);
+                        });
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addUserAvatarToDb(Uri avatarUrl) {
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.USERS_CHILD)
+                .child(userId)
+                .child(Constants.USER_AVATAR_URL)
+                .setValue(avatarUrl.toString());
     }
 
 }

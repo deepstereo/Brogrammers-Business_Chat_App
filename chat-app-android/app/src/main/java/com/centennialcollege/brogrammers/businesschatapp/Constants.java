@@ -20,7 +20,9 @@ public interface Constants {
     String CHAT_LAST_MESSAGE_TIMESTAMP = "lastMessageTimeStamp";
 
     String PHOTO_MESSAGES_CHILD = "photoMessages";
+    String USER_IMAGES_CHILD = "userImages";
 
     String KEY_CHAT_ID = "KEY_CHAT_ID";
 
+    String USER_AVATAR_URL = "avatarURL";
 }
