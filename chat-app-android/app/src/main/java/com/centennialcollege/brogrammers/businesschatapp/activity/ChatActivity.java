@@ -155,7 +155,7 @@ public class ChatActivity extends AppCompatActivity {
                         .setQuery(query, Message.class)
                         .build();
 
-        mMessagesRecyclerViewAdapter = new MessagesRecyclerViewAdapter(options, this);
+        mMessagesRecyclerViewAdapter = new MessagesRecyclerViewAdapter(options);
 
         mMessageRecyclerView.setLayoutManager(layoutManager);
         mMessageRecyclerView.setAdapter(mMessagesRecyclerViewAdapter);

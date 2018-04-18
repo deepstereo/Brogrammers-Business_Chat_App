@@ -79,9 +79,9 @@
         <ImageView
             android:id="@+id/iv_tick"
             android:layout_marginEnd="16dp"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@drawable/green_checkmark"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_check_primary"
             android:layout_gravity="center_vertical|end"
             android:visibility="invisible"/>
 

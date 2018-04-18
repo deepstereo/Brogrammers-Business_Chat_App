@@ -69,5 +69,6 @@
 
     <string name="chat_info_title">Chat members</string>
     <string name="new_group_chat_title">New Group Chat</string>
+    <string name="new_chat">New Chat</string>
 
 </resources>

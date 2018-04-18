@@ -10,4 +10,14 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity"/>
 
+
+    <!--Todo: Use this empty text when no rows available.-->
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="visible"
+        tools:text="No personal chats!" />
+
 </FrameLayout>

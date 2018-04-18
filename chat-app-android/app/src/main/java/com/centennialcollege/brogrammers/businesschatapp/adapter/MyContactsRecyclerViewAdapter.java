@@ -1,15 +1,17 @@
 package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
@@ -34,11 +36,11 @@ import java.util.Map;
 
 public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContactsRecyclerViewAdapter.ContactViewHolder> {
 
-    private Context context;
+    private Activity context;
     private User currentUser;
     private ArrayList<User> myContacts;
 
-    public MyContactsRecyclerViewAdapter(User currentUser, ArrayList<User> myContacts, Context context) {
+    public MyContactsRecyclerViewAdapter(User currentUser, ArrayList<User> myContacts, Activity context) {
         this.currentUser = currentUser;
         this.myContacts = myContacts;
         this.context = context;
@@ -79,47 +81,51 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
             ivAvatar = v.findViewById(R.id.iv_avatar);
         }
 
-        void bind(final User model) {
-                tvUsername.setText(model.getUsername());
-                tvEmail.setText(model.getEmail());
+        void bind(final User user) {
+            tvUsername.setText(user.getUsername());
+            tvEmail.setText(user.getEmail());
 
-            // Todo: Once Avatar images are available, set avatar if available, otherwise, set a placeholder avatar with First character of user name.
-            boolean isAvatarImageAvailable = false;
+            boolean isAvatarImageAvailable = !TextUtils.isEmpty(user.getAvatarURL());
+
             if (isAvatarImageAvailable) {
                 cvAvatar.setVisibility(View.VISIBLE);
-                // Todo : set avatar
+                Glide.with(view.getContext())
+                        .load(user.getAvatarURL())
+                        .centerCrop()
+                        .into(ivAvatar);
                 tvPlaceHolderAvatar.setVisibility(View.GONE);
             } else {
                 cvAvatar.setVisibility(View.GONE);
                 tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
-                tvPlaceHolderAvatar.setText(String.valueOf(model.getUsername().toUpperCase().charAt(0)));
+                tvPlaceHolderAvatar.setText(String.valueOf(user.getUsername().toUpperCase().charAt(0)));
             }
 
-                view.setOnClickListener(v -> {
+            view.setOnClickListener(v -> {
 
-                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                    String currentUserId = firebaseAuth.getCurrentUser().getUid();
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
-                    // Create a new chat
-                    Map<String, Boolean> members = new LinkedHashMap<>();
-                    members.put(currentUserId, true);
-                    members.put(model.getId(), true);
+                // Create a new chat
+                Map<String, Boolean> members = new LinkedHashMap<>();
+                members.put(currentUserId, true);
+                members.put(user.getId(), true);
 
-                    // Chat name is the concatenation of the usernames of sender and recipient.
-                    Chat newChat = new Chat(model.getUsername() + currentUser.getUsername(), false, members);
+                // Chat name is the concatenation of the userId of recipient and sender.
+                Chat newChat = new Chat(user.getId() + currentUser.getId(), false, members);
 
-                    DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
-                            .child(Constants.CHATS_CHILD);
-                    String newChatId = ChatAttributesHelper.getPersonalChatID(currentUserId, model.getId());
-                    chatReference.child(newChatId).setValue(newChat);
+                DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.CHATS_CHILD);
+                String newChatId = ChatAttributesHelper.getPersonalChatID(currentUserId, user.getId());
+                chatReference.child(newChatId).setValue(newChat);
 
-                    addChatIdInActivePersonalChats(newChatId, currentUserId, model.getId());
+                addChatIdInActivePersonalChats(newChatId, currentUserId, user.getId());
 
-                    Intent intent = new Intent(context, ChatActivity.class);
-                    intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
-                    intent.putExtra(Constants.KEY_CHAT_NAME, model.getUsername());
-                    context.startActivity(intent);
-                });
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
+                intent.putExtra(Constants.KEY_CHAT_NAME, user.getUsername());
+                context.startActivity(intent);
+                context.finish();
+            });
         }
     }
 

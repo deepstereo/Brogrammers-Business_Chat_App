@@ -103,7 +103,6 @@ public class ContactsActivity extends AppCompatActivity {
             String currentUserId = user.getUid();
             FirebaseDatabase.getInstance().getReference().child(USERS_CHILD).child(currentUserId)
                     .child("contactList").setValue(selectedContacts);
-            Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
         }
     }
 

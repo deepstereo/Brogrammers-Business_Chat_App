@@ -3,12 +3,14 @@ package com.centennialcollege.brogrammers.businesschatapp.adapter;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
@@ -80,11 +82,14 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
 
                 tvLastMessage.setText(message.getContent());
 
-                // Todo: Once Avatar images are available, set avatar if available, otherwise, set a placeholder avatar with First character of chat name.
-                boolean isAvatarImageAvailable = false;
+                boolean isAvatarImageAvailable = !TextUtils.isEmpty(chat.getAvatarUrl());
+
                 if (isAvatarImageAvailable) {
                     cvAvatar.setVisibility(View.VISIBLE);
-                    // Todo : set avatar
+                    Glide.with(view.getContext())
+                            .load(chat.getAvatarUrl())
+                            .centerCrop()
+                            .into(ivAvatar);
                     tvPlaceHolderAvatar.setVisibility(View.GONE);
                 } else {
                     cvAvatar.setVisibility(View.GONE);

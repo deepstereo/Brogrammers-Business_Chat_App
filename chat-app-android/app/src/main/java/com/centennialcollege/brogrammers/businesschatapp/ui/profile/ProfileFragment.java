@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.databinding.FragmentProfileBinding;
+import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -71,16 +73,17 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
         super.onViewCreated(view, savedInstanceState);
         presenter.takeView(this);
 
-        binding.ivAvatar.setOnClickListener(view1 -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, PICK_IMAGE);
-        });
-
-        initUserAvatar();
+        binding.tvPlaceholderAvatar.setOnClickListener(v -> launchPhotoGallery());
+        binding.ivAvatar.setOnClickListener(view1 -> launchPhotoGallery());
     }
 
-    private void initUserAvatar() {
+    private void launchPhotoGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    private void initUserAvatar(User user) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser == null) return;
         userId = firebaseUser.getUid();
@@ -96,16 +99,19 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    String url = dataSnapshot.getValue(String.class);
+                    String avatarUrl = dataSnapshot.getValue(String.class);
 
-                    if (url != null && url.length() > 0) {
-                        Context context = getContext();
-                        if (context == null) return;
-
-                        Glide.with(context)
-                                .load(url)
+                    if (!TextUtils.isEmpty(avatarUrl) && getContext() != null) {
+                        binding.cvAvatar.setVisibility(View.VISIBLE);
+                        Glide.with(getContext())
+                                .load(avatarUrl)
                                 .centerCrop()
                                 .into(binding.ivAvatar);
+                        binding.tvPlaceholderAvatar.setVisibility(View.GONE);
+                    } else {
+                        binding.cvAvatar.setVisibility(View.GONE);
+                        binding.tvPlaceholderAvatar.setVisibility(View.VISIBLE);
+                        binding.tvPlaceholderAvatar.setText(String.valueOf(user.getUsername().toUpperCase().charAt(0)));
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());
@@ -206,13 +212,10 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     }
 
     @Override
-    public void setUsername(String username) {
-        binding.etUsername.setText(username);
-    }
-
-    @Override
-    public void setUserEmail(String email) {
-        binding.etEmail.setText(email);
+    public void setUserInfo(User user) {
+        binding.etUsername.setText(user.getUsername());
+        binding.etEmail.setText(user.getEmail());
+        initUserAvatar(user);
     }
 
     @Override

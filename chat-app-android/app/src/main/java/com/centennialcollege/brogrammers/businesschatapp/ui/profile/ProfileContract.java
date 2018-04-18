@@ -1,5 +1,6 @@
 package com.centennialcollege.brogrammers.businesschatapp.ui.profile;
 
+import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.centennialcollege.brogrammers.businesschatapp.ui.BasePresenter;
 
 interface ProfileContract {
@@ -28,9 +29,7 @@ interface ProfileContract {
 
         void showUpdateSuccessMsg();
 
-        void setUsername(String username);
-
-        void setUserEmail(String email);
+        void setUserInfo(User user);
 
         void showReAuthenticationDialog();
 

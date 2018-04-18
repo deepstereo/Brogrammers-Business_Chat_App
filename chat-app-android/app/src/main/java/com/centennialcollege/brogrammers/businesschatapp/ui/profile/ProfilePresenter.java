@@ -45,8 +45,7 @@ class ProfilePresenter implements ProfileContract.Presenter {
                     if (isViewNotNull()) {
                         view.hideProgress();
 
-                        view.setUsername(user.getUsername());
-                        view.setUserEmail(user.getEmail());
+                        view.setUserInfo(user);
                     }
                 }
 

@@ -3,9 +3,7 @@ package com.centennialcollege.brogrammers.businesschatapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -14,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CardView cvAvatar;
     private ImageView ivAvatar;
 
+    private User currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,20 +65,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_new_chat:
+                if (tabLayout.getSelectedTabPosition() == 0) {
+                    Intent intent = new Intent(this, MyContactsActivity.class);
+                    intent.putExtra(Constants.ACTIVITY_TITLE, getString(R.string.new_chat));
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, GroupChatActivity.class));
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Initialize stuff.
      */
     private void init() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).show();
-            }
-        });
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -124,25 +139,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user == null) return;
+                    currentUser = dataSnapshot.getValue(User.class);
+                    currentUser.setId(dataSnapshot.getKey());
+                    if (currentUser == null) {
+                        return;
+                    }
 
-                    ((TextView) findViewById(R.id.tv_username)).setText(user.getUsername());
-                    ((TextView) findViewById(R.id.tv_user_email)).setText(user.getEmail());
+                    ((TextView) findViewById(R.id.tv_username)).setText(currentUser.getUsername());
+                    ((TextView) findViewById(R.id.tv_user_email)).setText(currentUser.getEmail());
 
-                    boolean isAvatarImageAvailable = (user.getAvatarURL() != null && user.getAvatarURL().length() > 0);
+                    boolean isAvatarImageAvailable = (currentUser.getAvatarURL() != null && currentUser.getAvatarURL().length() > 0);
 
                     if (isAvatarImageAvailable) {
                         cvAvatar.setVisibility(View.VISIBLE);
                         Glide.with(MainActivity.this)
-                                .load(user.getAvatarURL())
+                                .load(currentUser.getAvatarURL())
                                 .centerCrop()
                                 .into(ivAvatar);
                         tvPlaceHolderAvatar.setVisibility(View.GONE);
                     } else {
                         cvAvatar.setVisibility(View.GONE);
                         tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
-                        tvPlaceHolderAvatar.setText(String.valueOf(user.getUsername().toUpperCase().charAt(0)));
+                        tvPlaceHolderAvatar.setText(String.valueOf(currentUser.getUsername().toUpperCase().charAt(0)));
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());
@@ -183,10 +201,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_sign_out:
-                // Sign out the current user and navigate to Login Screen.
-                firebaseAuth.signOut();
-                launchLoginActivity();
+            case R.id.nav_my_profile:
+                launchProfileScreen();
                 break;
             case R.id.nav_contacts:
                 startActivity(new Intent(this, ContactsActivity.class));
@@ -194,15 +210,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_my_contacts:
                 startActivity(new Intent(this, MyContactsActivity.class));
                 break;
-            case R.id.nav_my_profile:
-                startActivity(new Intent(this, ProfileActivity.class));
-                break;
-            case R.id.nav_new_group_chat:
-                startActivity(new Intent(this, GroupChatActivity.class));
+            case R.id.nav_sign_out:
+                // Sign out the current user and navigate to Login Screen.
+                firebaseAuth.signOut();
+                launchLoginActivity();
                 break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onAvatarClicked(View view) {
+        launchProfileScreen();
+    }
+
+    private void launchProfileScreen() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(Constants.USER_AVATAR_URL, currentUser.getAvatarURL());
+        startActivity(intent);
     }
 }

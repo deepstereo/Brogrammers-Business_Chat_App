@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.adapter.MyContactsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
@@ -37,6 +38,11 @@ public class MyContactsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_contacts);
+
+        // Set a different title in case user navigated here from new chat menu item.
+        if (getIntent().getStringExtra(Constants.ACTIVITY_TITLE) != null) {
+            setTitle(getIntent().getStringExtra(Constants.ACTIVITY_TITLE));
+        }
 
         init();
         fetchMyContactsIds();

@@ -30,7 +30,7 @@ public class MessagesRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message
 
     private FirebaseUser currentUser;
 
-    public MessagesRecyclerViewAdapter(FirebaseRecyclerOptions<Message> options, Context context) {
+    public MessagesRecyclerViewAdapter(FirebaseRecyclerOptions<Message> options) {
         super(options);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -70,6 +70,10 @@ public class MessagesRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message
         }
 
         void bind(Message model) {
+            // FixMe: Populate it when support for multimedia msgs is added.
+            if (model.getIsMultimedia()) {
+                return;
+            }
             tvMessageText.setText(model.getContent());
             Date date = new Date(model.getTimeSent());
             SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a, MMM dd");

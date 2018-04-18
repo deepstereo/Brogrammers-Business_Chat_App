@@ -37,6 +37,15 @@
             android:paddingEnd="15dp"
             tools:text="Message Text" />
 
+        <TextView
+            android:id="@+id/tv_message_sender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="3dp"
+            android:textSize="12sp"
+            tools:text="Test user" />
+
     </LinearLayout>
 
     <Space

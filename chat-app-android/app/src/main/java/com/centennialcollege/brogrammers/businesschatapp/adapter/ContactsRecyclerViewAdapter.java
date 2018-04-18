@@ -2,12 +2,14 @@ package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -70,28 +72,31 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             ivAvatar = v.findViewById(R.id.iv_avatar);
         }
 
-        void bind(final User model) {
-            tvUsername.setText(model.getUsername());
-            tvEmail.setText(model.getEmail());
+        void bind(final User user) {
+            tvUsername.setText(user.getUsername());
+            tvEmail.setText(user.getEmail());
 
-            // Todo: Once Avatar images are available, set avatar if available, otherwise, set a placeholder avatar with First character of user name.
-            boolean isAvatarImageAvailable = false;
+            boolean isAvatarImageAvailable = !TextUtils.isEmpty(user.getAvatarURL());
+
             if (isAvatarImageAvailable) {
                 cvAvatar.setVisibility(View.VISIBLE);
-                // Todo : set avatar
+                Glide.with(view.getContext())
+                        .load(user.getAvatarURL())
+                        .centerCrop()
+                        .into(ivAvatar);
                 tvPlaceHolderAvatar.setVisibility(View.GONE);
             } else {
                 cvAvatar.setVisibility(View.GONE);
                 tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
-                tvPlaceHolderAvatar.setText(String.valueOf(model.getUsername().toUpperCase().charAt(0)));
+                tvPlaceHolderAvatar.setText(String.valueOf(user.getUsername().toUpperCase().charAt(0)));
             }
 
             view.setOnClickListener(v -> {
-                if (selectedContacts.containsKey(model.getId())) {
-                    selectedContacts.remove(model.getId());
+                if (selectedContacts.containsKey(user.getId())) {
+                    selectedContacts.remove(user.getId());
                     ivTick.setVisibility(View.INVISIBLE);
                 } else {
-                    selectedContacts.put(model.getId(), true);
+                    selectedContacts.put(user.getId(), true);
                     ivTick.setVisibility(View.VISIBLE);
                 }
             });

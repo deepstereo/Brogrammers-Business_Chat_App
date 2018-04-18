@@ -74,7 +74,6 @@ public class PersonalChatsFragment extends Fragment {
         chatListItems = new ArrayList<>();
 
         fetchCurrentUser();
-//        fetchActivePersonalChatIds();
         setupRecyclerView();
         return rootView;
     }
@@ -162,7 +161,27 @@ public class PersonalChatsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String chatName = dataSnapshot.getValue(String.class);
-                chatListItem.setChatName(chatName.replace(currentUser.getUsername(), ""));
+                fetchUser(chatName.replace(currentUser.getId(), ""), chatListItem);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    private void fetchUser(String userId, ChatListItem chatListItem) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD)
+                .child(userId);
+
+        // Attach a listener to read the data at our posts reference
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                chatListItem.setChatName(user.getUsername());
+                chatListItem.setAvatarUrl(user.getAvatarURL());
                 populateLastMessage(chatListItem);
             }
 

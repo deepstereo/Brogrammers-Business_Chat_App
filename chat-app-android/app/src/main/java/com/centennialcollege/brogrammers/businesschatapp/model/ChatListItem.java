@@ -10,6 +10,7 @@ public class ChatListItem implements Comparable<ChatListItem> {
 
     private String chatId;
     private String chatName;
+    private String avatarUrl;
     private Message lastMessage;
 
     public ChatListItem() {
@@ -37,6 +38,14 @@ public class ChatListItem implements Comparable<ChatListItem> {
 
     public void setChatId(String chatId) {
         this.chatId = chatId;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     @Override
