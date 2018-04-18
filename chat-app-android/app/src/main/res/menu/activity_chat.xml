@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_info"
-        android:icon="@android:drawable/ic_menu_info_details"
+        android:icon="@drawable/ic_info_outline_white"
         android:title="Info"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
 </menu>

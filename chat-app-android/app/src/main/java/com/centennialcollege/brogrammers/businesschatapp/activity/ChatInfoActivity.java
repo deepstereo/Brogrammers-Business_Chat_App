@@ -90,6 +90,7 @@ public class ChatInfoActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                user.setId(dataSnapshot.getKey());
                 chatMembers.add(user);
 
                 if (chatMembers.size() == chatMembersId.size()) {

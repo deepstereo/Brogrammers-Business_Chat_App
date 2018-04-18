@@ -71,7 +71,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
         super.onViewCreated(view, savedInstanceState);
         presenter.takeView(this);
 
-        binding.ivUserImage.setOnClickListener(view1 -> {
+        binding.ivAvatar.setOnClickListener(view1 -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE);
@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
                         Glide.with(context)
                                 .load(url)
                                 .centerCrop()
-                                .into(binding.ivUserImage);
+                                .into(binding.ivAvatar);
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());
@@ -270,7 +270,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
                             Glide.with(context)
                                     .load(downloadUrl)
                                     .centerCrop()
-                                    .into(binding.ivUserImage);
+                                    .into(binding.ivAvatar);
 
                             addUserAvatarToDb(downloadUrl);
                         });

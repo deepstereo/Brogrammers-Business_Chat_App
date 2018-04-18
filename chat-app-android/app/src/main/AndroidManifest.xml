@@ -45,7 +45,10 @@
         <activity
             android:name=".activity.ChatInfoActivity"
             android:label="@string/chat_info_title" />
-        <activity android:name=".activity.GroupChatActivity" />
+        <activity
+            android:name=".activity.GroupChatActivity"
+            android:label="@string/new_group_chat_title"
+            android:parentActivityName=".activity.MainActivity"/>
     </application>
 
 </manifest>

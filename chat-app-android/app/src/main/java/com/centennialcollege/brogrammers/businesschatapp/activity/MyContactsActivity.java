@@ -84,6 +84,7 @@ public class MyContactsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                user.setId(dataSnapshot.getKey());
                 myContacts.add(user);
 
                 if (myContacts.size() == myContactsId.size()) {
@@ -107,6 +108,7 @@ public class MyContactsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentUser = dataSnapshot.getValue(User.class);
+                currentUser.setId(dataSnapshot.getKey());
                 setupRecyclerView();
             }
 

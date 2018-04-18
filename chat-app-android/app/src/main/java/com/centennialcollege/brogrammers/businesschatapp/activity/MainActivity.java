@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth firebaseAuth;
     private TabLayout tabLayout;
     private DrawerLayout drawer;
+
+    private TextView tvPlaceHolderAvatar;
+    private CardView cvAvatar;
+    private ImageView ivAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,14 +98,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout = findViewById(R.id.layout_tabs);
         tabLayout.setupWithViewPager(chatsViewPager);
 
-        TextView userEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_user_email);
+        View headerView = navigationView.getHeaderView(0);
+        TextView userEmail = headerView.findViewById(R.id.tv_user_email);
         userEmail.setText(firebaseAuth.getCurrentUser().getEmail());
+
+        tvPlaceHolderAvatar = headerView.findViewById(R.id.tv_placeholder_avatar);
+        cvAvatar = headerView.findViewById(R.id.cv_avatar);
+        ivAvatar = headerView.findViewById(R.id.iv_avatar);
 
         initUserData();
     }
 
     private void initUserData() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser == null) return;
         String userId = firebaseUser.getUid();
 
@@ -120,11 +130,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ((TextView) findViewById(R.id.tv_username)).setText(user.getUsername());
                     ((TextView) findViewById(R.id.tv_user_email)).setText(user.getEmail());
 
-                    if (user.getAvatarURL().length() > 0) {
+                    boolean isAvatarImageAvailable = (user.getAvatarURL() != null && user.getAvatarURL().length() > 0);
+
+                    if (isAvatarImageAvailable) {
+                        cvAvatar.setVisibility(View.VISIBLE);
                         Glide.with(MainActivity.this)
                                 .load(user.getAvatarURL())
                                 .centerCrop()
-                                .into((ImageView) findViewById(R.id.iv_user_image));
+                                .into(ivAvatar);
+                        tvPlaceHolderAvatar.setVisibility(View.GONE);
+                    } else {
+                        cvAvatar.setVisibility(View.GONE);
+                        tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
+                        tvPlaceHolderAvatar.setText(String.valueOf(user.getUsername().toUpperCase().charAt(0)));
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());
@@ -136,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
     }
 
     /**

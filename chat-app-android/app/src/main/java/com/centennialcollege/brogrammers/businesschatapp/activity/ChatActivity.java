@@ -53,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        setTitle(getIntent().getStringExtra(Constants.KEY_CHAT_NAME));
         init();
         setupRecyclerView();
     }

@@ -17,5 +17,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="Add Contacts"
+        style="@style/MainButtonTheme"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        android:padding="15dp"
         android:onClick="onAddContactsButtonClicked"/>
 </LinearLayout>

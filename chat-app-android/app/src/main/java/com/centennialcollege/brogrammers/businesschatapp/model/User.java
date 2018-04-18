@@ -1,5 +1,7 @@
 package com.centennialcollege.brogrammers.businesschatapp.model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -7,6 +9,7 @@ import java.util.Map;
  * Model class to store information about a user.
  */
 
+@IgnoreExtraProperties
 public class User {
     @Deprecated
     private String id;

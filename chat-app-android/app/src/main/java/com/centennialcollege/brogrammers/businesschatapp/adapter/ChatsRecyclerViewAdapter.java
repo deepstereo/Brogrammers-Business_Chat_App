@@ -1,10 +1,12 @@
 package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
@@ -13,7 +15,7 @@ import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
 import com.centennialcollege.brogrammers.businesschatapp.model.ChatListItem;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -50,6 +52,9 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
         private TextView tvChatname;
         private TextView tvDate;
         private TextView tvLastMessage;
+        private TextView tvPlaceHolderAvatar;
+        private CardView cvAvatar;
+        private ImageView ivAvatar;
         private View view;
 
         ChatViewHolder(View v) {
@@ -58,6 +63,9 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
             tvChatname = v.findViewById(R.id.tv_chat_name);
             tvDate = v.findViewById(R.id.tv_date);
             tvLastMessage = v.findViewById(R.id.tv_last_message);
+            tvPlaceHolderAvatar = v.findViewById(R.id.tv_placeholder_avatar);
+            cvAvatar = v.findViewById(R.id.cv_avatar);
+            ivAvatar = v.findViewById(R.id.iv_avatar);
         }
 
         void bind(final ChatListItem chat) {
@@ -67,15 +75,28 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
             Message message = chat.getLastMessage();
             if (message != null) {
                 Date date = new Date(message.getTimeSent());
-                DateFormat dateFormat = DateFormat.getDateInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a, MMM dd");
                 tvDate.setText(dateFormat.format(date));
 
                 tvLastMessage.setText(message.getContent());
+
+                // Todo: Once Avatar images are available, set avatar if available, otherwise, set a placeholder avatar with First character of chat name.
+                boolean isAvatarImageAvailable = false;
+                if (isAvatarImageAvailable) {
+                    cvAvatar.setVisibility(View.VISIBLE);
+                    // Todo : set avatar
+                    tvPlaceHolderAvatar.setVisibility(View.GONE);
+                } else {
+                    cvAvatar.setVisibility(View.GONE);
+                    tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
+                    tvPlaceHolderAvatar.setText(String.valueOf(chat.getChatName().toUpperCase().charAt(0)));
+                }
             }
 
             view.setOnClickListener(v -> {
                 Intent intent = new Intent(view.getContext(), ChatActivity.class);
                 intent.putExtra(Constants.KEY_CHAT_ID, chat.getChatId());
+                intent.putExtra(Constants.KEY_CHAT_NAME, chat.getChatName());
                 view.getContext().startActivity(intent);
             });
         }

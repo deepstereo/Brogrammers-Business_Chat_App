@@ -25,6 +25,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        style="@style/MainButtonTheme"
+        android:layout_margin="10dp"
         android:text="Start Group Chat"
+        android:textSize="15sp"
+        android:padding="15dp"
         android:onClick="onStartGroupChatButtonClicked"/>
 </LinearLayout>

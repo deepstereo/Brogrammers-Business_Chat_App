@@ -51,13 +51,6 @@ public class GroupChatActivity extends AppCompatActivity {
 
         init();
         fetchMyContactsIds();
-        setupRecyclerView();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        contactsRecyclerViewAdapter.startListening();
     }
 
     private void init() {
@@ -103,10 +96,11 @@ public class GroupChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                user.setId(dataSnapshot.getKey());
                 myContacts.add(user);
 
                 if (myContacts.size() == myContactsId.size()) {
-                    contactsRecyclerViewAdapter.notifyDataSetChanged();
+                    setupRecyclerView();
                 }
             }
 
@@ -123,14 +117,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        Query query = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_CHILD);
-
-        FirebaseRecyclerOptions<User> options =
-                new FirebaseRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-        contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(options, selectedContacts);
+        contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(myContacts, selectedContacts);
 
         mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mContactsRecyclerView.setAdapter(contactsRecyclerViewAdapter);
@@ -152,7 +139,6 @@ public class GroupChatActivity extends AppCompatActivity {
             members.put(userId, true);
         }
 
-        // Todo: Change the Chat name later on as per discussion.
         Chat newChat = new Chat(etGroupName.getText().toString(), true, members);
 
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
@@ -164,6 +150,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
+        intent.putExtra(Constants.KEY_CHAT_NAME, newChat.getChatName());
         startActivity(intent);
     }
 
@@ -215,9 +202,4 @@ public class GroupChatActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        contactsRecyclerViewAdapter.stopListening();
-    }
 }

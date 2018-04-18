@@ -1,5 +1,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_background">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -9,7 +14,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/message"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:text="@string/chat"
+                android:textSize="40sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
 
             <ProgressBar
                 android:id="@+id/progress_bar"
@@ -25,13 +47,9 @@
 
                 <EditText
                     android:id="@+id/et_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    style="@style/InputFieldsStyle"
                     android:hint="@string/login_hint_email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:inputType="textEmailAddress" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -41,13 +59,9 @@
 
                 <EditText
                     android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:hint="@string/login_hint_password"
+                    style="@style/InputFieldsStyle"
                     android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:hint="@string/login_hint_password" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -55,19 +69,19 @@
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/login_action_login"
+                android:layout_marginTop="5dp"
+                android:text="@string/login_action_signin"
                 android:theme="@style/MainButtonTheme" />
 
             <Button
                 android:id="@+id/btn_registration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:text="@string/login_action_register"
                 android:theme="@style/MainButtonTheme" />
 
         </LinearLayout>
 
     </ScrollView>
+    </LinearLayout>
 </layout>

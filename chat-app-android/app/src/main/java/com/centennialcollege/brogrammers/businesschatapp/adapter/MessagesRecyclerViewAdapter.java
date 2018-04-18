@@ -16,6 +16,9 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * RecyclerView adapter to display the messages on chat screen.
  */
@@ -25,12 +28,10 @@ public class MessagesRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message
     private static final int MESSAGE_TYPE_MINE = 0;
     private static final int MESSAGE_TYPE_THEIR = 1;
 
-    private Context context;
     private FirebaseUser currentUser;
 
     public MessagesRecyclerViewAdapter(FirebaseRecyclerOptions<Message> options, Context context) {
         super(options);
-        this.context = context;
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
@@ -70,7 +71,9 @@ public class MessagesRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message
 
         void bind(Message model) {
             tvMessageText.setText(model.getContent());
-            tvMessageTime.setText(DateFormat.format(context.getString(R.string.message_date_format), model.getTimeSent()));
+            Date date = new Date(model.getTimeSent());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a, MMM dd");
+            tvMessageTime.setText(dateFormat.format(date));
         }
     }
 

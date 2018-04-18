@@ -5,6 +5,7 @@
     <!-- screen_type_name -->
 
     <!-- Login screen start -->
+    <string name="chat">Chat</string>
     <string name="login_title">Login</string>
     <string name="login_error_field_required">This field is required</string>
     <string name="login_error_email_invalid">This email address is invalid</string>
@@ -13,7 +14,7 @@
     <string name="login_error_wrong_password">This password is wrong</string>
     <string name="login_hint_email">Email</string>
     <string name="login_hint_password">Password</string>
-    <string name="login_action_login">Login</string>
+    <string name="login_action_signin">Sign In</string>
     <string name="login_action_register">Register</string>
     <!-- Login screen end -->
 
@@ -67,5 +68,6 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="chat_info_title">Chat members</string>
+    <string name="new_group_chat_title">New Group Chat</string>
 
 </resources>

@@ -88,6 +88,7 @@ public class PersonalChatsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentUser = dataSnapshot.getValue(User.class);
+                currentUser.setId(dataSnapshot.getKey());
                 fetchActivePersonalChatIds();
             }
 

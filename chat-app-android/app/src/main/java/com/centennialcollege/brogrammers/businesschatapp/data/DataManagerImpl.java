@@ -70,6 +70,7 @@ public class DataManagerImpl implements DataManager {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
+                        user.setId(dataSnapshot.getKey());
                         if (user != null)
                             getUserInfoCallback.onSuccess(user);
                         else

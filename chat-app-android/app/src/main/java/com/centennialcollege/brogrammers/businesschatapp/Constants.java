@@ -23,6 +23,7 @@ public interface Constants {
     String USER_IMAGES_CHILD = "userImages";
 
     String KEY_CHAT_ID = "KEY_CHAT_ID";
+    String KEY_CHAT_NAME = "KEY_CHAT_NAME";
 
     String USER_AVATAR_URL = "avatarURL";
 }
