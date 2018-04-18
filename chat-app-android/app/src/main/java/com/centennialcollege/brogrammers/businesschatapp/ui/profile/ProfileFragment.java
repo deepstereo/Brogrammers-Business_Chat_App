@@ -104,6 +104,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
 
                         Glide.with(context)
                                 .load(url)
+                                .centerCrop()
                                 .into(binding.ivUserImage);
                     }
                 } catch (Exception e) {
@@ -268,6 +269,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
 
                             Glide.with(context)
                                     .load(downloadUrl)
+                                    .centerCrop()
                                     .into(binding.ivUserImage);
 
                             addUserAvatarToDb(downloadUrl);

@@ -15,13 +15,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsPagerAdapter;
+import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.centennialcollege.brogrammers.businesschatapp.ui.login.LoginActivity;
 import com.centennialcollege.brogrammers.businesschatapp.ui.profile.ProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * The main chat screen where all messages sent by all users are visible.
@@ -85,6 +95,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TextView userEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_user_email);
         userEmail.setText(firebaseAuth.getCurrentUser().getEmail());
+
+        initUserData();
+    }
+
+    private void initUserData() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) return;
+        String userId = firebaseUser.getUid();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.USERS_CHILD)
+                .child(userId);
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user == null) return;
+
+                    ((TextView) findViewById(R.id.tv_username)).setText(user.getUsername());
+                    ((TextView) findViewById(R.id.tv_user_email)).setText(user.getEmail());
+
+                    if (user.getAvatarURL().length() > 0) {
+                        Glide.with(MainActivity.this)
+                                .load(user.getAvatarURL())
+                                .centerCrop()
+                                .into((ImageView) findViewById(R.id.iv_user_image));
+                    }
+                } catch (Exception e) {
+                    System.out.println("The read failed: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     /**
