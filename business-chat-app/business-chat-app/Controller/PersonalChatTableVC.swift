@@ -68,7 +68,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.lastSeenLabel.text = "Do Not Disturb"
         self.lastSeenTime.isHidden = true
       default:
-        let date = self.getDateFromInterval(timestamp: Double(lastSeen))
+        let date = self.getDateFromInterval(timestamp: Int64(lastSeen))
         self.lastSeenLabel.pushTransition(0.3)
         self.lastSeenTime.pushTransition(0.3)
         self.lastSeenLabel.text = "Last Seen:"
@@ -142,6 +142,8 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     //    self.hideKeyboardWhenTappedAround()
     chatTableView.separatorStyle = .none
     chatTableView.setContentOffset(chatTableView.contentOffset, animated: false)
+    textInputView.layer.borderWidth = 1
+    textInputView.layer.borderColor = colours.backgroundLigthBlue.cgColor
   }
   
   func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -181,7 +183,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
       if isMedia == true {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "multimediaMessageOut", for: indexPath) as! MultimediaMessageOut
-        let date = getDateFromInterval(timestamp: Double(chatMessages[indexPath.row].timeSent))
+        let date = getDateFromInterval(timestamp: Int64(chatMessages[indexPath.row].timeSent))
         
         cell.configeureCell(messageImage: mediaUrl, messageTime: date!, senderName: sender)
         return cell
@@ -198,7 +200,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
       //      }
       
       let cell = tableView.dequeueReusableCell(withIdentifier: "messageOut", for: indexPath) as! CustomMessageOut
-      let date = getDateFromInterval(timestamp: Double(chatMessages[indexPath.row].timeSent))
+      let date = getDateFromInterval(timestamp: Int64(chatMessages[indexPath.row].timeSent))
       
       cell.configeureCell(senderName: currentEmail!, messageTime: date!, messageBody: content, messageBackground: outColor!, isGroup: false)
       return cell
@@ -208,7 +210,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
       if isMedia == true {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "multimediaMessageIn", for: indexPath) as! MultimediaMessageIn
-        let date = getDateFromInterval(timestamp: Double(chatMessages[indexPath.row].timeSent))
+        let date = getDateFromInterval(timestamp: Int64(chatMessages[indexPath.row].timeSent))
         
         cell.configeureCell(messageImage: mediaUrl, messageTime: date!, senderName: sender)
         
@@ -216,7 +218,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
       }
       
       let cell = tableView.dequeueReusableCell(withIdentifier: "messageIn", for: indexPath) as! CustomMessageIn
-      let date = getDateFromInterval(timestamp: Double(chatMessages[indexPath.row].timeSent))
+      let date = getDateFromInterval(timestamp: Int64(chatMessages[indexPath.row].timeSent))
       
       cell.configeureCell(senderName: chatMessages[indexPath.row].senderId, messageTime: date!, messageBody: chatMessages[indexPath.row].content, messageBackground: inColor!, isGroup: false)
       return cell
@@ -265,15 +267,22 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
   }
   
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    sendMessage()
+    
+    textField.resignFirstResponder()  //if desired
+    
+    return true
+  }
   
-  @IBAction func sendButton(_ sender: UIButton) {
+  func sendMessage(){
     
     let date = Date()
-    let currentDate = date.millisecondsSince1970
-    let messageUID = ("\(currentDate)" + currentUserId!).replacingOccurrences(of: ".", with: "")
+    let currentDate = Int64(date.millisecondsSince1970)
+    let messageUID = MessageServices.instance.REF_MESSAGES.child((self.chat?.key)!).childByAutoId().key
     if textField.text != "" {
       sendBtn.isEnabled = false
-      MessageServices.instance.sendMessage(withContent: textField.text!, withTimeSent: "\(currentDate)", withMessageId: messageUID, forSender: currentUserId! , withChatId: chat?.key, isMultimedia: false, sendComplete: { (complete) in
+      MessageServices.instance.sendMessage(withContent: textField.text!, withTimeSent: currentDate, withMessageId: messageUID, forSender: currentUserId! , withChatId: chat?.key, isMultimedia: false, sendComplete: { (complete) in
         if complete {
           self.textField.isEnabled = true
           self.sendBtn.isEnabled = true
@@ -283,6 +292,14 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
       })
     }
     dismissKeyboard()
+  }
+  
+  
+  
+  @IBAction func sendButton(_ sender: UIButton) {
+    
+    sendMessage()
+
   }
   
   @IBAction func photoMessageButton(_ sender: Any) {
@@ -314,17 +331,27 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     let image = info[UIImagePickerControllerOriginalImage] as! UIImage
     let date = Date()
-    let currentDate = date.millisecondsSince1970
-    let messageUID = ("\(currentDate)" + currentUserId!).replacingOccurrences(of: ".", with: "")
+    let currentDate = Int64(date.millisecondsSince1970)
+    let messageUID = MessageServices.instance.REF_MESSAGES.child((self.chat?.key)!).childByAutoId().key
     
     Services.instance.uploadPhotoMessage(withImage: image, withChatKey: (self.chat?.key)!, withMessageId: messageUID, completion: { (imageUrl) in
       
-      MessageServices.instance.sendPhotoMessage(isMulti: true, withMediaUrl: imageUrl, withTimeSent: "\(currentDate)", withMessageId: messageUID, forSender: currentUserId!, withChatId: self.chat?.key, sendComplete: { (complete) in
+      MessageServices.instance.sendPhotoMessage(isMulti: true, withMediaUrl: imageUrl, withTimeSent: currentDate, withMessageId: messageUID, forSender: currentUserId!, withChatId: self.chat?.key, sendComplete: { (complete) in
         self.textField.isEnabled = true
         self.sendBtn.isEnabled = true
         self.textField.text = ""
-        print("Message saved \(currentDate)")
-        SVProgressHUD.dismiss()
+        
+        if complete {
+          print("Message saved \(currentDate)")
+          SVProgressHUD.showSuccess(withStatus: "Done!")
+          
+          SVProgressHUD.dismiss(withDelay: 0.5)
+        } else {
+          SVProgressHUD.showError(withStatus: "Uploading Error")
+          SVProgressHUD.dismiss(withDelay: 0.5)
+        }
+        
+        
       })
     })
     
@@ -349,7 +376,7 @@ class PersonalChatVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue.size
     
-    self.heightConstraint.constant = keyboardSize.height + 60
+    self.heightConstraint.constant = keyboardSize.height + 55
     UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions.curveLinear, animations: { () -> Void in
       
     })
