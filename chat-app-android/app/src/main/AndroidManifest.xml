@@ -29,15 +29,15 @@
             android:parentActivityName=".ui.login.LoginActivity" />
         <activity
             android:name=".activity.ContactsActivity"
-            android:label="Contacts"
+            android:label="@string/add_contacts_title"
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.MyContactsActivity"
-            android:label="My Contacts"
+            android:label="@string/my_contacts_title"
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".ui.profile.ProfileActivity"
-            android:label="Profile"
+            android:label="@string/profile_title"
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.ChatActivity"

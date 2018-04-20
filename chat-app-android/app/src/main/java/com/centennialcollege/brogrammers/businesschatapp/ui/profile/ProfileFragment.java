@@ -25,6 +25,7 @@ import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.databinding.FragmentProfileBinding;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
+import com.centennialcollege.brogrammers.businesschatapp.util.UserAttributesUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +39,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment implements ProfileContract.View {
 
@@ -111,7 +114,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
                     } else {
                         binding.cvAvatar.setVisibility(View.GONE);
                         binding.tvPlaceholderAvatar.setVisibility(View.VISIBLE);
-                        binding.tvPlaceholderAvatar.setText(String.valueOf(user.getUsername().toUpperCase().charAt(0)));
+                        UserAttributesUtils.setAccountColor(binding.tvPlaceholderAvatar, user.getUsername(), getContext());
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());
@@ -248,11 +251,6 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        StorageReference storageRef;
-        if (userId == null) return;
-        storageRef = FirebaseStorage.getInstance().getReference()
-                .child(Constants.USER_IMAGES_CHILD).child(userId);
-
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data.getData() == null) {
                 Toast.makeText(getContext(), "Error occurred while choosing photo.", Toast.LENGTH_SHORT).show();
@@ -260,6 +258,11 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
             }
 
             try {
+                StorageReference storageRef;
+                if (userId == null) return;
+                storageRef = FirebaseStorage.getInstance().getReference()
+                        .child(Constants.USER_IMAGES_CHILD).child(userId);
+
                 Context context = getContext();
                 if (context == null) return;
                 InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
@@ -285,12 +288,20 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     }
 
     private void addUserAvatarToDb(Uri avatarUrl) {
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.USERS_CHILD)
-                .child(userId)
-                .child(Constants.USER_AVATAR_URL)
-                .setValue(avatarUrl.toString());
+        DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference userAvatarUrlReference = dbReference.child(Constants.USERS_CHILD).child(userId).child(Constants.USER_AVATAR_URL);
+        DatabaseReference userAvatarReference = dbReference.child(Constants.USERS_CHILD).child(userId).child(Constants.USER_AVATAR);
+
+        // Evaluate the relative path for writing Avatar URL and Avatar availability status.
+        String userAvatarUrlReferenceRelativeKey = userAvatarUrlReference.toString().replace(dbReference.toString(), "");
+        String userAvatarReferenceRelativeKey = userAvatarReference.toString().replace(dbReference.toString(), "");
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(userAvatarUrlReferenceRelativeKey, avatarUrl.toString());
+        childUpdates.put(userAvatarReferenceRelativeKey, true);
+
+        dbReference.updateChildren(childUpdates);
     }
 
 }

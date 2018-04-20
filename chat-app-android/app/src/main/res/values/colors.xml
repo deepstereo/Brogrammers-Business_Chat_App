@@ -12,4 +12,29 @@
 
     <color name="gray">#9e9e9e</color>
     <color name="lighter_gray">#e0e0e0</color>
+
+    <!--Account Colors-->
+    <color name="xLightBlue">#3db6e1</color>
+    <color name="xGreen">#99CC00</color>
+    <color name="xLightPurple">#9c69ac</color>
+    <color name="xYellow">#fcb942</color>
+    <color name="xOrange">#ff8800</color>
+    <color name="xLightRed">#ef474c</color>
+    <color name="xDarkBlue">#730099cc</color>
+    <color name="xDarkGreen">#659840</color>
+    <color name="xDarkPurple">#864e9f</color>
+    <color name="xDarkRed">#c82026</color>
+
+    <array name="account_colors">
+        <item>@color/xLightBlue</item>
+        <item>@color/xGreen</item>
+        <item>@color/xLightPurple</item>
+        <item>@color/xYellow</item>
+        <item>@color/xOrange</item>
+        <item>@color/xLightRed</item>
+        <item>@color/xDarkBlue</item>
+        <item>@color/xDarkGreen</item>
+        <item>@color/xDarkPurple</item>
+        <item>@color/xDarkRed</item>
+    </array>
 </resources>

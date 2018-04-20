@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
@@ -36,7 +35,6 @@ public class ContactsActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     private RecyclerView mContactsRecyclerView;
-    private ContactsRecyclerViewAdapter contactsRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +58,7 @@ public class ContactsActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(allUsers, selectedContacts);
+        ContactsRecyclerViewAdapter contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(allUsers, selectedContacts);
 
         mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mContactsRecyclerView.setAdapter(contactsRecyclerViewAdapter);

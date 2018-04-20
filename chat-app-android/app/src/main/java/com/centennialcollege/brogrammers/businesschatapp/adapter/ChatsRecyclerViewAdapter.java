@@ -16,6 +16,7 @@ import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
 import com.centennialcollege.brogrammers.businesschatapp.model.ChatListItem;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
+import com.centennialcollege.brogrammers.businesschatapp.util.UserAttributesUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,9 +55,10 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
         private TextView tvChatname;
         private TextView tvDate;
         private TextView tvLastMessage;
-        private TextView tvPlaceHolderAvatar;
+        private TextView tvPlaceholderAvatar;
         private CardView cvAvatar;
         private ImageView ivAvatar;
+        private ImageView ivMultimediaType;
         private View view;
 
         ChatViewHolder(View v) {
@@ -65,9 +67,10 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
             tvChatname = v.findViewById(R.id.tv_chat_name);
             tvDate = v.findViewById(R.id.tv_date);
             tvLastMessage = v.findViewById(R.id.tv_last_message);
-            tvPlaceHolderAvatar = v.findViewById(R.id.tv_placeholder_avatar);
+            tvPlaceholderAvatar = v.findViewById(R.id.tv_placeholder_avatar);
             cvAvatar = v.findViewById(R.id.cv_avatar);
             ivAvatar = v.findViewById(R.id.iv_avatar);
+            ivMultimediaType = v.findViewById(R.id.iv_multimedia_type);
         }
 
         void bind(final ChatListItem chat) {
@@ -77,9 +80,15 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
             Message message = chat.getLastMessage();
             if (message != null) {
                 Date date = new Date(message.getTimeSent());
-                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a, MMM dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat(view.getContext().getString(R.string.messages_date_format_type));
                 tvDate.setText(dateFormat.format(date));
 
+                if (message.getIsMultimedia()) {
+                    //Todo: Later on change icon also based on media type.
+                    ivMultimediaType.setVisibility(View.VISIBLE);
+                } else {
+                    ivMultimediaType.setVisibility(View.GONE);
+                }
                 tvLastMessage.setText(message.getContent());
 
                 boolean isAvatarImageAvailable = !TextUtils.isEmpty(chat.getAvatarUrl());
@@ -90,11 +99,11 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
                             .load(chat.getAvatarUrl())
                             .centerCrop()
                             .into(ivAvatar);
-                    tvPlaceHolderAvatar.setVisibility(View.GONE);
+                    tvPlaceholderAvatar.setVisibility(View.GONE);
                 } else {
                     cvAvatar.setVisibility(View.GONE);
-                    tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
-                    tvPlaceHolderAvatar.setText(String.valueOf(chat.getChatName().toUpperCase().charAt(0)));
+                    tvPlaceholderAvatar.setVisibility(View.VISIBLE);
+                    UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, chat.getChatName(), view.getContext());
                 }
             }
 

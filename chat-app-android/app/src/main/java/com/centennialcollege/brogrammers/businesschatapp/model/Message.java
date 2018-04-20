@@ -11,11 +11,11 @@ public class Message {
     private String senderId;
     private long timeSent;
 
-    public Message(String content, boolean isMultimedia, String senderId) {
+    public Message(String content, boolean isMultimedia, String senderId, long timeStamp) {
         this.content = content;
         this.isMultimedia = isMultimedia;
         this.senderId = senderId;
-        timeSent = System.currentTimeMillis();
+        this.timeSent = timeStamp;
     }
 
     public Message() {

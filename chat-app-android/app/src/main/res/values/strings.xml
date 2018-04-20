@@ -22,16 +22,15 @@
     <string name="registration_title">Registration</string>
     <string name="registration_error_field_required">This field is required</string>
     <string name="registration_error_email_invalid">This email address is invalid</string>
-    <string name="registration_error_password_too_short">This password is too short, minimum length is %1$d characters</string>
+    <string name="registration_error_password_too_short">This password is too short, minimum length is %d characters</string>
     <string name="registration_error_passwords_not_same">This passwords aren\'t same</string>
-    <string name="registration_error_username_too_short">This username is too short, minimum length is %1$d characters</string>
+    <string name="registration_error_username_too_short">This username is too short, minimum length is %d characters</string>
     <string name="registration_error">Registration error</string>
     <string name="registration_error_email_exist">The email address is already in use by another account</string>
     <string name="registration_hint_email">Email</string>
     <string name="registration_hint_password">Password</string>
     <string name="registration_hint_confirm_password">Confirm Password</string>
     <string name="registration_hint_username">Username</string>
-    <string name="registration_action_login">Login</string>
     <string name="registration_action_register">Register</string>
     <!-- Registration screen end -->
 
@@ -59,7 +58,6 @@
 
 
     <string name="title_activity_chats">Chats</string>
-    <string name="message_date_format">dd-MM-yyyy (HH:mm)</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -70,5 +68,9 @@
     <string name="chat_info_title">Chat members</string>
     <string name="new_group_chat_title">New Group Chat</string>
     <string name="new_chat">New Chat</string>
+    <string name="multimedia_type_photo">photo</string>
+    <string name="messages_date_format_type">hh:mm a, MMM dd</string>
+    <string name="add_contacts_title">Add Contacts</string>
+    <string name="my_contacts_title">My Contacts</string>
 
 </resources>

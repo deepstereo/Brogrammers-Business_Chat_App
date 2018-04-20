@@ -15,14 +15,12 @@ import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.adapter.ContactsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -41,7 +39,6 @@ public class GroupChatActivity extends AppCompatActivity {
     private ArrayList<User> myContacts;
 
     private RecyclerView mContactsRecyclerView;
-    private ContactsRecyclerViewAdapter contactsRecyclerViewAdapter;
     private EditText etGroupName;
 
     @Override
@@ -117,7 +114,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(myContacts, selectedContacts);
+        ContactsRecyclerViewAdapter contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(myContacts, selectedContacts);
 
         mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mContactsRecyclerView.setAdapter(contactsRecyclerViewAdapter);

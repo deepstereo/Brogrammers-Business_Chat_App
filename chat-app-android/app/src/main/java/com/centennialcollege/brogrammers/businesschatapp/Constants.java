@@ -5,9 +5,9 @@ public interface Constants {
     int MINIMUM_PASSWORD_LENGTH = 6;
     int MINIMUM_USERNAME_LENGTH = 3;
 
-    String USERS_CHILD = "users-android-test-2";
-    String MESSAGES_CHILD = "messages-android-test-2";
-    String CHATS_CHILD = "chats-android-test-2";
+    String USERS_CHILD = "users-android";
+    String MESSAGES_CHILD = "messages-android";
+    String CHATS_CHILD = "chats-android";
 
     String USER_EMAIL = "email";
     String USER_USERNAME = "username";
@@ -26,6 +26,7 @@ public interface Constants {
     String KEY_CHAT_NAME = "key_chat_name";
 
     String USER_AVATAR_URL = "avatarURL";
+    String USER_AVATAR = "avatar";
 
     String ACTIVITY_TITLE = "activity_title";
 }

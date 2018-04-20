@@ -25,6 +25,7 @@ import com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsPagerAdapt
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.centennialcollege.brogrammers.businesschatapp.ui.login.LoginActivity;
 import com.centennialcollege.brogrammers.businesschatapp.ui.profile.ProfileActivity;
+import com.centennialcollege.brogrammers.businesschatapp.util.UserAttributesUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,9 +43,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout;
     private DrawerLayout drawer;
 
-    private TextView tvPlaceHolderAvatar;
+    private TextView tvPlaceholderAvatar;
     private CardView cvAvatar;
     private ImageView ivAvatar;
+
+    private View headerView;
 
     private User currentUser;
 
@@ -113,11 +116,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout = findViewById(R.id.layout_tabs);
         tabLayout.setupWithViewPager(chatsViewPager);
 
-        View headerView = navigationView.getHeaderView(0);
+        headerView = navigationView.getHeaderView(0);
         TextView userEmail = headerView.findViewById(R.id.tv_user_email);
         userEmail.setText(firebaseAuth.getCurrentUser().getEmail());
 
-        tvPlaceHolderAvatar = headerView.findViewById(R.id.tv_placeholder_avatar);
+        tvPlaceholderAvatar = headerView.findViewById(R.id.tv_placeholder_avatar);
         cvAvatar = headerView.findViewById(R.id.cv_avatar);
         ivAvatar = headerView.findViewById(R.id.iv_avatar);
 
@@ -145,22 +148,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         return;
                     }
 
-                    ((TextView) findViewById(R.id.tv_username)).setText(currentUser.getUsername());
-                    ((TextView) findViewById(R.id.tv_user_email)).setText(currentUser.getEmail());
+                    ((TextView) headerView.findViewById(R.id.tv_username)).setText(currentUser.getUsername());
+                    ((TextView) headerView.findViewById(R.id.tv_user_email)).setText(currentUser.getEmail());
 
-                    boolean isAvatarImageAvailable = (currentUser.getAvatarURL() != null && currentUser.getAvatarURL().length() > 0);
-
-                    if (isAvatarImageAvailable) {
+                    if (currentUser.getAvatar()) {
                         cvAvatar.setVisibility(View.VISIBLE);
                         Glide.with(MainActivity.this)
                                 .load(currentUser.getAvatarURL())
                                 .centerCrop()
                                 .into(ivAvatar);
-                        tvPlaceHolderAvatar.setVisibility(View.GONE);
+                        tvPlaceholderAvatar.setVisibility(View.GONE);
                     } else {
                         cvAvatar.setVisibility(View.GONE);
-                        tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
-                        tvPlaceHolderAvatar.setText(String.valueOf(currentUser.getUsername().toUpperCase().charAt(0)));
+                        tvPlaceholderAvatar.setVisibility(View.VISIBLE);
+                        UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, currentUser.getUsername(), MainActivity.this);
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());

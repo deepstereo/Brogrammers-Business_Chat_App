@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
 import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.centennialcollege.brogrammers.businesschatapp.util.ChatAttributesHelper;
+import com.centennialcollege.brogrammers.businesschatapp.util.UserAttributesUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,7 +66,7 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
     class ContactViewHolder extends RecyclerView.ViewHolder {
         private TextView tvUsername;
         private TextView tvEmail;
-        private TextView tvPlaceHolderAvatar;
+        private TextView tvPlaceholderAvatar;
         private CardView cvAvatar;
         private ImageView ivAvatar;
         private View view;
@@ -76,7 +76,7 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
             view = v;
             tvUsername = v.findViewById(R.id.tv_username);
             tvEmail = v.findViewById(R.id.tv_email);
-            tvPlaceHolderAvatar = v.findViewById(R.id.tv_placeholder_avatar);
+            tvPlaceholderAvatar = v.findViewById(R.id.tv_placeholder_avatar);
             cvAvatar = v.findViewById(R.id.cv_avatar);
             ivAvatar = v.findViewById(R.id.iv_avatar);
         }
@@ -85,19 +85,17 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
             tvUsername.setText(user.getUsername());
             tvEmail.setText(user.getEmail());
 
-            boolean isAvatarImageAvailable = !TextUtils.isEmpty(user.getAvatarURL());
-
-            if (isAvatarImageAvailable) {
+            if (user.getAvatar()) {
                 cvAvatar.setVisibility(View.VISIBLE);
                 Glide.with(view.getContext())
                         .load(user.getAvatarURL())
                         .centerCrop()
                         .into(ivAvatar);
-                tvPlaceHolderAvatar.setVisibility(View.GONE);
+                tvPlaceholderAvatar.setVisibility(View.GONE);
             } else {
                 cvAvatar.setVisibility(View.GONE);
-                tvPlaceHolderAvatar.setVisibility(View.VISIBLE);
-                tvPlaceHolderAvatar.setText(String.valueOf(user.getUsername().toUpperCase().charAt(0)));
+                tvPlaceholderAvatar.setVisibility(View.VISIBLE);
+                UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, user.getUsername(), context);
             }
 
             view.setOnClickListener(v -> {

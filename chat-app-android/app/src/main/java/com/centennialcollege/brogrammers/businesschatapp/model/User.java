@@ -15,6 +15,7 @@ public class User {
     private String id;
     private String username;
     private String email;
+    private boolean avatar;
     private String avatarURL;
     private Map<String, Boolean> contactList = new LinkedHashMap<>();
     private Map<String, Boolean> activePersonalChats = new LinkedHashMap<>();
@@ -81,6 +82,14 @@ public class User {
 
     public void setActiveGroupChats(Map<String, Boolean> activeGroupChats) {
         this.activeGroupChats = activeGroupChats;
+    }
+
+    public boolean getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(boolean hasAvatar) {
+        this.avatar = hasAvatar;
     }
 
     public String getAvatarURL() {

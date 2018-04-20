@@ -50,10 +50,7 @@ public class ChatListItem implements Comparable<ChatListItem> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ChatListItem) {
-            return chatId.equals(((ChatListItem) obj).chatId);
-        }
-        return false;
+        return obj instanceof ChatListItem && chatId.equals(((ChatListItem) obj).chatId);
     }
 
     @Override
