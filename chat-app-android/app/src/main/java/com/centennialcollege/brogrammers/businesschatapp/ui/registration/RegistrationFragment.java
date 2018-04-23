@@ -46,6 +46,8 @@ public class RegistrationFragment extends Fragment implements RegistrationContra
             presenter.attemptRegistration(username, email, password, passwordConfirm);
         });
 
+        binding.btnCancel.setOnClickListener(v -> getActivity().onBackPressed());
+
         return binding.getRoot();
     }
 

@@ -32,6 +32,7 @@
     <string name="registration_hint_confirm_password">Confirm Password</string>
     <string name="registration_hint_username">Username</string>
     <string name="registration_action_register">Register</string>
+    <string name="registration_cancel">Cancel</string>
     <!-- Registration screen end -->
 
     <!-- Profile screen start -->

@@ -17,12 +17,24 @@
     <style name="InputFieldsStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">2dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
         <item name="android:background">@drawable/bg_round_white</item>
         <item name="android:padding">5dp</item>
         <item name="android:textSize">20sp</item>
         <item name="android:maxLines">1</item>
         <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="TextInputLayoutTheme" parent="Widget.Design.TextInputLayout">
+        <item name="android:textColorHint">#dcbcbcbc</item>
+        <item name="android:paddingTop">3dp</item>
+    </style>
+
+    <style name="InputLayoutHintTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TabLayoutStyle">
@@ -38,6 +50,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="AppTheme.NoActionBar.TransparentStatusBar" parent="AppTheme.NoActionBar"/>
 
     <style name="AccountCircleTheme">
         <item name="android:background">@drawable/bg_circular_primary</item>

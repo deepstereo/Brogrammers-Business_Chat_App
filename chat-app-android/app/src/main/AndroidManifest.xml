@@ -14,9 +14,10 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_chats"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
         <activity
-            android:name=".ui.login.LoginActivity">
+            android:name=".ui.login.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,6 +27,7 @@
         <activity
             android:name=".ui.registration.RegistrationActivity"
             android:label="@string/registration_title"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".ui.login.LoginActivity" />
         <activity
             android:name=".activity.ContactsActivity"
