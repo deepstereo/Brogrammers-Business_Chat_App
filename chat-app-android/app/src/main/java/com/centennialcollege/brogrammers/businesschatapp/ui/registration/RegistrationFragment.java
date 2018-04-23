@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
-import com.centennialcollege.brogrammers.businesschatapp.activity.MainActivity;
+import com.centennialcollege.brogrammers.businesschatapp.activity.HomeActivity;
 import com.centennialcollege.brogrammers.businesschatapp.databinding.FragmentRegistrationBinding;
 
 
@@ -129,7 +129,7 @@ public class RegistrationFragment extends Fragment implements RegistrationContra
 
     @Override
     public void launchMainActivity() {
-        Intent intent = new Intent(getContext(), MainActivity.class);
+        Intent intent = new Intent(getContext(), HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

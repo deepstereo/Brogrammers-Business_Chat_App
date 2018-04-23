@@ -31,6 +31,10 @@ interface ProfileContract {
 
         void setUserInfo(User user);
 
+        void setUserInfoReadOnly();
+
+        String getUserId();
+
         void showReAuthenticationDialog();
 
         void closeReAuthenticationDialog();

@@ -1,5 +1,7 @@
 package com.centennialcollege.brogrammers.businesschatapp.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
+import com.centennialcollege.brogrammers.businesschatapp.ui.profile.ProfileActivity;
 import com.centennialcollege.brogrammers.businesschatapp.util.UserAttributesUtils;
 
 import java.util.ArrayList;
@@ -51,6 +55,7 @@ public class ChatMembersRecyclerViewAdapter extends RecyclerView.Adapter<ChatMem
         private CardView cvAvatar;
         private ImageView ivAvatar;
         private View view;
+        private Context context;
 
         ContactViewHolder(View v) {
             super(v);
@@ -60,6 +65,7 @@ public class ChatMembersRecyclerViewAdapter extends RecyclerView.Adapter<ChatMem
             tvPlaceholderAvatar = v.findViewById(R.id.tv_placeholder_avatar);
             cvAvatar = v.findViewById(R.id.cv_avatar);
             ivAvatar = v.findViewById(R.id.iv_avatar);
+            context = view.getContext();
         }
 
         void bind(final User user) {
@@ -68,7 +74,7 @@ public class ChatMembersRecyclerViewAdapter extends RecyclerView.Adapter<ChatMem
 
             if (user.getAvatar()) {
                 cvAvatar.setVisibility(View.VISIBLE);
-                Glide.with(view.getContext())
+                Glide.with(context)
                         .load(user.getAvatarURL())
                         .centerCrop()
                         .into(ivAvatar);
@@ -76,8 +82,14 @@ public class ChatMembersRecyclerViewAdapter extends RecyclerView.Adapter<ChatMem
             } else {
                 cvAvatar.setVisibility(View.GONE);
                 tvPlaceholderAvatar.setVisibility(View.VISIBLE);
-                UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, user.getUsername(), view.getContext());
+                UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, user.getUsername(), context);
             }
+
+            view.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra(Constants.USER_ID, user.getId());
+                context.startActivity(intent);
+            });
         }
     }
 }

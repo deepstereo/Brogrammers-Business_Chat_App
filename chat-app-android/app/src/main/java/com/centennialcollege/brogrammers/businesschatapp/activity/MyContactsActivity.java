@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
@@ -11,6 +12,7 @@ import com.centennialcollege.brogrammers.businesschatapp.adapter.MyContactsRecyc
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.centennialcollege.brogrammers.businesschatapp.Constants.USERS_CHILD;
+import static com.centennialcollege.brogrammers.businesschatapp.Constants.USER_CONTACT_LIST;
 
 public class MyContactsActivity extends AppCompatActivity {
 
@@ -59,20 +62,41 @@ public class MyContactsActivity extends AppCompatActivity {
     private void fetchMyContactsIds() {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD).child(firebaseUser.getUid());
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD)
+                .child(firebaseUser.getUid()).child(USER_CONTACT_LIST);
 
         // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if (user != null) {
-                    myContactsId.putAll(user.getContactList());
+        ref.addChildEventListener(new ChildEventListener() {
 
-                    for (String myContactId : user.getContactList().keySet()) {
-                        fetchMyContact(myContactId);
-                    }
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String myContactId = dataSnapshot.getKey();
+                if (!TextUtils.isEmpty(myContactId)) {
+                    myContactsId.put(myContactId, true);
+                    fetchMyContact(myContactId);
                 }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String myContactId = dataSnapshot.getKey();
+                if (!TextUtils.isEmpty(myContactId) && myContactsId.containsKey(myContactId)) {
+                    myContactsId.remove(myContactId);
+                    User tempUser = new User();
+                    tempUser.setId(myContactId);
+                    myContacts.remove(tempUser);
+                    myContactsRecyclerViewAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override

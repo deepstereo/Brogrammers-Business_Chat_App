@@ -37,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 /**
  * The main chat screen where all messages sent by all users are visible.
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth firebaseAuth;
     private TabLayout tabLayout;
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     if (currentUser.getAvatar()) {
                         cvAvatar.setVisibility(View.VISIBLE);
-                        Glide.with(MainActivity.this)
+                        Glide.with(HomeActivity.this)
                                 .load(currentUser.getAvatarURL())
                                 .centerCrop()
                                 .into(ivAvatar);
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else {
                         cvAvatar.setVisibility(View.GONE);
                         tvPlaceholderAvatar.setVisibility(View.VISIBLE);
-                        UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, currentUser.getUsername(), MainActivity.this);
+                        UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, currentUser.getUsername(), HomeActivity.this);
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void launchProfileScreen() {
         Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(Constants.USER_AVATAR_URL, currentUser.getAvatarURL());
+        intent.putExtra(Constants.USER_ID, currentUser.getId());
         startActivity(intent);
     }
 }

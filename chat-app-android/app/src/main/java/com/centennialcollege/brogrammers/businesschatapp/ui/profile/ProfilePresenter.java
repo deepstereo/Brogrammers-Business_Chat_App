@@ -37,15 +37,21 @@ class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     private void updateUserInfo() {
-        if (isViewNotNull()) {
+        if (isViewNotNull() && !TextUtils.isEmpty(view.getUserId())) {
             view.showProgress();
-            dataManager.getCurrentUserInfo(new DataManager.GetUserInfoCallback() {
+            dataManager.getUserInfo(new DataManager.GetUserInfoCallback() {
                 @Override
                 public void onSuccess(User user) {
                     if (isViewNotNull()) {
                         view.hideProgress();
 
                         view.setUserInfo(user);
+
+                        // Setting read only here so that click listeners on profile image holding views
+                        // are set before we reach here.
+                        if (!TextUtils.equals(view.getUserId(), dataManager.getFirebaseAuthHelper().getCurrentUser().getUid())) {
+                            view.setUserInfoReadOnly();
+                        }
                     }
                 }
 
@@ -57,7 +63,7 @@ class ProfilePresenter implements ProfileContract.Presenter {
                         view.showError(ProfileContract.Error.ERROR_GET_USER_INFO);
                     }
                 }
-            });
+            }, view.getUserId());
         }
     }
 

@@ -99,4 +99,9 @@ public class User {
     public void setAvatarURL(String avatarURL) {
         this.avatarURL = avatarURL;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof User && id.equals(((User) obj).id);
+    }
 }

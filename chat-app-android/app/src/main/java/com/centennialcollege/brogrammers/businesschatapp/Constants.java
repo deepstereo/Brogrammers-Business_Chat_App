@@ -27,6 +27,7 @@ public interface Constants {
 
     String USER_AVATAR_URL = "avatarURL";
     String USER_AVATAR = "avatar";
+    String USER_ID = "userId";
 
     String ACTIVITY_TITLE = "activity_title";
 }

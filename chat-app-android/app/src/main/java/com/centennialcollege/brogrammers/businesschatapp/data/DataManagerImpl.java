@@ -61,10 +61,7 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public void getCurrentUserInfo(GetUserInfoCallback getUserInfoCallback) {
-        FirebaseUser firebaseUser = firebaseAuthHelper.getCurrentUser();
-        String userId = firebaseUser.getUid();
-
+    public void getUserInfo(GetUserInfoCallback getUserInfoCallback, String userId) {
         firebaseDbHelper.getUserRef(userId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -82,6 +79,12 @@ public class DataManagerImpl implements DataManager {
                         getUserInfoCallback.onFailure();
                     }
                 });
+    }
+
+    @Override
+    public void getCurrentUserInfo(GetUserInfoCallback getUserInfoCallback) {
+        FirebaseUser firebaseUser = firebaseAuthHelper.getCurrentUser();
+        getUserInfo(getUserInfoCallback, firebaseUser.getUid());
     }
 
     @Override

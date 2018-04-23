@@ -89,6 +89,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                 UserAttributesUtils.setAccountColor(tvPlaceholderAvatar, user.getUsername(), view.getContext());
             }
 
+            ivTick.setVisibility(selectedContacts.containsKey(user.getId()) ? View.VISIBLE : View.INVISIBLE);
+
             view.setOnClickListener(v -> {
                 if (selectedContacts.containsKey(user.getId())) {
                     selectedContacts.remove(user.getId());

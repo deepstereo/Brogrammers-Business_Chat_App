@@ -54,13 +54,24 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
 
     private String userId;
 
+    private boolean isCurrentUser = true;
+
     public ProfileFragment() {
     } // Required empty public constructor
+
+    public static ProfileFragment getInstance(@NonNull String userId) {
+        ProfileFragment profileFragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(Constants.USER_ID, userId);
+        profileFragment.setArguments(args);
+        return profileFragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new ProfilePresenter();
+        userId = getArguments().getString(Constants.USER_ID);
     }
 
     @Override
@@ -87,10 +98,6 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     }
 
     private void initUserAvatar(User user) {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser == null) return;
-        userId = firebaseUser.getUid();
-
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference()
                 .child(Constants.USERS_CHILD)
@@ -136,8 +143,10 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_profile, menu);
+        MenuItem item = menu.findItem(R.id.menu_save);
+        item.setVisible(isCurrentUser);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -219,6 +228,27 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
         binding.etUsername.setText(user.getUsername());
         binding.etEmail.setText(user.getEmail());
         initUserAvatar(user);
+    }
+
+    @Override
+    public void setUserInfoReadOnly() {
+        binding.tvPlaceholderAvatar.setOnClickListener(null);
+        binding.ivAvatar.setOnClickListener(null);
+        makeEditableTextFieldReadOnly(binding.etUsername);
+        makeEditableTextFieldReadOnly(binding.etEmail);
+    }
+
+    private void makeEditableTextFieldReadOnly(EditText editText) {
+        isCurrentUser = false;
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+        editText.setClickable(false);
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public String getUserId() {
+        return userId;
     }
 
     @Override
