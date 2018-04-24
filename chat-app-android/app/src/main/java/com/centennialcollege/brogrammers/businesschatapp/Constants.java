@@ -29,5 +29,9 @@ public interface Constants {
     String USER_AVATAR = "avatar";
     String USER_ID = "userId";
 
-    String ACTIVITY_TITLE = "activity_title";
+    String USER_CONNECTIONS = "connections";
+    String USER_LAST_ONLINE = "lastOnline";
+    String INFO_CONNECTED = ".info/connected";
+
+    String MY_CONTACTS_ACTIVITY_ACTION = "myContactsActivityAction";
 }

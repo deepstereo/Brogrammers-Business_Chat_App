@@ -28,6 +28,9 @@ import static com.centennialcollege.brogrammers.businesschatapp.Constants.USER_C
 
 public class MyContactsActivity extends AppCompatActivity {
 
+    public static final int ACTION_NEW_CHAT = 1;
+    public static final int ACTION_MY_CONTACTS_INFO = 2;
+
     private FirebaseAuth firebaseAuth;
     private Map<String, Boolean> myContactsId;
 
@@ -42,9 +45,11 @@ public class MyContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_contacts);
 
-        // Set a different title in case user navigated here from new chat menu item.
-        if (getIntent().getStringExtra(Constants.ACTIVITY_TITLE) != null) {
-            setTitle(getIntent().getStringExtra(Constants.ACTIVITY_TITLE));
+        // Set a different title in case user navigated here from new chat menu item or from my contacts nav menu item.
+        if (getIntent().getIntExtra(Constants.MY_CONTACTS_ACTIVITY_ACTION, 0) == ACTION_NEW_CHAT) {
+            setTitle(R.string.new_chat);
+        } else if (getIntent().getIntExtra(Constants.MY_CONTACTS_ACTIVITY_ACTION, 0) == ACTION_MY_CONTACTS_INFO) {
+            setTitle(R.string.my_contacts_title);
         }
 
         init();
@@ -155,7 +160,12 @@ public class MyContactsActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        myContactsRecyclerViewAdapter = new MyContactsRecyclerViewAdapter(currentUser, myContacts, this);
+        // Send different actions based on whether user navigated here from new chat menu item or from my contacts nav menu item.
+        if (getIntent().getIntExtra(Constants.MY_CONTACTS_ACTIVITY_ACTION, 0) == ACTION_NEW_CHAT) {
+            myContactsRecyclerViewAdapter = new MyContactsRecyclerViewAdapter(currentUser, myContacts, this, ACTION_NEW_CHAT);
+        } else if (getIntent().getIntExtra(Constants.MY_CONTACTS_ACTIVITY_ACTION, 0) == ACTION_MY_CONTACTS_INFO) {
+            myContactsRecyclerViewAdapter = new MyContactsRecyclerViewAdapter(currentUser, myContacts, this, ACTION_MY_CONTACTS_INFO);
+        }
 
         mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mContactsRecyclerView.setAdapter(myContactsRecyclerViewAdapter);

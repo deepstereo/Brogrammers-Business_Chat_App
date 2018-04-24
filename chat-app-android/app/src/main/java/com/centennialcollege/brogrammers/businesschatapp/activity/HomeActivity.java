@@ -80,7 +80,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_new_chat:
                 if (tabLayout.getSelectedTabPosition() == 0) {
                     Intent intent = new Intent(this, MyContactsActivity.class);
-                    intent.putExtra(Constants.ACTIVITY_TITLE, getString(R.string.new_chat));
+                    intent.putExtra(Constants.MY_CONTACTS_ACTIVITY_ACTION, MyContactsActivity.ACTION_NEW_CHAT);
                     startActivity(intent);
                 } else {
                     startActivity(new Intent(this, GroupChatActivity.class));
@@ -209,7 +209,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, ContactsActivity.class));
                 break;
             case R.id.nav_my_contacts:
-                startActivity(new Intent(this, MyContactsActivity.class));
+                Intent intent = new Intent(this, MyContactsActivity.class);
+                intent.putExtra(Constants.MY_CONTACTS_ACTIVITY_ACTION, MyContactsActivity.ACTION_MY_CONTACTS_INFO);
+                startActivity(intent);
                 break;
             case R.id.nav_sign_out:
                 // Sign out the current user and navigate to Login Screen.

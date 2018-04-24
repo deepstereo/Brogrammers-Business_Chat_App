@@ -14,8 +14,10 @@ import com.bumptech.glide.Glide;
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.activity.ChatActivity;
+import com.centennialcollege.brogrammers.businesschatapp.activity.MyContactsActivity;
 import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
+import com.centennialcollege.brogrammers.businesschatapp.ui.profile.ProfileActivity;
 import com.centennialcollege.brogrammers.businesschatapp.util.ChatAttributesHelper;
 import com.centennialcollege.brogrammers.businesschatapp.util.UserAttributesUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,14 +38,17 @@ import java.util.Map;
 
 public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContactsRecyclerViewAdapter.ContactViewHolder> {
 
+    private final int actionClick;
+
     private Activity context;
     private User currentUser;
     private ArrayList<User> myContacts;
 
-    public MyContactsRecyclerViewAdapter(User currentUser, ArrayList<User> myContacts, Activity context) {
+    public MyContactsRecyclerViewAdapter(User currentUser, ArrayList<User> myContacts, Activity context, int actionClick) {
         this.currentUser = currentUser;
         this.myContacts = myContacts;
         this.context = context;
+        this.actionClick = actionClick;
     }
 
     @Override
@@ -100,29 +105,37 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
 
             view.setOnClickListener(v -> {
 
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                String currentUserId = firebaseAuth.getCurrentUser().getUid();
+                // Perform different actions based on action received.
+                if (actionClick == MyContactsActivity.ACTION_MY_CONTACTS_INFO) {
+                    Intent intent = new Intent(context, ProfileActivity.class);
+                    intent.putExtra(Constants.USER_ID, user.getId());
+                    context.startActivity(intent);
+                } else if (actionClick == MyContactsActivity.ACTION_NEW_CHAT) {
+                    // Initiate a new or existing chat
+                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                    String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
-                // Create a new chat
-                Map<String, Boolean> members = new LinkedHashMap<>();
-                members.put(currentUserId, true);
-                members.put(user.getId(), true);
+                    // Create a new chat
+                    Map<String, Boolean> members = new LinkedHashMap<>();
+                    members.put(currentUserId, true);
+                    members.put(user.getId(), true);
 
-                // Chat name is the concatenation of the userId of recipient and sender.
-                Chat newChat = new Chat(user.getId() + currentUser.getId(), false, members);
+                    // Chat name is the concatenation of the userId of recipient and sender.
+                    Chat newChat = new Chat(user.getId() + currentUser.getId(), false, members);
 
-                DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
-                        .child(Constants.CHATS_CHILD);
-                String newChatId = ChatAttributesHelper.getPersonalChatID(currentUserId, user.getId());
-                chatReference.child(newChatId).setValue(newChat);
+                    DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.CHATS_CHILD);
+                    String newChatId = ChatAttributesHelper.getPersonalChatID(currentUserId, user.getId());
+                    chatReference.child(newChatId).setValue(newChat);
 
-                addChatIdInActivePersonalChats(newChatId, currentUserId, user.getId());
+                    addChatIdInActivePersonalChats(newChatId, currentUserId, user.getId());
 
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
-                intent.putExtra(Constants.KEY_CHAT_NAME, user.getUsername());
-                context.startActivity(intent);
-                context.finish();
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
+                    intent.putExtra(Constants.KEY_CHAT_NAME, user.getUsername());
+                    context.startActivity(intent);
+                    context.finish();
+                }
             });
         }
     }
