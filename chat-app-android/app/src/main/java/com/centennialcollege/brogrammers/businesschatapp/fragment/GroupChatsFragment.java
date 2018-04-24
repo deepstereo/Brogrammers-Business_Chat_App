@@ -160,23 +160,29 @@ public class GroupChatsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildren().iterator().hasNext()) {
-                    Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
-                    if (message != null) {
-                        if (message.getIsMultimedia()) {
-                            // Todo: Change this text based on type of multimedia message.
-                            message.setContent(getString(R.string.multimedia_type_photo));
-                        }
-                        chatListItem.setLastMessage(message);
+                    if (!isAdded()) {
+                        return;
+                    }
 
-                        // If it's a new chat item, then add it in the list, otherwise, just modify
-                        // the last message text in existing chat item and refresh adapter.
-                        if (!chatListItems.contains(chatListItem)) {
-                            chatListItems.add(chatListItem);
-                        }
+                    if (dataSnapshot.getChildren().iterator().hasNext()) {
+                        Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
+                        if (message != null) {
+                            if (message.getIsMultimedia()) {
+                                // Todo: Change this text based on type of multimedia message.
+                                message.setContent(getString(R.string.multimedia_type_photo));
+                            }
+                            chatListItem.setLastMessage(message);
 
-                        if (chatListItems.size() == activeGroupChatIds.size()) {
-                            Collections.sort(chatListItems);
-                            chatsRecyclerViewAdapter.notifyDataSetChanged();
+                            // If it's a new chat item, then add it in the list, otherwise, just modify
+                            // the last message text in existing chat item and refresh adapter.
+                            if (!chatListItems.contains(chatListItem)) {
+                                chatListItems.add(chatListItem);
+                            }
+
+                            if (chatListItems.size() == activeGroupChatIds.size()) {
+                                Collections.sort(chatListItems);
+                                chatsRecyclerViewAdapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 }

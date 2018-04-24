@@ -257,6 +257,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     public void setUserInfoReadOnly() {
         binding.tvPlaceholderAvatar.setOnClickListener(null);
         binding.ivAvatar.setOnClickListener(null);
+        binding.btnChangePassword.setVisibility(View.GONE);
         makeEditableTextFieldReadOnly(binding.etUsername);
         makeEditableTextFieldReadOnly(binding.etEmail);
     }

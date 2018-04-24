@@ -48,14 +48,16 @@
         <activity
             android:name=".activity.ChatActivity"
             android:parentActivityName=".activity.HomeActivity"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.ChatInfoActivity"
             android:label="@string/chat_info_title" />
         <activity
             android:name=".activity.GroupChatActivity"
             android:label="@string/new_group_chat_title"
-            android:parentActivityName=".activity.HomeActivity"/>
+            android:parentActivityName=".activity.HomeActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
     </application>
 
 </manifest>

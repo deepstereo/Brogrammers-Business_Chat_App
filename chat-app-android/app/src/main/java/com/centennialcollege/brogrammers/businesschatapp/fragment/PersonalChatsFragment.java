@@ -203,6 +203,10 @@ public class PersonalChatsFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!isAdded()) {
+                    return;
+                }
+
                 Log.d("PERSONAL_CHATS_FRAGMENT", "Listener CALLED with chatId : " + chatListItem.getChatId());
                 if (dataSnapshot.getChildren().iterator().hasNext()) {
                     Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
