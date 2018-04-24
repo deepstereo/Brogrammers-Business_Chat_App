@@ -133,6 +133,7 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
                     intent.putExtra(Constants.KEY_CHAT_NAME, user.getUsername());
+                    intent.putExtra(Constants.KEY_CHAT_ACTIVITY_CHAT_TYPE, ChatActivity.CHAT_TYPE_PERSONAL);
                     context.startActivity(intent);
                     context.finish();
                 }

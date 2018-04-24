@@ -67,8 +67,8 @@ public class ChatInfoActivity extends AppCompatActivity {
                 try {
                     chatMembersId = (Map<String, Boolean>) dataSnapshot.getValue();
 
-                    for (String myContactId : chatMembersId.keySet()) {
-                        fetchChatMembers(myContactId);
+                    for (String chatMemberId : chatMembersId.keySet()) {
+                        fetchChatMembers(chatMemberId);
                     }
                 } catch (Exception e) {
                     System.out.println("The read failed: " + e.getMessage());

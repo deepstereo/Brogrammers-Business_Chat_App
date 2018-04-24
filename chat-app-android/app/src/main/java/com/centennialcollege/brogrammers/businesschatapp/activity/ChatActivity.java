@@ -18,11 +18,15 @@ import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.adapter.MessagesRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
+import com.centennialcollege.brogrammers.businesschatapp.ui.profile.ProfileActivity;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,6 +37,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
+
+    public static final int CHAT_TYPE_PERSONAL = 2;
+    public static final int CHAT_TYPE_GROUP = 3;
 
     private static final int PICK_IMAGE = 1;
 
@@ -186,9 +193,41 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                Intent intent = new Intent(this, ChatInfoActivity.class);
-                intent.putExtra(Constants.KEY_CHAT_ID, chatId);
-                startActivity(intent);
+                if (getIntent().getIntExtra(Constants.KEY_CHAT_ACTIVITY_CHAT_TYPE, 0) == CHAT_TYPE_PERSONAL) {
+
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                                .child(Constants.CHATS_CHILD).child(chatId).child(Constants.CHATS_MEMBERS);
+
+                        // Attach a listener to read the data at our posts reference
+                        ref.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                try {
+                                    Map<String, Boolean> chatMembersId = (Map<String, Boolean>) dataSnapshot.getValue();
+
+                                    Intent intent = new Intent(ChatActivity.this, ProfileActivity.class);
+                                    for (String chatMemberId : chatMembersId.keySet()) {
+                                        if (!TextUtils.equals(chatMemberId, FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                            intent.putExtra(Constants.USER_ID, chatMemberId);
+                                        }
+                                    }
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    System.out.println("The read failed: " + e.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
+                            }
+                        });
+
+                } else if (getIntent().getIntExtra(Constants.KEY_CHAT_ACTIVITY_CHAT_TYPE, 0) == CHAT_TYPE_GROUP) {
+                    Intent intent = new Intent(this, ChatInfoActivity.class);
+                    intent.putExtra(Constants.KEY_CHAT_ID, chatId);
+                    startActivity(intent);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

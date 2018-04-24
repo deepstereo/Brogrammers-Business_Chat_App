@@ -241,7 +241,7 @@ public class PersonalChatsFragment extends Fragment {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
-        chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatListItems);
+        chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatListItems, true);
 
         mChatsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mChatsRecyclerView.setAdapter(chatsRecyclerViewAdapter);

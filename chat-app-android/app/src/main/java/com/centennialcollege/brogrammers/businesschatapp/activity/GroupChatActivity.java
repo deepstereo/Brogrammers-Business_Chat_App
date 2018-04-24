@@ -148,6 +148,7 @@ public class GroupChatActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
         intent.putExtra(Constants.KEY_CHAT_NAME, newChat.getChatName());
+        intent.putExtra(Constants.KEY_CHAT_ACTIVITY_CHAT_TYPE, ChatActivity.CHAT_TYPE_GROUP);
         startActivity(intent);
     }
 

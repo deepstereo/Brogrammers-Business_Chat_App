@@ -29,9 +29,11 @@ import java.util.Date;
 public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecyclerViewAdapter.ChatViewHolder> {
 
     private ArrayList<ChatListItem> chatListItems;
+    private boolean isPersonalChat;
 
-    public ChatsRecyclerViewAdapter(ArrayList<ChatListItem> personalChats) {
-        this.chatListItems = personalChats;
+    public ChatsRecyclerViewAdapter(ArrayList<ChatListItem> Chats, boolean isPersonalChat) {
+        this.chatListItems = Chats;
+        this.isPersonalChat = isPersonalChat;
     }
 
     @Override
@@ -111,6 +113,8 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
                 Intent intent = new Intent(view.getContext(), ChatActivity.class);
                 intent.putExtra(Constants.KEY_CHAT_ID, chat.getChatId());
                 intent.putExtra(Constants.KEY_CHAT_NAME, chat.getChatName());
+                intent.putExtra(Constants.KEY_CHAT_ACTIVITY_CHAT_TYPE, isPersonalChat ? ChatActivity.CHAT_TYPE_PERSONAL
+                        : ChatActivity.CHAT_TYPE_GROUP);
                 view.getContext().startActivity(intent);
             });
         }

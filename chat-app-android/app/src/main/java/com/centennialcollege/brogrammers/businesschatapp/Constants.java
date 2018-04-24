@@ -34,4 +34,5 @@ public interface Constants {
     String INFO_CONNECTED = ".info/connected";
 
     String MY_CONTACTS_ACTIVITY_ACTION = "myContactsActivityAction";
+    String KEY_CHAT_ACTIVITY_CHAT_TYPE = "chatActivityChatType";
 }
