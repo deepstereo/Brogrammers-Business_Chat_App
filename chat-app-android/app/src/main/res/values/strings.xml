@@ -51,6 +51,15 @@
     <string name="profile_title_enter_password">Enter your password:</string>
     <string name="profile_ok">Ok</string>
     <string name="profile_cancel">Cancel</string>
+    <string name="profile_title_change_password">Change password</string>
+    <string name="profile_hint_old_password">Current password</string>
+    <string name="profile_hint_new_password">New password</string>
+    <string name="profile_hint_new_confirm_password">New password, again</string>
+    <string name="profile_error_username_too_short">This username is too short, minimum length is %d characters</string>
+    <string name="profile_error_password_too_short">This password is too short, minimum length is %d characters</string>
+    <string name="profile_error_all_fields_required">All fields required</string>
+    <string name="profile_error_passwords_not_same">This passwords aren\'t same</string>
+    <string name="profile_change_password">Change password</string>
     <!-- Profile screen end -->
 
     <!-- Strings need to relocate to specific screen -->
@@ -73,5 +82,6 @@
     <string name="messages_date_format_type">hh:mm a, MMM dd</string>
     <string name="add_contacts_title">Add Contacts</string>
     <string name="my_contacts_title">My Contacts</string>
+
 
 </resources>

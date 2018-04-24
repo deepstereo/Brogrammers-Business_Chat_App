@@ -88,6 +88,14 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
+    public Task<Void> updatePassword(String oldPassword, String newPassword) {
+        FirebaseUser firebaseUser = firebaseAuthHelper.getCurrentUser();
+
+        return firebaseAuthHelper.reAuthentication(oldPassword)
+                .continueWithTask(task -> firebaseUser.updatePassword(newPassword));
+    }
+
+    @Override
     public Task<Void> replaceCurrentUserEmailAndUsername(String email, String username,
                                                          ReplaceUserEmailAndUsernameCallback replaceCallback) {
         FirebaseUser firebaseUser = firebaseAuthHelper.getCurrentUser();

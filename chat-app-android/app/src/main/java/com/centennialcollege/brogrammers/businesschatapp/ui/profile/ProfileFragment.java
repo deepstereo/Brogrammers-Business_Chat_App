@@ -10,7 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +55,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     private FragmentProfileBinding binding;
 
     private AlertDialog authDialog;
+    private AlertDialog changePasswordDialog;
 
     private String userId;
 
@@ -79,6 +84,8 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
         setHasOptionsMenu(true);
+
+        binding.btnChangePassword.setOnClickListener(v -> showChangePasswordDialog());
         return binding.getRoot();
     }
 
@@ -195,6 +202,22 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
                 break;
             case ERROR_GET_USER_INFO:
                 Toast.makeText(getContext(), R.string.profile_error_get_user_info, Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR_USERNAME_TOO_SHORT:
+                Toast.makeText(getContext(),
+                        getString(R.string.profile_error_username_too_short, Constants.MINIMUM_USERNAME_LENGTH),
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR_ALL_FIELDS_REQUIRED:
+                Toast.makeText(getContext(), R.string.profile_error_all_fields_required, Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR_NEW_PASSWORD_TOO_SHORT:
+                Toast.makeText(getContext(),
+                        getString(R.string.profile_error_password_too_short, Constants.MINIMUM_PASSWORD_LENGTH),
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR_PASSWORDS_NOT_MATCHING:
+                Toast.makeText(getContext(), R.string.profile_error_passwords_not_same, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -332,6 +355,68 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
         childUpdates.put(userAvatarReferenceRelativeKey, true);
 
         dbReference.updateChildren(childUpdates);
+    }
+
+    @Override
+    public void showChangePasswordDialog() {
+        AlertDialog.Builder changePasswordDialogBuilder = new AlertDialog.Builder(getContext());
+
+        final TextView tvOldPassword = new TextView(getContext());
+        final TextView tvNewPassword = new TextView(getContext());
+        final TextView tvNewConfirmPassword = new TextView(getContext());
+
+        tvOldPassword.setText(R.string.profile_hint_old_password);
+        tvNewPassword.setText(R.string.profile_hint_new_password);
+        tvNewConfirmPassword.setText(R.string.profile_hint_new_confirm_password);
+
+        final EditText etOldPassword = new EditText(getContext());
+        final EditText etNewPassword = new EditText(getContext());
+        final EditText etNewConfirmPassword = new EditText(getContext());
+
+        etOldPassword.setHint(R.string.profile_hint_old_password);
+        etNewPassword.setHint(R.string.profile_hint_new_password);
+        etNewConfirmPassword.setHint(R.string.profile_hint_new_confirm_password);
+
+        etOldPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        etNewPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        etNewConfirmPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+        final LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        ViewGroup.LayoutParams LLParams =
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout.setLayoutParams(LLParams);
+
+        linearLayout.addView(tvOldPassword);
+        linearLayout.addView(etOldPassword);
+
+        linearLayout.addView(tvNewPassword);
+        linearLayout.addView(etNewPassword);
+
+        linearLayout.addView(tvNewConfirmPassword);
+        linearLayout.addView(etNewConfirmPassword);
+
+        changePasswordDialogBuilder.setTitle(R.string.profile_title_change_password)
+                .setView(linearLayout)
+                .setPositiveButton(R.string.profile_ok, (dialogInterface, i) -> {
+                })
+                .setNegativeButton(R.string.profile_cancel, (dialog, id) -> dialog.cancel());
+
+        changePasswordDialog = changePasswordDialogBuilder.create();
+
+        changePasswordDialog.show();
+
+        changePasswordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v ->
+                presenter.attemptChangePassword(
+                        etOldPassword.getText().toString(),
+                        etNewPassword.getText().toString(),
+                        etNewConfirmPassword.getText().toString()
+                        ));
+    }
+
+    @Override
+    public void closeChangePasswordDialog() {
+        if (changePasswordDialog != null) changePasswordDialog.dismiss();
     }
 
 }

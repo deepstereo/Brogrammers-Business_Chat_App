@@ -14,7 +14,10 @@ interface ProfileContract {
         ERROR_EMAIL_ALREADY_IN_USE,
         ERROR_GET_USER_INFO,
         ERROR_WRONG_PASSWORD,
-        ERROR_PASSWORD_REQUIRED
+        ERROR_PASSWORD_REQUIRED,
+        ERROR_ALL_FIELDS_REQUIRED,
+        ERROR_NEW_PASSWORD_TOO_SHORT,
+        ERROR_PASSWORDS_NOT_MATCHING
     }
 
     interface View {
@@ -38,6 +41,10 @@ interface ProfileContract {
         void showReAuthenticationDialog();
 
         void closeReAuthenticationDialog();
+
+        void showChangePasswordDialog();
+
+        void closeChangePasswordDialog();
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -46,6 +53,8 @@ interface ProfileContract {
         void attemptChangeUserInfo(String username, String email);
 
         void attemptReAuthentication(String password);
+
+        void attemptChangePassword(String oldPassword, String newPassword, String newConfirmPassword);
     }
 
 }

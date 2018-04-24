@@ -6,6 +6,7 @@ import com.centennialcollege.brogrammers.businesschatapp.data.DataManager;
 import com.centennialcollege.brogrammers.businesschatapp.data.DataManagerImpl;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
 
+import static com.centennialcollege.brogrammers.businesschatapp.Constants.MINIMUM_PASSWORD_LENGTH;
 import static com.centennialcollege.brogrammers.businesschatapp.Constants.MINIMUM_USERNAME_LENGTH;
 
 
@@ -154,6 +155,37 @@ class ProfilePresenter implements ProfileContract.Presenter {
                 })
                 .addOnFailureListener(e ->
                         view.showError(ProfileContract.Error.ERROR_WRONG_PASSWORD));
+    }
+
+    @Override
+    public void attemptChangePassword(String oldPassword, String newPassword, String newConfirmPassword) {
+        if (TextUtils.isEmpty(oldPassword) || TextUtils.isEmpty(newPassword) || TextUtils.isEmpty(newConfirmPassword)) {
+            view.showError(ProfileContract.Error.ERROR_ALL_FIELDS_REQUIRED);
+            return;
+        }
+
+        if (!isPasswordLongEnough(newPassword)) {
+            view.showError(ProfileContract.Error.ERROR_NEW_PASSWORD_TOO_SHORT);
+            return;
+        }
+
+        if (!newPassword.equals(newConfirmPassword)) {
+            view.showError(ProfileContract.Error.ERROR_PASSWORDS_NOT_MATCHING);
+            return;
+        }
+
+        dataManager
+                .updatePassword(oldPassword, newPassword)
+                .addOnSuccessListener(aVoid -> {
+                    view.closeChangePasswordDialog();
+                    view.showUpdateSuccessMsg();
+                })
+                .addOnFailureListener(e ->
+                        view.showError(ProfileContract.Error.ERROR_WRONG_PASSWORD));
+    }
+
+    private boolean isPasswordLongEnough(String password) {
+        return password.length() >= MINIMUM_PASSWORD_LENGTH;
     }
 
 }

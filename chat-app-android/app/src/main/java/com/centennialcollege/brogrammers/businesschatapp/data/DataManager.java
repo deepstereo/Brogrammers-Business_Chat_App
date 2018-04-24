@@ -11,6 +11,8 @@ import com.google.firebase.auth.AuthResult;
 
 public interface DataManager {
 
+    Task<Void> updatePassword(String oldPassword, String newPassword);
+
     interface GetUserInfoCallback {
 
         void onSuccess(User user);
