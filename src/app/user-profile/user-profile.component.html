@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <h4 class="modal-title"> Settings </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <ngb-alert type="success" *ngIf="updateSuccess" (close)="updateSuccess = false">
+        <strong>Update Successful!</strong>
+    </ngb-alert>
+  <h6>User Profile:</h6>
+  <form #userProfileForm="ngForm">
+    <div class="form-group row">
+        <label for="username-input" class="col-2 col-form-label">Name:</label>
+        <div class="col-10">
+          <input class="form-control" type="text" name="username" [(ngModel)]="username" value="{{username}}" id="username-input">
+        </div>
+      </div>
+
+      <div class="form-group row">
+          <label for="email-input" class="col-2 col-form-label">Email:</label>
+          <div class="col-10">
+            <input class="form-control" type="text" name="email" [(ngModel)]="email" value="{{email}}" id="email-input">
+          </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="status-input" class="col-2 col-form-label">Status:</label>
+            <div class="col-10">
+              <input class="form-control" type="text" name="status" [(ngModel)]="status" value="{{status}}" id="status-input">
+            </div>
+          </div>
+
+          <button class="btn btn-secondary" type="button" (click)="update()">Update</button>
+      
+        </form>
+      </div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-success" (click)="activeModal.close('Close click')">Close</button>
+</div>

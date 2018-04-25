@@ -1,3 +1,5 @@
-<p>
-  chat-list works!
-</p>
+<div class="userList">
+  <div *ngFor="let personalChat of chats" (click)="openChat(personalChat.key)"> 
+    <div *ngIf="chats.indexOf(personalChat) > -1">{{personalChat.username}}</div>
+  </div>
+</div>

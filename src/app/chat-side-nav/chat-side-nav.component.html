@@ -1,3 +1,16 @@
-<p>
-  chat-side-nav works!
-</p>
+<div class="chatNav">
+  <div class="row">
+    <div class="column">
+      <div class="p-1">
+      <button type="button" class="btn text-center"><i class="fa fa-address-card" (click)="showContactList()"></i></button>
+    </div>
+    </div>
+    <div class="column">
+        <div class="p-1"><button type="button" class="btn text-center"><i class="fa fa-comments-o"></i></button></div>
+      </div>
+
+      <div class="column">
+          <div class="p-1"><button type="button" class="btn text-center" (click)="showUserProfile()"><i class="fa fa-cogs"></i></button></div>
+        </div>
+  </div>
+</div>

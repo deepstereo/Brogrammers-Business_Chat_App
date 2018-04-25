@@ -17,6 +17,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { ContentComponent } from './content/content.component';
 
 import { AuthService } from './services/auth.service';
+import { ChatService } from './services/chat.service';
 import { ChatComponent } from './chat/chat.component';
 
 import { RouterModule } from '@angular/router';
@@ -26,6 +27,8 @@ import { ChatListComponent } from './chat-list/chat-list.component';
 import { ChatFeedComponent } from './chat-feed/chat-feed.component';
 import { ChatFormComponent } from './chat-form/chat-form.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ContactListComponent } from './contact-list/contact-list.component';
 
 
 @NgModule({
@@ -40,7 +43,9 @@ import { ChatMessageComponent } from './chat-message/chat-message.component';
     ChatListComponent,
     ChatFeedComponent,
     ChatFormComponent,
-    ChatMessageComponent
+    ChatMessageComponent,
+    UserProfileComponent,
+    ContactListComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,11 @@ import { ChatMessageComponent } from './chat-message/chat-message.component';
     FormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [AuthService],
+  entryComponents: [
+    ContactListComponent,
+    UserProfileComponent
+  ],
+  providers: [AuthService, ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
