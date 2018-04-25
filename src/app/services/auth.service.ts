@@ -41,10 +41,12 @@ export class AuthService {
   }
 
   setUserData(email: string, username: string) {
-    const path = 'users/' + this.currentUserID;
+    const path = 'users_angular/' + this.currentUserID;
     const data = {
       email: email,
-      username: username
+      username: username,
+      status: 'online',
+      avatar: false,
     };
 
     this.db.object(path).update(data);
