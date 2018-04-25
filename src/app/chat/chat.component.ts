@@ -8,7 +8,11 @@ import { Router } from '@angular/router';
 })
 export class ChatComponent implements OnInit {
 
-  constructor() { }
+  public activeChatID: string;
+  
+  constructor() {
+    this.activeChatID =null;
+   }
 
   ngOnInit() {
   }

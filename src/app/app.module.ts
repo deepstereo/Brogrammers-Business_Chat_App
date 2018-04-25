@@ -21,6 +21,10 @@ import { ChatComponent } from './chat/chat.component';
 
 import { RouterModule } from '@angular/router';
 import { appRoutes } from '../routes';
+import { ChatSideNavComponent } from './chat-side-nav/chat-side-nav.component';
+import { ChatListComponent } from './chat-list/chat-list.component';
+import { ChatFeedComponent } from './chat-feed/chat-feed.component';
+import { ChatFormComponent } from './chat-form/chat-form.component';
 
 
 @NgModule({
@@ -30,7 +34,11 @@ import { appRoutes } from '../routes';
     AppFooterComponent,
     RegistrationComponent,
     ContentComponent,
-    ChatComponent
+    ChatComponent,
+    ChatSideNavComponent,
+    ChatListComponent,
+    ChatFeedComponent,
+    ChatFormComponent
   ],
   imports: [
     BrowserModule,

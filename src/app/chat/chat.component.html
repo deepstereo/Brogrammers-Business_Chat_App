@@ -1,4 +1,25 @@
-<p>
-  chat works!
-</p>
-<router-outlet></router-outlet>
+<div class="container-fluid Content">
+  <div class="row">
+  <nav class="col-md-3 sidenav bg-light d-md-block d-done chatSideWrapper" style="min-height:100%; position:fixed;">
+    <div class="sidebar-sticky">
+      <div class="nav chatSideNavWrapper">
+        <app-chat-side-nav></app-chat-side-nav>
+      </div>
+      <div class="nav chatListWrapper">
+        <app-chat-list></app-chat-list>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="col-md-9 ml-sm-auto chatMainWrapper" *ngIf="activeChatID != null">
+    <div class="container-fluid chatFeedWrapper" style="overflow-y: scroll;">
+      <app-chat-feed [chatID]="activeChatID"></app-chat-feed>
+    </div>
+  </div>
+  </div>
+  <div class="row" *ngIf="activeChatID != null">
+    <div class="fixed-bottom p-0 chatFormWrapper">
+        <app-chat-form [chatID]="activeChatID"></app-chat-form>
+    </div>
+  </div>
+</div>
