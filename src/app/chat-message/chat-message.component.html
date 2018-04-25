@@ -1,0 +1,13 @@
+<div class="card-block chatMessageContainer">
+  <div class="messageHeader receiver">
+    <span class="card-title sender">
+      <h4>{{ userName }}</h4>
+    </span>
+    <span class="card-subtitle mb-2 text-muted timestamp">
+      <h6>{{ timeSent | date: DD:MM}}</h6>
+    </span>
+  </div>
+  <div class="card-text messageContent">
+    {{ content }}
+  </div>
+</div>

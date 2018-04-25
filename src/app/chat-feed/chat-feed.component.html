@@ -1,3 +1,5 @@
-<p>
-  chat-feed works!
-</p>
+<div class="feedWrapper">
+  <div *ngFor="let message of feed | async" class="card m-5 message">
+    <app-chat-message [chatMessage]=message></app-chat-message>
+  </div>
+</div>

@@ -25,6 +25,7 @@ import { ChatSideNavComponent } from './chat-side-nav/chat-side-nav.component';
 import { ChatListComponent } from './chat-list/chat-list.component';
 import { ChatFeedComponent } from './chat-feed/chat-feed.component';
 import { ChatFormComponent } from './chat-form/chat-form.component';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { ChatFormComponent } from './chat-form/chat-form.component';
     ChatSideNavComponent,
     ChatListComponent,
     ChatFeedComponent,
-    ChatFormComponent
+    ChatFormComponent,
+    ChatMessageComponent
   ],
   imports: [
     BrowserModule,
