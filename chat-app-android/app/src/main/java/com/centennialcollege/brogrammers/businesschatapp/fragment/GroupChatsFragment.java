@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
@@ -16,6 +18,7 @@ import com.centennialcollege.brogrammers.businesschatapp.model.ChatListItem;
 import com.centennialcollege.brogrammers.businesschatapp.model.Message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +27,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +51,8 @@ public class GroupChatsFragment extends Fragment {
 
     private ArrayList<ChatListItem> chatListItems;
 
+    private TextView emptyView;
+
     public GroupChatsFragment() {
         // Required empty public constructor
     }
@@ -66,35 +72,67 @@ public class GroupChatsFragment extends Fragment {
         activeGroupChatIds = new HashMap<>();
         chatListItems = new ArrayList<>();
 
-        fetchActiveGroupChatIds();
+        emptyView = rootView.findViewById(R.id.empty_view);
+
         setupRecyclerView();
+        fetchActiveGroupChatIds();
         return rootView;
+    }
+
+    private void setEmptyView() {
+        mChatsRecyclerView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     private void fetchActiveGroupChatIds() {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD)
-                .child(firebaseUser.getUid()).child(Constants.ACTIVE_GROUP_CHATS);
+                .child(firebaseUser.getUid()).child(Constants.USER_ACTIVE_GROUP_CHATS);
 
-        // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
+        // Attach a listener to read and observe the list of personal chat Ids.
+        ref.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                HashMap<String, Boolean> chatIds = (HashMap<String, Boolean>) dataSnapshot.getValue();
-                if (chatIds != null) {
-                    activeGroupChatIds.putAll(chatIds);
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String chatId = dataSnapshot.getKey();
+                if (!TextUtils.isEmpty(chatId)) {
+                    activeGroupChatIds.put(chatId, true);
                 }
 
                 if (activeGroupChatIds != null && activeGroupChatIds.size() > 0) {
-                    for (String activePersonalChatId : activeGroupChatIds.keySet()) {
-                        ChatListItem chatListItem = new ChatListItem();
-                        chatListItem.setChatId(activePersonalChatId);
-                        populateChatName(chatListItem);
+//                    setEmptyView();
+                    ChatListItem chatListItem = new ChatListItem();
+                    chatListItem.setChatId(chatId);
+                    populateChatName(chatListItem);
+                } else {
+//                    mChatsRecyclerView.setVisibility(View.GONE);
+//                    emptyView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                // Do Nothing
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String chatId = dataSnapshot.getKey();
+                activeGroupChatIds.remove(chatId);
+                ChatListItem chatToRemove = null;
+                for (ChatListItem item : chatListItems) {
+                    if (TextUtils.equals(item.getChatId(), chatId)) {
+                        chatToRemove = item;
+                        break;
                     }
                 }
-                ref.removeEventListener(this);
+                chatListItems.remove(chatToRemove);
+                chatsRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                // Todo: Think of what could trigger this.
             }
 
             @Override
@@ -135,13 +173,31 @@ public class GroupChatsFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
-                if (message != null) {
-                    chatListItem.setLastMessage(message);
-                    chatListItems.add(chatListItem);
+                if (dataSnapshot.getChildren().iterator().hasNext()) {
+                    if (!isAdded()) {
+                        return;
+                    }
 
-                    if (chatListItems.size() == activeGroupChatIds.size()) {
-                        chatsRecyclerViewAdapter.notifyDataSetChanged();
+                    if (dataSnapshot.getChildren().iterator().hasNext()) {
+                        Message message = dataSnapshot.getChildren().iterator().next().getValue(Message.class);
+                        if (message != null) {
+                            if (message.getIsMultimedia()) {
+                                // Todo: Change this text based on type of multimedia message.
+                                message.setContent(getString(R.string.multimedia_type_photo));
+                            }
+                            chatListItem.setLastMessage(message);
+
+                            // If it's a new chat item, then add it in the list, otherwise, just modify
+                            // the last message text in existing chat item and refresh adapter.
+                            if (!chatListItems.contains(chatListItem)) {
+                                chatListItems.add(chatListItem);
+                            }
+
+//                            if (chatListItems.size() == activeGroupChatIds.size()) {
+                                Collections.sort(chatListItems);
+                                chatsRecyclerViewAdapter.notifyDataSetChanged();
+//                            }
+                        }
                     }
                 }
             }
@@ -159,7 +215,7 @@ public class GroupChatsFragment extends Fragment {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
 
-        chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatListItems, getContext());
+        chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatListItems, false);
 
         mChatsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mChatsRecyclerView.setAdapter(chatsRecyclerViewAdapter);

@@ -1,48 +1,56 @@
 package com.centennialcollege.brogrammers.businesschatapp.model;
 
-import java.util.Date;
-
 /**
  * Model class for a chat message.
  */
 
 public class Message {
 
-    private String messageText;
-    private String messageUser;
-    private long messageTime;
+    private String content;
+    private boolean isMultimedia;
+    private String senderId;
+    private long timeSent;
 
-    public Message(String messageText, String messageUser) {
-        this.messageText = messageText;
-        this.messageUser = messageUser;
-        messageTime = new Date().getTime();
+    public Message(String content, boolean isMultimedia, String senderId, long timeStamp) {
+        this.content = content;
+        this.isMultimedia = isMultimedia;
+        this.senderId = senderId;
+        this.timeSent = timeStamp;
     }
 
     public Message() {
     }
 
-    public String getMessageText() {
-        return messageText;
+    public String getContent() {
+        return content;
     }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getMessageUser() {
-        return messageUser;
+    public boolean getIsMultimedia() {
+        return isMultimedia;
     }
 
-    public void setMessageUser(String messageUser) {
-        this.messageUser = messageUser;
+    public void setIsMultimedia(boolean multimedia) {
+        isMultimedia = multimedia;
     }
 
-    public long getMessageTime() {
-        return messageTime;
+    public String getSenderId() {
+        return senderId;
     }
 
-    public void setMessageTime(long messageTime) {
-        this.messageTime = messageTime;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public long getTimeSent() {
+        return timeSent;
+    }
+
+    public void setTimeSent(long timeSent) {
+        this.timeSent = timeSent;
     }
 
 }

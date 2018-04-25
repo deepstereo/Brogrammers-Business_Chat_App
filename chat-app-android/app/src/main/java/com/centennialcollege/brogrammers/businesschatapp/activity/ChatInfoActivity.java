@@ -5,11 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
-import com.centennialcollege.brogrammers.businesschatapp.adapter.UserContactsRecyclerViewAdapter;
+import com.centennialcollege.brogrammers.businesschatapp.adapter.ChatMembersRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,49 +21,57 @@ import java.util.Map;
 
 import static com.centennialcollege.brogrammers.businesschatapp.Constants.USERS_CHILD;
 
-public class UserContactsActivity extends AppCompatActivity {
+public class ChatInfoActivity extends AppCompatActivity {
 
-    private FirebaseAuth firebaseAuth;
-    private Map<String, Boolean> myContactsId;
+    private Map<String, Boolean> chatMembersId;
 
-    private RecyclerView mContactsRecyclerView;
-    private UserContactsRecyclerViewAdapter userContactsRecyclerViewAdapter;
+    private RecyclerView membersRecyclerView;
+    private ChatMembersRecyclerViewAdapter membersRecyclerViewAdapter;
 
-    private ArrayList<User> myContacts;
+    private ArrayList<User> chatMembers;
+    private String chatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_contacts);
+        setContentView(R.layout.activity_chat_info);
 
         init();
-        fetchMyContactsIds();
+        fetchChatMembersIds();
         setupRecyclerView();
     }
 
     private void init() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        mContactsRecyclerView = findViewById(R.id.rv_contacts);
-        myContactsId = new HashMap<>();
-        myContacts = new ArrayList<>();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        chatId = getIntent().getStringExtra(Constants.KEY_CHAT_ID);
+        membersRecyclerView = findViewById(R.id.rv_contacts);
+        chatMembersId = new HashMap<>();
+        chatMembers = new ArrayList<>();
     }
 
-    private void fetchMyContactsIds() {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD).child(firebaseUser.getUid());
+    private void fetchChatMembersIds() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                .child(Constants.CHATS_CHILD).child(chatId).child(Constants.CHATS_MEMBERS);
 
         // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if (user != null) {
-                    myContactsId.putAll(user.getContactList());
+                try {
+                    chatMembersId = (Map<String, Boolean>) dataSnapshot.getValue();
 
-                    for (String myContactId : user.getContactList().keySet()) {
-                        fetchUser(myContactId);
+                    for (String chatMemberId : chatMembersId.keySet()) {
+                        fetchChatMembers(chatMemberId);
                     }
+                } catch (Exception e) {
+                    System.out.println("The read failed: " + e.getMessage());
                 }
             }
 
@@ -75,18 +82,19 @@ public class UserContactsActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchUser(String contactId) {
+    private void fetchChatMembers(String contactId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD).child(contactId);
 
         // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                myContacts.add(user);
+                user.setId(dataSnapshot.getKey());
+                chatMembers.add(user);
 
-                if (myContacts.size() == myContactsId.size()) {
-                    userContactsRecyclerViewAdapter.notifyDataSetChanged();
+                if (chatMembers.size() == chatMembersId.size()) {
+                    membersRecyclerViewAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -103,10 +111,10 @@ public class UserContactsActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        userContactsRecyclerViewAdapter = new UserContactsRecyclerViewAdapter(myContacts, this);
+        membersRecyclerViewAdapter = new ChatMembersRecyclerViewAdapter(chatMembers);
 
-        mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mContactsRecyclerView.setAdapter(userContactsRecyclerViewAdapter);
+        membersRecyclerView.setLayoutManager(mLinearLayoutManager);
+        membersRecyclerView.setAdapter(membersRecyclerViewAdapter);
     }
 
 }

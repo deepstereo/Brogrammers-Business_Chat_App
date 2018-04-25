@@ -15,14 +15,12 @@ import com.centennialcollege.brogrammers.businesschatapp.R;
 import com.centennialcollege.brogrammers.businesschatapp.adapter.ContactsRecyclerViewAdapter;
 import com.centennialcollege.brogrammers.businesschatapp.model.Chat;
 import com.centennialcollege.brogrammers.businesschatapp.model.User;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -41,7 +39,6 @@ public class GroupChatActivity extends AppCompatActivity {
     private ArrayList<User> myContacts;
 
     private RecyclerView mContactsRecyclerView;
-    private ContactsRecyclerViewAdapter contactsRecyclerViewAdapter;
     private EditText etGroupName;
 
     @Override
@@ -51,13 +48,6 @@ public class GroupChatActivity extends AppCompatActivity {
 
         init();
         fetchMyContactsIds();
-        setupRecyclerView();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        contactsRecyclerViewAdapter.startListening();
     }
 
     private void init() {
@@ -103,11 +93,14 @@ public class GroupChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                myContacts.add(user);
-
-                if (myContacts.size() == myContactsId.size()) {
-                    contactsRecyclerViewAdapter.notifyDataSetChanged();
+                if (user != null) {
+                    user.setId(dataSnapshot.getKey());
+                    myContacts.add(user);
                 }
+
+//                if (myContacts.size() == myContactsId.size()) {
+                    setupRecyclerView();
+//                }
             }
 
             @Override
@@ -123,14 +116,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 
-        Query query = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_CHILD);
-
-        FirebaseRecyclerOptions<User> options =
-                new FirebaseRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-        contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(options, selectedContacts);
+        ContactsRecyclerViewAdapter contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(myContacts, selectedContacts);
 
         mContactsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mContactsRecyclerView.setAdapter(contactsRecyclerViewAdapter);
@@ -152,7 +138,6 @@ public class GroupChatActivity extends AppCompatActivity {
             members.put(userId, true);
         }
 
-        // Todo: Change the Chat name later on as per discussion.
         Chat newChat = new Chat(etGroupName.getText().toString(), true, members);
 
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference()
@@ -164,6 +149,8 @@ public class GroupChatActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra(Constants.KEY_CHAT_ID, newChatId);
+        intent.putExtra(Constants.KEY_CHAT_NAME, newChat.getChatName());
+        intent.putExtra(Constants.KEY_CHAT_ACTIVITY_CHAT_TYPE, ChatActivity.CHAT_TYPE_GROUP);
         startActivity(intent);
     }
 
@@ -176,7 +163,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
     private void updateActiveGroupChatsForUser(final String newChatId, String userId) {
         final DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_CHILD)
-                .child(userId).child(Constants.ACTIVE_GROUP_CHATS);
+                .child(userId).child(Constants.USER_ACTIVE_GROUP_CHATS);
 
 
         // Attach a listener to read the data at our posts reference
@@ -215,9 +202,4 @@ public class GroupChatActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        contactsRecyclerViewAdapter.stopListening();
-    }
 }
