@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
@@ -50,6 +51,8 @@ public class GroupChatsFragment extends Fragment {
 
     private ArrayList<ChatListItem> chatListItems;
 
+    private TextView emptyView;
+
     public GroupChatsFragment() {
         // Required empty public constructor
     }
@@ -69,9 +72,16 @@ public class GroupChatsFragment extends Fragment {
         activeGroupChatIds = new HashMap<>();
         chatListItems = new ArrayList<>();
 
-        fetchActiveGroupChatIds();
+        emptyView = rootView.findViewById(R.id.empty_view);
+
         setupRecyclerView();
+        fetchActiveGroupChatIds();
         return rootView;
+    }
+
+    private void setEmptyView() {
+        mChatsRecyclerView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     private void fetchActiveGroupChatIds() {
@@ -90,9 +100,13 @@ public class GroupChatsFragment extends Fragment {
                 }
 
                 if (activeGroupChatIds != null && activeGroupChatIds.size() > 0) {
+//                    setEmptyView();
                     ChatListItem chatListItem = new ChatListItem();
                     chatListItem.setChatId(chatId);
                     populateChatName(chatListItem);
+                } else {
+//                    mChatsRecyclerView.setVisibility(View.GONE);
+//                    emptyView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -179,10 +193,10 @@ public class GroupChatsFragment extends Fragment {
                                 chatListItems.add(chatListItem);
                             }
 
-                            if (chatListItems.size() == activeGroupChatIds.size()) {
+//                            if (chatListItems.size() == activeGroupChatIds.size()) {
                                 Collections.sort(chatListItems);
                                 chatsRecyclerViewAdapter.notifyDataSetChanged();
-                            }
+//                            }
                         }
                     }
                 }

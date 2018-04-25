@@ -125,9 +125,11 @@ public class ContactsActivity extends AppCompatActivity {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
                         for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                             User user = snapshot.getValue(User.class);
-                            user.setId(snapshot.getKey());
-                            if (!TextUtils.equals(firebaseAuth.getCurrentUser().getUid(), user.getId())) {
-                                allUsers.add(user);
+                            if (user != null) {
+                                user.setId(snapshot.getKey());
+                                if (!TextUtils.equals(firebaseAuth.getCurrentUser().getUid(), user.getId())) {
+                                    allUsers.add(user);
+                                }
                             }
                         }
                         contactsRecyclerViewAdapter.notifyDataSetChanged();

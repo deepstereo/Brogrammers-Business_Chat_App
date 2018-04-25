@@ -119,12 +119,14 @@ public class MyContactsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                user.setId(dataSnapshot.getKey());
-                myContacts.add(user);
-
-                if (myContacts.size() == myContactsId.size()) {
-                    myContactsRecyclerViewAdapter.notifyDataSetChanged();
+                if (user != null) {
+                    user.setId(dataSnapshot.getKey());
+                    myContacts.add(user);
                 }
+
+//                if (myContacts.size() == myContactsId.size()) {
+                    myContactsRecyclerViewAdapter.notifyDataSetChanged();
+//                }
             }
 
             @Override

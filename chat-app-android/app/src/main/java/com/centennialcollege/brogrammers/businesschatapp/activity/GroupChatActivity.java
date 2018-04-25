@@ -93,12 +93,14 @@ public class GroupChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                user.setId(dataSnapshot.getKey());
-                myContacts.add(user);
-
-                if (myContacts.size() == myContactsId.size()) {
-                    setupRecyclerView();
+                if (user != null) {
+                    user.setId(dataSnapshot.getKey());
+                    myContacts.add(user);
                 }
+
+//                if (myContacts.size() == myContactsId.size()) {
+                    setupRecyclerView();
+//                }
             }
 
             @Override

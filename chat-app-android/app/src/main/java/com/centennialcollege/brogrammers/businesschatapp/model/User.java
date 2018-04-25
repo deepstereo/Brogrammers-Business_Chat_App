@@ -17,6 +17,8 @@ public class User {
     private String email;
     private boolean avatar;
     private String avatarURL;
+    private String status = "online";
+    private long lastOnline = 1524533287565L;
     private Map<String, Boolean> contactList = new LinkedHashMap<>();
     private Map<String, Boolean> activePersonalChats = new LinkedHashMap<>();
     private Map<String, Boolean> activeGroupChats = new LinkedHashMap<>();
@@ -98,6 +100,22 @@ public class User {
 
     public void setAvatarURL(String avatarURL) {
         this.avatarURL = avatarURL;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getLastOnline() {
+        return lastOnline;
+    }
+
+    public void setLastOnline(long lastOnline) {
+        this.lastOnline = lastOnline;
     }
 
     @Override

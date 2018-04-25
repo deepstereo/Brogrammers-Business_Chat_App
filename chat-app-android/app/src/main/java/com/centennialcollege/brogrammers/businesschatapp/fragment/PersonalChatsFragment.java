@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.centennialcollege.brogrammers.businesschatapp.Constants;
 import com.centennialcollege.brogrammers.businesschatapp.R;
@@ -48,11 +49,12 @@ public class PersonalChatsFragment extends Fragment {
     private Map<String, Boolean> activePersonalChatIds;
 
     private RecyclerView mChatsRecyclerView;
-    private com.centennialcollege.brogrammers.businesschatapp.adapter.ChatsRecyclerViewAdapter chatsRecyclerViewAdapter;
+    private ChatsRecyclerViewAdapter chatsRecyclerViewAdapter;
 
     private ArrayList<ChatListItem> chatListItems;
 
     private User currentUser;
+    private TextView emptyView;
 
     public PersonalChatsFragment() {
         // Required empty public constructor
@@ -73,9 +75,17 @@ public class PersonalChatsFragment extends Fragment {
         activePersonalChatIds = new HashMap<>();
         chatListItems = new ArrayList<>();
 
-        fetchCurrentUser();
+        emptyView = rootView.findViewById(R.id.empty_view);
+
+//        showEmptyView();
         setupRecyclerView();
+        fetchCurrentUser();
         return rootView;
+    }
+
+    private void showEmptyView() {
+        mChatsRecyclerView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     private void fetchCurrentUser() {
@@ -114,9 +124,13 @@ public class PersonalChatsFragment extends Fragment {
                 }
 
                 if (activePersonalChatIds != null && activePersonalChatIds.size() > 0) {
+//                    showEmptyView();
                     ChatListItem chatListItem = new ChatListItem();
                     chatListItem.setChatId(chatId);
                     populateChatName(chatListItem);
+                } else {
+//                    mChatsRecyclerView.setVisibility(View.GONE);
+//                    emptyView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -161,7 +175,9 @@ public class PersonalChatsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String chatName = dataSnapshot.getValue(String.class);
-                fetchUser(chatName.replace(currentUser.getId(), ""), chatListItem);
+                if (chatName != null) {
+                    fetchUser(chatName.replace(currentUser.getId(), ""), chatListItem);
+                }
             }
 
             @Override
@@ -223,10 +239,10 @@ public class PersonalChatsFragment extends Fragment {
                             chatListItems.add(chatListItem);
                         }
 
-                        if (chatListItems.size() == activePersonalChatIds.size()) {
+//                        if (chatListItems.size() == activePersonalChatIds.size()) {
                             Collections.sort(chatListItems);
                             chatsRecyclerViewAdapter.notifyDataSetChanged();
-                        }
+//                        }
                     }
                 }
             }

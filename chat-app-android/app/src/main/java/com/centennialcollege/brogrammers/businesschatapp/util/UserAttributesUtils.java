@@ -3,6 +3,7 @@ package com.centennialcollege.brogrammers.businesschatapp.util;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.centennialcollege.brogrammers.businesschatapp.R;
@@ -34,6 +35,9 @@ public class UserAttributesUtils {
      * @param name Username of user.
      */
     public static void setAccountColor(TextView accountCircle, String name, Context context) {
+        if (TextUtils.isEmpty(name)) {
+            return;
+        }
         GradientDrawable gradientDrawable = (GradientDrawable) accountCircle.getBackground().mutate();
         gradientDrawable.setColor(getAccountColor(name, context));
         accountCircle.setText(String.valueOf(name.toUpperCase().charAt(0)));

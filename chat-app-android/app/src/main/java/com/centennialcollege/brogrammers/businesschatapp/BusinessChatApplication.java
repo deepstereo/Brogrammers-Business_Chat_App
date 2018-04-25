@@ -23,8 +23,8 @@ public class BusinessChatApplication extends Application {
         super.onCreate();
 
         /* Enable disk persistence */
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
+//        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        database.setPersistenceEnabled(true);
 
         // Todo: Implement user online/offline status indicator functionality.
 //        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
