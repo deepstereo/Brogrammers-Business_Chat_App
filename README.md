@@ -17,5 +17,6 @@ Built by a team of 7 students with 2 developers per platform.
 ## Presentation slides
 
 These are the keynote slides we created for Centennial College Tech Fair 2018, where the project was presented.
+The slides feature real screenshots from the app.
 
 ![Slide 1](keynote01.jpg "Slide 1")
