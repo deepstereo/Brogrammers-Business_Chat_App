@@ -19,4 +19,12 @@ Built by a team of 7 students with 2 developers per platform.
 These are the keynote slides we created for Centennial College Tech Fair 2018, where the project was presented.
 The slides feature real screenshots from the app.
 
-![Slide 1](keynote01.jpg "Slide 1")
+![Slide 1](keynote01.jpeg "Slide 1")
+---
+![Slide 2](keynote02.jpeg "Slide 2")
+---
+![Slide 3](keynote03.jpeg "Slide 3")
+---
+![Slide 4](keynote04.jpeg "Slide 4")
+---
+![Slide 5](keynote05.jpeg "Slide 5")
