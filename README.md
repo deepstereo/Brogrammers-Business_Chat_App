@@ -14,7 +14,7 @@ Built by a team of 7 students with 2 developers per platform.
 * view photos full-screen
 * in-app updating of email & password
 
-## Presentation slides
+## Presentation slides with screenshots
 
 These are the keynote slides we created for Centennial College Tech Fair 2018, where the project was presented.
 The slides feature real screenshots from the app.
